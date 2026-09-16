@@ -7,7 +7,6 @@ import { FunctionCallItem } from "@domain/model-context/context-item/model-item/
 import { ReasoningItem } from "@domain/model-context/context-item/model-item/reasoning"
 import { StructuredOutputFormat } from "@domain/generative-model/request-validation/structured-output"
 import { FunctionCallOutputItem } from "@domain/model-context/context-item/client-item/function-call-output"
-import { ModelContextRepository } from "@domain/model-context/model-context-repository"
 import { InputTokenDetails, OutputTokenDetails, TokenUsage } from "@domain/generative-model/token-usage"
 import { Tool } from "@domain/generative-model/tool"
 import { McpClient, type McpServerConfig, type McpToolSpec } from "@infra/mcp/mcp-client"
