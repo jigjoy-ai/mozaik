@@ -48,7 +48,6 @@ export {
 	createAgent,
 	createHuman,
 	ModelContext,
-	ModelContextRepository,
 	ContextItem,
 	SemanticEvent,
 	UserMessageItem,
