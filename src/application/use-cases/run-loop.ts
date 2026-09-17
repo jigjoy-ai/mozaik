@@ -1,5 +1,5 @@
 import { RuntimeService } from "@app/services/runtime"
-import { AgentLoop } from "@domain/agentic-environment/loop/agent-loop"
+import { AgentLoop } from "@app/services/agent-loop"
 import { FunctionCallState } from "@app/states/function-call"
 import { InferenceState } from "@app/states/inference"
 import { InferenceInput } from "@domain/agentic-environment/loop/inference"

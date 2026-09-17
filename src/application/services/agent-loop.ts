@@ -1,8 +1,8 @@
-import { InterceptionHandler } from "./interception"
-import { LoopTransition, ReceivedMessage } from "./loop-state"
-import { LoopVisitor } from "./loop-visitor"
-import { LoopStateExecutor } from "./loop-state"
-import { TransitionResolver } from "./transition-resolver"
+import { InterceptionHandler } from "@domain/agentic-environment/loop/interception"
+import { LoopTransition, ReceivedMessage } from "@domain/agentic-environment/loop/loop-state"
+import { LoopVisitor } from "@domain/agentic-environment/loop/loop-visitor"
+import { LoopStateExecutor } from "@domain/agentic-environment/loop/loop-state"
+import { TransitionResolver } from "@domain/agentic-environment/loop/transition-resolver"
 
 export class AgentLoop {
 	private constructor(
