@@ -13,14 +13,14 @@ import {
 	ContextPreparationToInferenceRule,
 	ModelMessageToIdleRule,
 } from "@domain/agent-loop/transition-rule"
-import { RuntimeState } from "@domain/agentic-environment/runtime-state"
+import { DomainModel } from "@domain/agentic-environment/runtime-state"
 import { EventPublisherLoopVisitor } from "@app/services/event-publisher-visitor"
 import { InferenceStreamingState } from "@app/states/inference-streaming"
 import { InterceptionHandler } from "@domain/agent-loop/interception"
 import { DefaultLoopStateExecutor } from "@app/services/state-executor"
 import { createCloudClient } from "@mozaik-ai/cloud-sdk"
 
-export function createRunLoop<TRuntimeState extends RuntimeState>(resolveRuntime: () => RuntimeService<TRuntimeState>) {
+export function createRunLoop<TModel extends DomainModel>(resolveRuntime: () => RuntimeService<TModel>) {
 	return function runLoop(
 		agentId: string,
 		message: string,

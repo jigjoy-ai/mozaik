@@ -1,12 +1,10 @@
 import { RuntimeService } from "@app/services/runtime"
 import { ExternalParticipant } from "@domain/agentic-environment/participant/external-paricipant"
 import { Participant } from "@domain/agentic-environment/participant/participant"
-import { RuntimeState } from "@domain/agentic-environment/runtime-state"
+import { DomainModel } from "@domain/agentic-environment/runtime-state"
 import { SituationHandler } from "@domain/agentic-environment/situation/situation-handler"
 
-export function ParticipantFactory<TRuntimeState extends RuntimeState>(
-	resolveRuntime: () => RuntimeService<TRuntimeState>,
-) {
+export function ParticipantFactory<TModel extends DomainModel>(resolveRuntime: () => RuntimeService<TModel>) {
 	return function createParticipant(
 		name: string,
 		capabilities: readonly string[],

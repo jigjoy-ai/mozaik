@@ -3,7 +3,7 @@ import { LoopVisitor } from "@domain/agent-loop/loop-visitor"
 import { FunctionCallOutputItem } from "@domain/model-context/context-item/client-item/function-call-output"
 import { FunctionCallParams } from "@domain/agent-loop/function-call"
 import { RuntimeService } from "@app/services/runtime"
-import { RuntimeState } from "@domain/agentic-environment/runtime-state"
+import { DomainModel } from "@domain/agentic-environment/runtime-state"
 import { SemanticEvent } from "@domain/agentic-environment/semantic-event/event"
 import { CloudClient } from "@mozaik-ai/cloud-sdk"
 import { Agent } from "@domain/agentic-environment/participant/agent"
@@ -13,7 +13,7 @@ export class EventPublisherLoopVisitor implements LoopVisitor {
 	constructor(
 		private readonly agentId: string,
 		private readonly loopId: string,
-		private readonly runtime: RuntimeService<RuntimeState>,
+		private readonly runtime: RuntimeService<DomainModel>,
 		private readonly cloudClient: CloudClient,
 	) {}
 

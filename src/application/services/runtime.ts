@@ -1,5 +1,5 @@
 import { Participant } from "@domain/agentic-environment/participant/participant"
-import { RuntimeState } from "@domain/agentic-environment/runtime-state"
+import { DomainModel } from "@domain/agentic-environment/runtime-state"
 import { EventProcessor } from "@domain/agentic-environment/semantic-event/event-processor"
 import {
 	ParticipantJoinedEvent,
@@ -9,44 +9,35 @@ import {
 import { InferenceRunner } from "@domain/agent-loop/inference"
 import { FunctionCallRunner } from "@domain/agent-loop/function-call"
 
-export class RuntimeService<TRuntimeState extends RuntimeState> {
+export class RuntimeService<TModel extends DomainModel> {
 	constructor(
-		public readonly state: TRuntimeState,
+		public readonly model: TModel,
 		private readonly processor: EventProcessor,
 		private readonly inferenceRunner: InferenceRunner,
 		private readonly functionCallRunner: FunctionCallRunner,
 	) {}
 
 	join(participant: Participant): void {
-		this.state.addParticipant(participant)
-		const participants = this.state.getParticipants().filter((p) => p.getId() !== participant.getId())
-		for (const participant of participants) {
-			participant.participantJoined(participant)
-		}
 		this.publish(ParticipantJoinedEvent.init(participant.getManifest()))
 	}
 
 	leave(participant: Participant): void {
-		this.state.removeParticipant(participant)
-		const participants = this.state.getParticipants().filter((p) => p.getId() !== participant.getId())
-		for (const participant of participants) {
-			participant.participantLeft(participant)
-		}
 		this.publish(ParticipantLeftEvent.init(participant.getManifest()))
 	}
 
 	publish(event: SemanticEvent): void {
-		for (const participant of this.state.getParticipants()) {
-			this.processor.process(event, participant)
-		}
+		// for (const participant of this.model.getParticipants()) {
+		// 	this.processor.process(event, participant)
+		// }
 	}
 
 	getParticipant(id: string): Participant | undefined {
-		if (!this.state.getParticipant(id)) {
-			throw new Error(`Participant ${id} not found`)
-		}
+		// if (!this.model.getParticipant(id)) {
+		// 	throw new Error(`Participant ${id} not found`)
+		// }
 
-		return this.state.getParticipant(id)
+		// return this.model.getParticipant(id)
+		return
 	}
 
 	getInferenceRunner(): InferenceRunner {

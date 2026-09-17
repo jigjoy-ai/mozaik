@@ -1,10 +1,8 @@
 import { RuntimeService } from "@app/services/runtime"
 import { Participant } from "@domain/agentic-environment/participant/participant"
-import { RuntimeState } from "@domain/agentic-environment/runtime-state"
+import { DomainModel } from "@domain/agentic-environment/runtime-state"
 import { EventProcessor } from "@domain/agentic-environment/semantic-event/event-processor"
-import { createJoin } from "./application/use-cases/join"
-import { createLeave } from "./application/use-cases/leave"
-import { createSendMessage } from "./application/use-cases/send-message"
+import { createSendMessage } from "@app/use-cases/send-message"
 import { createRunLoop } from "@app/use-cases/run-loop"
 import { InferenceRunner } from "@domain/agent-loop/inference"
 import { supportedModels } from "@app/services/models"
@@ -13,22 +11,39 @@ import { InferenceInputValidator } from "@domain/generative-model/request-valida
 import { DefaultInferenceRunner } from "@app/services/inference-runner"
 import { DefaultFunctionCallRunner } from "@app/services/function-call"
 import { createSendEvent } from "@app/use-cases/send-event"
-import { AgentFactory } from "@app/use-cases/agent-factory"
+import { AgentRepository, CreateAgentUseCase } from "@app/use-cases/create-agent"
 import { ParticipantFactory } from "@app/use-cases/paricipant-factory"
+import { Agent } from "@domain/agentic-environment/participant/agent"
+import { Tool } from "@domain/generative-model/tool"
+import { SituationHandler } from "@domain/agentic-environment/situation/situation-handler"
 
 export type InferenceRunnerConfig = {
 	supportedModels?: GenerativeModel[]
 	runner?: InferenceRunner
 }
 
-export function defineRuntime<TRuntimeState extends RuntimeState>() {
-	let runtime: RuntimeService<TRuntimeState> | null = null
+export class InMemoryAgentRepository implements AgentRepository {
+	getById(id: string): Promise<Agent | undefined> {
+		throw new Error("Method not implemented.")
+	}
+	getAll(): Promise<Agent[]> {
+		throw new Error("Method not implemented.")
+	}
+	private readonly agents: Agent[] = []
+
+	async save(agent: Agent): Promise<void> {
+		this.agents.push(agent)
+	}
+}
+
+export function defineRuntime<TModel extends DomainModel>() {
+	let runtime: RuntimeService<TModel> | null = null
 	const processor = new EventProcessor()
 
 	function initializeRuntime(config: {
-		state: TRuntimeState
+		model: TModel
 		inferenceRunnerConfig?: InferenceRunnerConfig
-	}): RuntimeService<TRuntimeState> {
+	}): RuntimeService<TModel> {
 		if (runtime) {
 			throw new Error("Runtime already initialized")
 		}
@@ -42,12 +57,12 @@ export function defineRuntime<TRuntimeState extends RuntimeState>() {
 
 		const functionCallRunner = new DefaultFunctionCallRunner()
 
-		runtime = new RuntimeService(config.state, processor, inferenceRunner, functionCallRunner)
+		runtime = new RuntimeService(config.model, processor, inferenceRunner, functionCallRunner)
 
 		return runtime
 	}
 
-	function resolveRuntime(): RuntimeService<TRuntimeState> {
+	function resolveRuntime(): RuntimeService<TModel> {
 		if (!runtime) {
 			throw new Error("Runtime not initialized")
 		}
@@ -55,25 +70,27 @@ export function defineRuntime<TRuntimeState extends RuntimeState>() {
 		return runtime
 	}
 
-	function resolveParticipant(id: string): Participant {
-		if (!runtime) {
-			throw new Error("Runtime not initialized")
+	const createAgentUseCase = new CreateAgentUseCase(new InMemoryAgentRepository())
+
+	const createAgent =
+		() =>
+		async (
+			name: string,
+			instruction: string,
+			capabilities: readonly string[],
+			tools: Tool[],
+			handlers: SituationHandler[],
+		) => {
+			return await createAgentUseCase.execute(name, instruction, capabilities, tools, handlers)
 		}
-
-		const participant = runtime.state.getParticipant(id)
-
-		if (!participant) {
-			throw new Error(`Participant ${id} not found`)
-		}
-
-		return participant
-	}
-
-	const createAgent = AgentFactory(resolveRuntime)
 	const createParticipant = ParticipantFactory(resolveRuntime)
 
-	const join = createJoin(resolveRuntime)
-	const leave = createLeave(resolveRuntime)
+	const join = () => async (participant: Participant) => {
+		resolveRuntime().join(participant)
+	}
+	const leave = () => async (participant: Participant) => {
+		resolveRuntime().leave(participant)
+	}
 	const sendMessage = createSendMessage(resolveRuntime)
 	const sendEvent = createSendEvent(resolveRuntime)
 	const runLoop = createRunLoop(resolveRuntime)
@@ -81,7 +98,6 @@ export function defineRuntime<TRuntimeState extends RuntimeState>() {
 	return {
 		initializeRuntime,
 		resolveRuntime,
-		resolveParticipant,
 		createAgent,
 		createParticipant,
 		join,
