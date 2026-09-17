@@ -1,7 +1,7 @@
 import { InterceptionHandler } from "./interception"
 import { LoopTransition, ReceivedMessage } from "./loop-state"
 import { LoopVisitor } from "./loop-visitor"
-import { LoopStateExecutor } from "./state-executor"
+import { LoopStateExecutor } from "./loop-state"
 import { TransitionResolver } from "./transition-resolver"
 
 export class AgentLoop {

@@ -1,4 +1,4 @@
-import type { InferenceInput, InferenceOutput, InferenceRunner } from "@app/states/inference"
+import type { InferenceInput, InferenceOutput, InferenceRunner } from "@domain/agentic-environment/loop/inference"
 import type { InferenceInputValidator } from "@domain/generative-model/request-validation/inference-request-validator"
 import { GenerativeModel } from "@domain/generative-model/generative-model"
 import { SemanticEvent } from "@domain/agentic-environment/semantic-event/event"

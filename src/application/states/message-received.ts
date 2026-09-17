@@ -1,4 +1,4 @@
-import { InferenceInput } from "@app/states/inference"
+import { InferenceInput } from "@domain/agentic-environment/loop/inference"
 import { UserMessageItem } from "@domain/model-context/context-item/client-item/user-message"
 import { LoopState, LoopStateExecution, ReceivedMessage } from "@domain/agentic-environment/loop/loop-state"
 import { LoopVisitor } from "@domain/agentic-environment/loop/loop-visitor"

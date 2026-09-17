@@ -1,8 +1,7 @@
 import { LoopVisitor } from "@domain/agentic-environment/loop/loop-visitor"
 import { LoopState } from "@domain/agentic-environment/loop/loop-state"
-import { InferenceInput, InferenceOutput } from "./inference"
+import { InferenceInput, InferenceOutput, InferenceRunner } from "@domain/agentic-environment/loop/inference"
 import { LoopStateExecution } from "@domain/agentic-environment/loop/loop-state"
-import { InferenceRunner } from "./inference"
 
 export class InferenceStreamingState implements LoopState<InferenceInput, LoopStateExecution<"inference_streaming">> {
 	readonly id = "inference_streaming"

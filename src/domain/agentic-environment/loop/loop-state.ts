@@ -1,9 +1,9 @@
 import { ModelMessageItem } from "@domain/model-context/context-item/model-item/model-message"
 import { FunctionCallOutputItem } from "@domain/model-context/context-item/client-item/function-call-output"
-import { FunctionCallParams } from "@app/states/function-call"
 import { LoopVisitor } from "./loop-visitor"
 import { InterceptionOutput, InterceptionParams } from "./interception"
 import { InferenceInput, InferenceOutput } from "./inference"
+import { FunctionCallParams } from "./function-call"
 
 export type LoopStateId =
 	| "message_received"
@@ -98,3 +98,7 @@ export type LoopTransition<TStateId extends LoopStateId = LoopStateId> = {
 		input: LoopStateContract[K]["input"]
 	}
 }[TStateId]
+
+export interface LoopStateExecutor {
+	execute(transition: LoopTransition<ExecutableLoopStateId>, loopVisitor: LoopVisitor): Promise<LoopStateExecution>
+}

@@ -6,8 +6,8 @@ import {
 	ParticipantLeftEvent,
 	SemanticEvent,
 } from "@domain/agentic-environment/semantic-event/event"
-import { InferenceRunner } from "@app/states/inference"
-import { FunctionCallRunner } from "@app/states/function-call"
+import { InferenceRunner } from "@domain/agentic-environment/loop/inference"
+import { FunctionCallRunner } from "@domain/agentic-environment/loop/function-call"
 
 export class RuntimeService<TRuntimeState extends RuntimeState> {
 	constructor(

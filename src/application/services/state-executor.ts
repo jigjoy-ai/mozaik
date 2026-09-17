@@ -1,12 +1,17 @@
-import { ExecutableLoopStateId, LoopStateExecution, LoopTransition } from "./loop-state"
-import { LoopVisitor } from "./loop-visitor"
+import {
+	ExecutableLoopStateId,
+	LoopStateExecution,
+	LoopStateExecutor,
+	LoopTransition,
+} from "@domain/agentic-environment/loop/loop-state"
+import { LoopVisitor } from "@domain/agentic-environment/loop/loop-visitor"
 import { FunctionCallState } from "@app/states/function-call"
 import { InferenceState } from "@app/states/inference"
 import { MessageReceivedState } from "@app/states/message-received"
 import { ModelMessageState } from "@app/states/model-message"
 import { InferenceStreamingState } from "@app/states/inference-streaming"
 
-export class LoopStateExecutor {
+export class DefaultLoopStateExecutor implements LoopStateExecutor {
 	constructor(
 		private readonly messageReceivedState: MessageReceivedState,
 		private readonly inferenceState: InferenceState,

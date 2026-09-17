@@ -1,7 +1,7 @@
 import { LoopTransition, ModelMessageParams, ReceivedMessage } from "@domain/agentic-environment/loop/loop-state"
 import { LoopVisitor } from "@domain/agentic-environment/loop/loop-visitor"
 import { FunctionCallOutputItem } from "@domain/model-context/context-item/client-item/function-call-output"
-import { FunctionCallParams } from "@app/states/function-call"
+import { FunctionCallParams } from "@domain/agentic-environment/loop/function-call"
 import { RuntimeService } from "@app/services/runtime"
 import { RuntimeState } from "@domain/agentic-environment/runtime-state"
 import { SemanticEvent } from "@domain/agentic-environment/semantic-event/event"

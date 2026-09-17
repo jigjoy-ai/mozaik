@@ -1,8 +1,8 @@
 import { RuntimeService } from "@app/services/runtime"
 import { AgentLoop } from "@domain/agentic-environment/loop/agent-loop"
-import { LoopStateExecutor } from "@domain/agentic-environment/loop/state-executor"
 import { FunctionCallState } from "@app/states/function-call"
-import { InferenceInput, InferenceState } from "@app/states/inference"
+import { InferenceState } from "@app/states/inference"
+import { InferenceInput } from "@domain/agentic-environment/loop/inference"
 import { MessageReceivedState } from "@app/states/message-received"
 import { ModelMessageState } from "@app/states/model-message"
 import { TransitionResolver } from "@domain/agentic-environment/loop/transition-resolver"
@@ -17,6 +17,7 @@ import { RuntimeState } from "@domain/agentic-environment/runtime-state"
 import { EventPublisherLoopVisitor } from "@app/services/event-publisher-visitor"
 import { InferenceStreamingState } from "@app/states/inference-streaming"
 import { InterceptionHandler } from "@domain/agentic-environment/loop/interception"
+import { DefaultLoopStateExecutor } from "@app/services/state-executor"
 
 export function createRunLoop<TRuntimeState extends RuntimeState>(resolveRuntime: () => RuntimeService<TRuntimeState>) {
 	return function runLoop(
@@ -38,7 +39,7 @@ export function createRunLoop<TRuntimeState extends RuntimeState>(resolveRuntime
 			new ModelMessageToIdleRule(),
 		])
 
-		const stateExecutor = new LoopStateExecutor(
+		const stateExecutor = new DefaultLoopStateExecutor(
 			new MessageReceivedState(),
 			new InferenceState(inferenceRunner),
 			new InferenceStreamingState(inferenceRunner),
