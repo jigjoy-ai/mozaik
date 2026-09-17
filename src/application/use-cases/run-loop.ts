@@ -18,6 +18,7 @@ import { EventPublisherLoopVisitor } from "@app/services/event-publisher-visitor
 import { InferenceStreamingState } from "@app/states/inference-streaming"
 import { InterceptionHandler } from "@domain/agentic-environment/loop/interception"
 import { DefaultLoopStateExecutor } from "@app/services/state-executor"
+import { createCloudClient } from "@mozaik-ai/cloud-sdk"
 
 export function createRunLoop<TRuntimeState extends RuntimeState>(resolveRuntime: () => RuntimeService<TRuntimeState>) {
 	return function runLoop(
@@ -49,7 +50,9 @@ export function createRunLoop<TRuntimeState extends RuntimeState>(resolveRuntime
 
 		const agentLoop = AgentLoop.create(stateExecutor, transitionResolver, interceptionHandler)
 
-		const loopVisitor = new EventPublisherLoopVisitor(agentId, agentLoop.getLoopId(), runtime)
+		const cloudClient = createCloudClient()
+
+		const loopVisitor = new EventPublisherLoopVisitor(agentId, agentLoop.getLoopId(), runtime, cloudClient)
 
 		agentLoop.run(
 			{

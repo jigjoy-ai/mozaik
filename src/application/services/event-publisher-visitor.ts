@@ -5,19 +5,17 @@ import { FunctionCallParams } from "@domain/agentic-environment/loop/function-ca
 import { RuntimeService } from "@app/services/runtime"
 import { RuntimeState } from "@domain/agentic-environment/runtime-state"
 import { SemanticEvent } from "@domain/agentic-environment/semantic-event/event"
-import { CloudClient, createCloudClient } from "@mozaik-ai/cloud-sdk"
+import { CloudClient } from "@mozaik-ai/cloud-sdk"
 import { Agent } from "@domain/agentic-environment/participant/agent"
 import { InferenceInput, InferenceOutput } from "@domain/agentic-environment/loop/inference"
 
 export class EventPublisherLoopVisitor implements LoopVisitor {
-	private readonly cloud: CloudClient
 	constructor(
 		private readonly agentId: string,
 		private readonly loopId: string,
 		private readonly runtime: RuntimeService<RuntimeState>,
-	) {
-		this.cloud = createCloudClient()
-	}
+		private readonly cloudClient: CloudClient,
+	) {}
 
 	visitMessageReceivedStarted(input: ReceivedMessage): void {
 		this.publish("message_received.started", input)
@@ -66,11 +64,11 @@ export class EventPublisherLoopVisitor implements LoopVisitor {
 		})
 		this.runtime.publish(event)
 
-		if (this.cloud.enabled) {
+		if (this.cloudClient.enabled) {
 			const participant = this.runtime.getParticipant(this.agentId)
 			const agent = participant as Agent
 			if (agent) {
-				this.cloud.send({
+				this.cloudClient.send({
 					...event,
 					payload: {
 						...payload,
