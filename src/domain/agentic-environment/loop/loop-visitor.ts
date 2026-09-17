@@ -1,8 +1,8 @@
 import { FunctionCallParams } from "@app/states/function-call"
-import { InferenceInput, InferenceOutput } from "@app/states/inference"
 import { SemanticEvent } from "@domain/agentic-environment/semantic-event/event"
 import { FunctionCallOutputItem } from "@domain/model-context/context-item/client-item/function-call-output"
 import { LoopTransition, ModelMessageParams, ReceivedMessage } from "./loop-state"
+import { InferenceInput, InferenceOutput } from "./inference"
 
 export interface LoopVisitor {
 	visitMessageReceivedStarted(input: ReceivedMessage): void

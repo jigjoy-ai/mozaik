@@ -1,13 +1,13 @@
-import { InferenceInput, InferenceOutput } from "@app/states/inference"
-import { LoopTransition, ModelMessageParams, ReceivedMessage } from "./loop-state"
-import { LoopVisitor } from "./loop-visitor"
+import { LoopTransition, ModelMessageParams, ReceivedMessage } from "@domain/agentic-environment/loop/loop-state"
+import { LoopVisitor } from "@domain/agentic-environment/loop/loop-visitor"
 import { FunctionCallOutputItem } from "@domain/model-context/context-item/client-item/function-call-output"
 import { FunctionCallParams } from "@app/states/function-call"
 import { RuntimeService } from "@app/services/runtime"
-import { RuntimeState } from "../runtime-state"
+import { RuntimeState } from "@domain/agentic-environment/runtime-state"
 import { SemanticEvent } from "@domain/agentic-environment/semantic-event/event"
 import { CloudClient, createCloudClient } from "@mozaik-ai/cloud-sdk"
-import { Agent } from "../participant/agent"
+import { Agent } from "@domain/agentic-environment/participant/agent"
+import { InferenceInput, InferenceOutput } from "@domain/agentic-environment/loop/inference"
 
 export class EventPublisherLoopVisitor implements LoopVisitor {
 	private readonly cloud: CloudClient

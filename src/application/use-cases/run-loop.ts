@@ -14,7 +14,7 @@ import {
 	ModelMessageToIdleRule,
 } from "@domain/agentic-environment/loop/transition-rule"
 import { RuntimeState } from "@domain/agentic-environment/runtime-state"
-import { EventPublisherLoopVisitor } from "@domain/agentic-environment/loop/event-publisher-visitor"
+import { EventPublisherLoopVisitor } from "@app/services/event-publisher-visitor"
 import { InferenceStreamingState } from "@app/states/inference-streaming"
 import { InterceptionHandler } from "@domain/agentic-environment/loop/interception"
 
