@@ -14,7 +14,7 @@ import { McpToolRegistry } from "@infra/mcp/mcp-tool-registry"
 import { SystemMessageItem } from "@domain/model-context/context-item/client-item/system-message"
 import { SemanticEvent } from "@domain/agentic-environment/semantic-event/event"
 import { Endpoint } from "@domain/generative-model/endpoint"
-import { InferenceInput, InferenceOutput, InferenceRunner } from "@domain/agentic-environment/loop/inference"
+import { InferenceInput, InferenceOutput, InferenceRunner } from "@domain/agent-loop/inference"
 import { Participant } from "@domain/agentic-environment/participant/participant"
 import { createAgent } from "@app/use-cases/create-agent"
 import { createHuman } from "@app/use-cases/create-human"
@@ -34,13 +34,13 @@ import {
 } from "@domain/agentic-environment/situation/situation-handler"
 import { SituationSpecification } from "@domain/agentic-environment/situation/situation-specification"
 import { DefaultInferenceRunner } from "@app/services/inference-runner"
-import { InterceptionHandler } from "@domain/agentic-environment/loop/interception"
+import { InterceptionHandler } from "@domain/agent-loop/interception"
 import {
 	ExecutableLoopStateId,
 	ExecutableTransition,
 	LoopStateExecution,
 	LoopTransition,
-} from "@domain/agentic-environment/loop/loop-state"
+} from "@domain/agent-loop/loop-state"
 
 export {
 	defineRuntime,

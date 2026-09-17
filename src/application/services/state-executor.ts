@@ -3,8 +3,8 @@ import {
 	LoopStateExecution,
 	LoopStateExecutor,
 	LoopTransition,
-} from "@domain/agentic-environment/loop/loop-state"
-import { LoopVisitor } from "@domain/agentic-environment/loop/loop-visitor"
+} from "@domain/agent-loop/loop-state"
+import { LoopVisitor } from "@domain/agent-loop/loop-visitor"
 import { FunctionCallState } from "@app/states/function-call"
 import { InferenceState } from "@app/states/inference"
 import { MessageReceivedState } from "@app/states/message-received"

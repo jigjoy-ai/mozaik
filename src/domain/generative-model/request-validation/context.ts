@@ -1,4 +1,4 @@
-import type { InferenceInput } from "@app/states/inference"
+import type { InferenceInput } from "@domain/agent-loop/inference"
 import type { ContextItem } from "@domain/model-context/context-item/context-item"
 import { DeveloperMessageItem } from "@domain/model-context/context-item/client-item/developer-message"
 import { SystemMessageItem } from "@domain/model-context/context-item/client-item/system-message"

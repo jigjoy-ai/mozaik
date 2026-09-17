@@ -1,7 +1,7 @@
-import { InferenceInput } from "@domain/agentic-environment/loop/inference"
+import { InferenceInput } from "@domain/agent-loop/inference"
 import { UserMessageItem } from "@domain/model-context/context-item/client-item/user-message"
-import { LoopState, LoopStateExecution, ReceivedMessage } from "@domain/agentic-environment/loop/loop-state"
-import { LoopVisitor } from "@domain/agentic-environment/loop/loop-visitor"
+import { LoopState, LoopStateExecution, ReceivedMessage } from "@domain/agent-loop/loop-state"
+import { LoopVisitor } from "@domain/agent-loop/loop-visitor"
 
 export class MessageReceivedState implements LoopState<ReceivedMessage, LoopStateExecution<"message_received">> {
 	readonly id = "message_received"

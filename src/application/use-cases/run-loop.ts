@@ -2,21 +2,21 @@ import { RuntimeService } from "@app/services/runtime"
 import { AgentLoop } from "@app/services/agent-loop"
 import { FunctionCallState } from "@app/states/function-call"
 import { InferenceState } from "@app/states/inference"
-import { InferenceInput } from "@domain/agentic-environment/loop/inference"
+import { InferenceInput } from "@domain/agent-loop/inference"
 import { MessageReceivedState } from "@app/states/message-received"
 import { ModelMessageState } from "@app/states/model-message"
-import { TransitionResolver } from "@domain/agentic-environment/loop/transition-resolver"
+import { TransitionResolver } from "@domain/agent-loop/transition-resolver"
 import {
 	FunctionCallToInferenceRule,
 	InferenceToFunctionCallRule,
 	InferenceToModelMessageRule,
 	ContextPreparationToInferenceRule,
 	ModelMessageToIdleRule,
-} from "@domain/agentic-environment/loop/transition-rule"
+} from "@domain/agent-loop/transition-rule"
 import { RuntimeState } from "@domain/agentic-environment/runtime-state"
 import { EventPublisherLoopVisitor } from "@app/services/event-publisher-visitor"
 import { InferenceStreamingState } from "@app/states/inference-streaming"
-import { InterceptionHandler } from "@domain/agentic-environment/loop/interception"
+import { InterceptionHandler } from "@domain/agent-loop/interception"
 import { DefaultLoopStateExecutor } from "@app/services/state-executor"
 import { createCloudClient } from "@mozaik-ai/cloud-sdk"
 

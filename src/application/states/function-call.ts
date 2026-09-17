@@ -1,8 +1,8 @@
 import { FunctionCallOutputItem } from "@domain/model-context/context-item/client-item/function-call-output"
-import type { LoopState, LoopStateExecution } from "@domain/agentic-environment/loop/loop-state"
+import type { LoopState, LoopStateExecution } from "@domain/agent-loop/loop-state"
 import type { Tool } from "@domain/generative-model/tool"
-import type { LoopVisitor } from "@domain/agentic-environment/loop/loop-visitor"
-import { FunctionCallParams, FunctionCallRunner } from "@domain/agentic-environment/loop/function-call"
+import type { LoopVisitor } from "@domain/agent-loop/loop-visitor"
+import { FunctionCallParams, FunctionCallRunner } from "@domain/agent-loop/function-call"
 
 export class FunctionCallState implements LoopState<FunctionCallParams, LoopStateExecution<"function_call">> {
 	readonly id = "function_call"
