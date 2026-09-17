@@ -33,4 +33,8 @@ export abstract class Participant {
 	setHandlers(handlers: SituationHandler[]): void {
 		this.handlers = handlers
 	}
+
+	abstract participantJoined(participant: Participant): void
+
+	abstract participantLeft(participant: Participant): void
 }

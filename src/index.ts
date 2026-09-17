@@ -16,8 +16,6 @@ import { SemanticEvent } from "@domain/agentic-environment/semantic-event/event"
 import { Endpoint } from "@domain/generative-model/endpoint"
 import { InferenceInput, InferenceOutput, InferenceRunner } from "@domain/agent-loop/inference"
 import { Participant } from "@domain/agentic-environment/participant/participant"
-import { createAgent } from "@app/use-cases/create-agent"
-import { createHuman } from "@app/use-cases/create-human"
 import { RuntimeState } from "@domain/agentic-environment/runtime-state"
 import { defineRuntime, type InferenceRunnerConfig } from "./define-runtime"
 import { supportedModels } from "@app/services/models"
@@ -26,7 +24,7 @@ import { OpenAIChatCompletions } from "@infra/providers/openai/endpoints/openai-
 import { AnthropicMessages } from "@infra/providers/anthropic/endpoints/anthropic-messages"
 import { GeminiGenerateContent } from "@infra/providers/gemini/endpoints/gemini-generate-content"
 import { Agent } from "@domain/agentic-environment/participant/agent"
-import { Human } from "@domain/agentic-environment/participant/human"
+import { ExternalParticipant } from "@domain/agentic-environment/participant/external-paricipant"
 import {
 	SituationContext,
 	SituationHandler,
@@ -45,8 +43,6 @@ import {
 export {
 	defineRuntime,
 	RuntimeState,
-	createAgent,
-	createHuman,
 	ModelContext,
 	ContextItem,
 	SemanticEvent,
@@ -74,7 +70,7 @@ export {
 	GeminiGenerateContent,
 	Participant,
 	Agent,
-	Human,
+	ExternalParticipant,
 	SituationHandler,
 	SituationProcessor,
 	SituationSpecification,

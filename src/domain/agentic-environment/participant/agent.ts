@@ -22,6 +22,48 @@ export class Agent extends Participant {
 		this.tools = tools
 	}
 
+	participantJoined(participant: Participant): void {
+		if (this.getId() === participant.getId()) {
+			return
+		}
+
+		const particpantJoinedMessage = `The participant with id ${participant.getId()} joined the conversation.
+		
+		Their capabilities are: ${participant.getManifest().capabilities}.
+		Their role is: ${participant.getManifest().role}.
+
+		You can communicate with them using the sendMessage tool to delegate them tasks or whatever the situation context requires.
+		`
+
+		this.memory.getContext().addContextItem(DeveloperMessageItem.create(particpantJoinedMessage))
+	}
+
+	participantLeft(participant: Participant): void {
+		if (this.getId() === participant.getId()) {
+			return
+		}
+
+		const particpantLeftMessage = `The participant with id ${participant.getId()} left the conversation.
+		They were a ${participant.getManifest().role} with the following capabilities: ${participant.getManifest().capabilities}.
+		
+		From now on, you can't communicate with them anymore, nor delegate them tasks.
+		`
+
+		this.memory.getContext().addContextItem(DeveloperMessageItem.create(particpantLeftMessage))
+	}
+
+	getTools(): Tool[] {
+		return this.tools
+	}
+
+	getDeveloperMessage(): string {
+		return this.developerMessage
+	}
+
+	getMemory(): Memory {
+		return this.memory
+	}
+
 	static create({
 		name,
 		instruction,
@@ -42,17 +84,5 @@ export class Agent extends Participant {
 		const developerMessage = DeveloperMessageItem.create(instruction)
 		memory.getContext().addContextItem(developerMessage)
 		return new Agent(manifest, instruction, tools, memory, handlers)
-	}
-
-	getTools(): Tool[] {
-		return this.tools
-	}
-
-	getDeveloperMessage(): string {
-		return this.developerMessage
-	}
-
-	getMemory(): Memory {
-		return this.memory
 	}
 }

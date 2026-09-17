@@ -13,6 +13,8 @@ import { InferenceInputValidator } from "@domain/generative-model/request-valida
 import { DefaultInferenceRunner } from "@app/services/inference-runner"
 import { DefaultFunctionCallRunner } from "@app/services/function-call"
 import { createSendEvent } from "@app/use-cases/send-event"
+import { AgentFactory } from "@app/use-cases/agent-factory"
+import { ParticipantFactory } from "@app/use-cases/paricipant-factory"
 
 export type InferenceRunnerConfig = {
 	supportedModels?: GenerativeModel[]
@@ -67,6 +69,9 @@ export function defineRuntime<TRuntimeState extends RuntimeState>() {
 		return participant
 	}
 
+	const createAgent = AgentFactory(resolveRuntime)
+	const createParticipant = ParticipantFactory(resolveRuntime)
+
 	const join = createJoin(resolveRuntime)
 	const leave = createLeave(resolveRuntime)
 	const sendMessage = createSendMessage(resolveRuntime)
@@ -77,6 +82,8 @@ export function defineRuntime<TRuntimeState extends RuntimeState>() {
 		initializeRuntime,
 		resolveRuntime,
 		resolveParticipant,
+		createAgent,
+		createParticipant,
 		join,
 		leave,
 		sendMessage,

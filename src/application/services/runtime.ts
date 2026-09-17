@@ -19,11 +19,19 @@ export class RuntimeService<TRuntimeState extends RuntimeState> {
 
 	join(participant: Participant): void {
 		this.state.addParticipant(participant)
+		const participants = this.state.getParticipants().filter((p) => p.getId() !== participant.getId())
+		for (const participant of participants) {
+			participant.participantJoined(participant)
+		}
 		this.publish(ParticipantJoinedEvent.init(participant.getManifest()))
 	}
 
 	leave(participant: Participant): void {
 		this.state.removeParticipant(participant)
+		const participants = this.state.getParticipants().filter((p) => p.getId() !== participant.getId())
+		for (const participant of participants) {
+			participant.participantLeft(participant)
+		}
 		this.publish(ParticipantLeftEvent.init(participant.getManifest()))
 	}
 
