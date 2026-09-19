@@ -12,11 +12,11 @@ import { DefaultInferenceRunner } from "@app/services/inference-runner"
 import { DefaultFunctionCallRunner } from "@app/services/function-call"
 import { createSendEvent } from "@app/use-cases/send-event"
 import { CreateAgentUseCase } from "@app/use-cases/create-agent"
-import { ParticipantFactory } from "@app/use-cases/paricipant-factory"
 import { Agent } from "@domain/agent/agent"
 import { Tool } from "@domain/generative-model/tool"
 import { SituationHandler } from "@domain/environment/situation-handler"
 import { AgentRepository } from "@domain/agent/agent-repository"
+import { CreateParticipantUseCase } from "@app/use-cases/create-participant"
 
 export type InferenceRunnerConfig = {
 	supportedModels?: GenerativeModel[]
@@ -84,7 +84,11 @@ export function defineRuntime<TModel extends DomainModel>() {
 		) => {
 			return await createAgentUseCase.execute(name, instruction, capabilities, tools, handlers)
 		}
-	const createParticipant = ParticipantFactory(resolveRuntime)
+	const createParticipantUseCase = new CreateParticipantUseCase()
+
+	const createParticipant = async (name: string, capabilities: readonly string[], handlers: SituationHandler[]) => {
+		return await createParticipantUseCase.execute(name, capabilities, handlers)
+	}
 
 	const join = () => async (participant: Participant) => {
 		resolveRuntime().join(participant)

@@ -16,7 +16,6 @@ import { OpenAIChatCompletions } from "@infra/providers/openai/endpoints/openai-
 import { AnthropicMessages } from "@infra/providers/anthropic/endpoints/anthropic-messages"
 import { GeminiGenerateContent } from "@infra/providers/gemini/endpoints/gemini-generate-content"
 import { Agent } from "@domain/agent/agent"
-import { ExternalParticipant } from "@domain/environment/external-paricipant"
 import { SituationContext, SituationHandler, SituationProcessor } from "@domain/environment/situation-handler"
 import { SituationSpecification } from "@domain/environment/situation-specification"
 import { DefaultInferenceRunner } from "@app/services/inference-runner"
@@ -66,7 +65,6 @@ export {
 	GeminiGenerateContent,
 	Participant,
 	Agent,
-	ExternalParticipant,
 	SituationHandler,
 	SituationProcessor,
 	SituationSpecification,

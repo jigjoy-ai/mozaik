@@ -1,6 +1,6 @@
 import { SituationHandler } from "./situation-handler"
 
-export type ParticipantRole = "agent" | "human"
+export type ParticipantRole = "agent" | "external"
 
 export type ParticipantManifest = {
 	readonly id: string
@@ -9,11 +9,11 @@ export type ParticipantManifest = {
 	readonly capabilities?: readonly string[]
 }
 
-export abstract class Participant {
+export class Participant {
 	private readonly manifest: ParticipantManifest
 	private handlers: SituationHandler[]
 
-	protected constructor(manifest: ParticipantManifest, handlers: SituationHandler[]) {
+	constructor(manifest: ParticipantManifest, handlers: SituationHandler[]) {
 		this.manifest = manifest
 		this.handlers = handlers
 	}
@@ -33,8 +33,4 @@ export abstract class Participant {
 	setHandlers(handlers: SituationHandler[]): void {
 		this.handlers = handlers
 	}
-
-	abstract participantJoined(participant: Participant): void
-
-	abstract participantLeft(participant: Participant): void
 }
