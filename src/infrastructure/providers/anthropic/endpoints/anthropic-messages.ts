@@ -1,6 +1,6 @@
 import { SemanticEvent } from "@domain/agentic-environment/semantic-event/event"
 import type { Endpoint } from "@domain/generative-model/endpoint"
-import type { InferenceInput, InferenceOutput } from "@app/states/inference"
+import type { InferenceInput, InferenceOutput } from "@domain/agent-loop/states/inference"
 import { AnthropicMessagesMapper } from "./anthropic-messages-mapper"
 import Anthropic from "@anthropic-ai/sdk"
 import type { InferenceEndpointMapper } from "@domain/generative-model/inference-endpoint-mapper"

@@ -1,12 +1,7 @@
 import { Agent } from "@domain/agentic-environment/participant/agent"
 import { Tool } from "@domain/generative-model/tool"
 import { SituationHandler } from "@domain/agentic-environment/situation/situation-handler"
-
-export interface AgentRepository {
-	save(agent: Agent): Promise<void>
-	getById(id: string): Promise<Agent | undefined>
-	getAll(): Promise<Agent[]>
-}
+import { AgentRepository } from "@domain/agentic-environment/agent-repository"
 
 export class CreateAgentUseCase {
 	private readonly agentRepository: AgentRepository

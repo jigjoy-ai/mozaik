@@ -1,4 +1,4 @@
-import type { InferenceInput, InferenceItem, InferenceOutput } from "@app/states/inference"
+import type { InferenceInput, InferenceItem, InferenceOutput } from "@domain/agent-loop/states/inference"
 import type { InferenceEndpointMapper } from "@domain/generative-model/inference-endpoint-mapper"
 import { DeveloperMessageItem } from "@domain/model-context/context-item/client-item/developer-message"
 import { FunctionCallOutputItem } from "@domain/model-context/context-item/client-item/function-call-output"

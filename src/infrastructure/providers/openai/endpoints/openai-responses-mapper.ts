@@ -1,4 +1,4 @@
-import type { InferenceInput, InferenceItem } from "@app/states/inference"
+import type { InferenceInput, InferenceItem } from "@domain/agent-loop/states/inference"
 import type { InferenceEndpointMapper } from "@domain/generative-model/inference-endpoint-mapper"
 import { DeveloperMessageItem } from "@domain/model-context/context-item/client-item/developer-message"
 import { FunctionCallOutputItem } from "@domain/model-context/context-item/client-item/function-call-output"
@@ -8,7 +8,7 @@ import { FunctionCallItem } from "@domain/model-context/context-item/model-item/
 import { ModelMessageItem } from "@domain/model-context/context-item/model-item/model-message"
 import { ReasoningItem } from "@domain/model-context/context-item/model-item/reasoning"
 import { SummaryText } from "@domain/model-context/context-item/item-content/summary-text"
-import { InferenceOutput } from "@app/states/inference"
+import { InferenceOutput } from "@domain/agent-loop/states/inference"
 import { InputTokenDetails, OutputTokenDetails, TokenUsage } from "@domain/generative-model/token-usage"
 import type OpenAI from "openai"
 

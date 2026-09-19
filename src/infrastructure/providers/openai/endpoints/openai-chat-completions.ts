@@ -1,8 +1,8 @@
-import type { InferenceOutput } from "@app/states/inference"
+import type { InferenceOutput } from "@domain/agent-loop/states/inference"
 import { SemanticEvent } from "@domain/agentic-environment/semantic-event/event"
 import type { Endpoint } from "@domain/generative-model/endpoint"
 import { OpenAIChatCompletionsMapper } from "./openai-chat-completions-mapper"
-import type { InferenceInput } from "@app/states/inference"
+import type { InferenceInput } from "@domain/agent-loop/states/inference"
 import OpenAI from "openai"
 import type { InferenceEndpointMapper } from "@domain/generative-model/inference-endpoint-mapper"
 

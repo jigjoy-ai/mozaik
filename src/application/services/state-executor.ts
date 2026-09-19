@@ -5,11 +5,11 @@ import {
 	LoopTransition,
 } from "@domain/agent-loop/loop-state"
 import { LoopVisitor } from "@domain/agent-loop/loop-visitor"
-import { FunctionCallState } from "@app/states/function-call"
-import { InferenceState } from "@app/states/inference"
-import { MessageReceivedState } from "@app/states/message-received"
-import { ModelMessageState } from "@app/states/model-message"
-import { InferenceStreamingState } from "@app/states/inference-streaming"
+import { FunctionCallState } from "@domain/agent-loop/states/function-call"
+import { InferenceState } from "@domain/agent-loop/states/inference"
+import { MessageReceivedState } from "@domain/agent-loop/states/message-received"
+import { ModelMessageState } from "@domain/agent-loop/states/model-message"
+import { InferenceStreamingState } from "@domain/agent-loop/states/inference-streaming"
 
 export class DefaultLoopStateExecutor implements LoopStateExecutor {
 	constructor(

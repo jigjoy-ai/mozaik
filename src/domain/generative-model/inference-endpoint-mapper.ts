@@ -1,4 +1,4 @@
-import type { InferenceInput, InferenceOutput } from "@app/states/inference"
+import type { InferenceInput, InferenceOutput } from "@domain/agent-loop/states/inference"
 
 export interface InferenceEndpointMapper {
 	toRequest(inferenceInput: InferenceInput): any
