@@ -2,7 +2,7 @@ import { FunctionCallOutputItem } from "@domain/generative-model/context/items/f
 import type { LoopState, LoopStateExecution } from "@domain/agent/loop/loop-state"
 import type { Tool } from "@domain/generative-model/tool"
 import type { LoopVisitor } from "@domain/agent/loop/loop-visitor"
-import { InferenceInput } from "@domain/agent/loop/states/inference"
+import { InferenceInput } from "@domain/generative-model/inference-runner"
 import { FunctionCallItem } from "@domain/generative-model/context/items/function-call"
 
 export interface FunctionCallParams {

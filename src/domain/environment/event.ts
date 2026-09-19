@@ -1,4 +1,4 @@
-import { ParticipantManifest } from "../participant/participant"
+import { ParticipantManifest } from "./participant"
 
 export class SemanticEvent<TType extends string = string, TPayload = unknown> {
 	readonly type: TType

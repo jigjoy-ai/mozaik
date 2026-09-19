@@ -4,10 +4,10 @@ import { FunctionCallOutputItem } from "@domain/generative-model/context/items/f
 import { FunctionCallParams } from "@domain/agent/loop/states/function-call"
 import { RuntimeService } from "@app/services/runtime"
 import { DomainModel } from "@domain/environment/runtime-state"
-import { SemanticEvent } from "@domain/environment/semantic-event/event"
+import { SemanticEvent } from "@domain/environment/event"
 import { CloudClient } from "@mozaik-ai/cloud-sdk"
 import { Agent } from "@domain/agent/agent"
-import { InferenceInput, InferenceOutput } from "@domain/agent/loop/states/inference"
+import { InferenceInput, InferenceOutput } from "@domain/generative-model/inference-runner"
 
 export class EventPublisherLoopVisitor implements LoopVisitor {
 	constructor(

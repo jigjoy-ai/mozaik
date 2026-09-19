@@ -2,7 +2,7 @@ import { ModelMessageItem } from "@domain/generative-model/context/items/model-m
 import { FunctionCallOutputItem } from "@domain/generative-model/context/items/function-call-output"
 import { LoopVisitor } from "./loop-visitor"
 import { InterceptionOutput, InterceptionParams } from "../interception"
-import { InferenceInput, InferenceOutput } from "./states/inference"
+import { InferenceInput, InferenceOutput } from "@domain/generative-model/inference-runner"
 import { FunctionCallParams } from "./states/function-call"
 
 export type LoopStateId =

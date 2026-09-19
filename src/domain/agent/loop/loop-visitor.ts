@@ -1,7 +1,7 @@
-import { SemanticEvent } from "@domain/environment/semantic-event/event"
+import { SemanticEvent } from "@domain/environment/event"
 import { FunctionCallOutputItem } from "@domain/generative-model/context/items/function-call-output"
 import { LoopTransition, ModelMessageParams, ReceivedMessage } from "./loop-state"
-import { InferenceInput, InferenceOutput } from "./states/inference"
+import { InferenceInput, InferenceOutput } from "@domain/generative-model/inference-runner"
 import { FunctionCallParams } from "./states/function-call"
 
 export interface LoopVisitor {

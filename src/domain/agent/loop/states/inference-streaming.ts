@@ -1,6 +1,6 @@
 import { LoopVisitor } from "@domain/agent/loop/loop-visitor"
 import { LoopState } from "@domain/agent/loop/loop-state"
-import { InferenceInput, InferenceOutput, InferenceRunner } from "@domain/agent/loop/states/inference"
+import { InferenceInput, InferenceOutput, InferenceRunner } from "@domain/generative-model/inference-runner"
 import { LoopStateExecution } from "@domain/agent/loop/loop-state"
 
 export class InferenceStreamingState implements LoopState<InferenceInput, LoopStateExecution<"inference_streaming">> {

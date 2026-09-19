@@ -1,4 +1,4 @@
-import { SemanticEvent } from "@domain/environment/semantic-event/event"
+import { SemanticEvent } from "@domain/environment/event"
 import type { Endpoint } from "@domain/generative-model/endpoint"
 import type { InferenceInput, InferenceOutput } from "@domain/agent/loop/states/inference"
 import { AnthropicMessagesMapper } from "./anthropic-messages-mapper"

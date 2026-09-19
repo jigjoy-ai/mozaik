@@ -1,5 +1,5 @@
-import { SemanticEvent } from "../semantic-event/event"
-import { Participant } from "../participant/participant"
+import { SemanticEvent } from "./event"
+import { Participant } from "./participant"
 import { SituationSpecification } from "./situation-specification"
 
 export interface SituationHandler {

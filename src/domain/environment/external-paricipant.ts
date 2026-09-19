@@ -1,5 +1,5 @@
 import { Participant, ParticipantManifest } from "./participant"
-import { SituationHandler } from "../situation/situation-handler"
+import { SituationHandler } from "./situation-handler"
 
 export class ExternalParticipant extends Participant {
 	private collaborators: Participant[] = []

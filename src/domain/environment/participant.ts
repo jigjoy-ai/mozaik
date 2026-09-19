@@ -1,4 +1,4 @@
-import { SituationHandler } from "../situation/situation-handler"
+import { SituationHandler } from "./situation-handler"
 
 export type ParticipantRole = "agent" | "human"
 

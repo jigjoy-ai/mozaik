@@ -1,8 +1,8 @@
-import { Participant } from "@domain/environment/participant/participant"
+import { Participant } from "@domain/environment/participant"
 import { DomainModel } from "@domain/environment/runtime-state"
-import { EventProcessor } from "@domain/environment/semantic-event/event-processor"
-import { ParticipantJoinedEvent, ParticipantLeftEvent, SemanticEvent } from "@domain/environment/semantic-event/event"
-import { InferenceRunner } from "@domain/agent/loop/states/inference"
+import { EventProcessor } from "@domain/environment/event-processor"
+import { ParticipantJoinedEvent, ParticipantLeftEvent, SemanticEvent } from "@domain/environment/event"
+import { InferenceRunner } from "@domain/generative-model/inference-runner"
 import { FunctionCallRunner } from "@domain/agent/loop/states/function-call"
 
 export class RuntimeService<TModel extends DomainModel> {

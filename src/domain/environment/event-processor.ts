@@ -1,5 +1,5 @@
-import { SemanticEvent } from "@domain/environment/semantic-event/event"
-import { Participant } from "@domain/environment/participant/participant"
+import { SemanticEvent } from "./event"
+import { Participant } from "./participant"
 
 export class EventProcessor {
 	process(event: SemanticEvent, consumer: Participant): void {

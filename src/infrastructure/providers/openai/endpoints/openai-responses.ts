@@ -1,4 +1,4 @@
-import { SemanticEvent } from "@domain/environment/semantic-event/event"
+import { SemanticEvent } from "@domain/environment/event"
 import { InferenceOutput } from "@domain/agent/loop/states/inference"
 import type { Endpoint } from "@domain/generative-model/endpoint"
 import OpenAI from "openai"

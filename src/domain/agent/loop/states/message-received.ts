@@ -1,4 +1,4 @@
-import { InferenceInput } from "@domain/agent/loop/states/inference"
+import { InferenceInput } from "@domain/generative-model/inference-runner"
 import { UserMessageItem } from "@domain/generative-model/context/items/user-message"
 import { LoopState, LoopStateExecution, ReceivedMessage } from "@domain/agent/loop/loop-state"
 import { LoopVisitor } from "@domain/agent/loop/loop-visitor"

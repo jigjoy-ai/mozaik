@@ -1,5 +1,5 @@
 import { InferenceOutput } from "@domain/agent/loop/states/inference"
-import { SemanticEvent } from "@domain/environment/semantic-event/event"
+import { SemanticEvent } from "@domain/environment/event"
 import type { Endpoint } from "@domain/generative-model/endpoint"
 import { OpenAIChatCompletionsMapper } from "./openai-chat-completions-mapper"
 import { InferenceInput } from "@domain/agent/loop/states/inference"

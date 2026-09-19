@@ -1,5 +1,5 @@
-import { SemanticEvent } from "@domain/environment/semantic-event/event"
-import { Participant } from "../participant/participant"
+import { SemanticEvent } from "./event"
+import { Participant } from "./participant"
 
 export type SituationContext<TEvent extends SemanticEvent = SemanticEvent> = {
 	readonly event: TEvent
