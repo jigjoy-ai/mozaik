@@ -1,13 +1,9 @@
-import { Participant } from "@domain/agentic-environment/participant/participant"
-import { DomainModel } from "@domain/agentic-environment/runtime-state"
-import { EventProcessor } from "@domain/agentic-environment/semantic-event/event-processor"
-import {
-	ParticipantJoinedEvent,
-	ParticipantLeftEvent,
-	SemanticEvent,
-} from "@domain/agentic-environment/semantic-event/event"
-import { InferenceRunner } from "@domain/agent-loop/inference"
-import { FunctionCallRunner } from "@domain/agent-loop/function-call"
+import { Participant } from "@domain/environment/participant/participant"
+import { DomainModel } from "@domain/environment/runtime-state"
+import { EventProcessor } from "@domain/environment/semantic-event/event-processor"
+import { ParticipantJoinedEvent, ParticipantLeftEvent, SemanticEvent } from "@domain/environment/semantic-event/event"
+import { InferenceRunner } from "@domain/agent/loop/states/inference"
+import { FunctionCallRunner } from "@domain/agent/loop/states/function-call"
 
 export class RuntimeService<TModel extends DomainModel> {
 	constructor(

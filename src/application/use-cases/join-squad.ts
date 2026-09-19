@@ -1,4 +1,4 @@
-import { SquadRepository } from "@domain/agentic-environment/squad-repository"
+import { SquadRepository } from "@domain/environment/squad-repository"
 
 export class JoinSquadUseCase {
 	private readonly squadRepository: SquadRepository

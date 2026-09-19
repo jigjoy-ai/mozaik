@@ -1,6 +1,6 @@
 import { RuntimeService } from "@app/services/runtime"
-import { DomainModel } from "@domain/agentic-environment/runtime-state"
-import { SemanticEvent } from "@domain/agentic-environment/semantic-event/event"
+import { DomainModel } from "@domain/environment/runtime-state"
+import { SemanticEvent } from "@domain/environment/semantic-event/event"
 
 export function createSendEvent<TModel extends DomainModel>(resolveRuntime: () => RuntimeService<TModel>) {
 	return function sendEvent(event: SemanticEvent, senderId: string): void {

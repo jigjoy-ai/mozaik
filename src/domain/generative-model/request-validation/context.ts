@@ -1,11 +1,11 @@
-import type { InferenceInput } from "@domain/agent-loop/inference"
-import type { ContextItem } from "@domain/model-context/context-item/context-item"
-import { DeveloperMessageItem } from "@domain/model-context/context-item/client-item/developer-message"
-import { SystemMessageItem } from "@domain/model-context/context-item/client-item/system-message"
-import { UserMessageItem } from "@domain/model-context/context-item/client-item/user-message"
-import { ModelMessageItem } from "@domain/model-context/context-item/model-item/model-message"
+import type { InferenceInput } from "@domain/agent/loop/states/inference"
 import type { RequestValidationRule } from "./rule"
 import type { ModelSpecification } from "../generative-model"
+import { ContextItem } from "@domain/generative-model/context/item"
+import { UserMessageItem } from "@domain/generative-model/context/items/user-message"
+import { SystemMessageItem } from "@domain/generative-model/context/items/system-message"
+import { DeveloperMessageItem } from "@domain/generative-model/context/items/developer-message"
+import { ModelMessageItem } from "@domain/generative-model/context/items/model-message"
 
 function getContextItemValidationKey(item: ContextItem): string {
 	if (item instanceof UserMessageItem) {

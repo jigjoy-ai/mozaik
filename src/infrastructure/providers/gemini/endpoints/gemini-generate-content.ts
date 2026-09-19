@@ -1,7 +1,7 @@
-import { SemanticEvent } from "@domain/agentic-environment/semantic-event/event"
+import { SemanticEvent } from "@domain/environment/semantic-event/event"
 import { GoogleGenAI } from "@google/genai"
 import type { Endpoint } from "@domain/generative-model/endpoint"
-import type { InferenceInput, InferenceOutput } from "@domain/agent-loop/states/inference"
+import type { InferenceInput, InferenceOutput } from "@domain/agent/loop/states/inference"
 import { GeminiGenerateContentMapper } from "./gemini-generate-content-mapper"
 import type { InferenceEndpointMapper } from "@domain/generative-model/inference-endpoint-mapper"
 

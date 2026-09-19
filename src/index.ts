@@ -1,48 +1,44 @@
-import { ModelContext } from "@domain/model-context/model-context"
-import { ContextItem } from "@domain/model-context/context-item/context-item"
-import { UserMessageItem } from "@domain/model-context/context-item/client-item/user-message"
-import { DeveloperMessageItem } from "@domain/model-context/context-item/client-item/developer-message"
-import { ModelMessageItem } from "@domain/model-context/context-item/model-item/model-message"
-import { FunctionCallItem } from "@domain/model-context/context-item/model-item/function-call"
-import { ReasoningItem } from "@domain/model-context/context-item/model-item/reasoning"
+import { ModelContext } from "@domain/generative-model/context/model-context"
 import { StructuredOutputFormat } from "@domain/generative-model/request-validation/structured-output"
-import { FunctionCallOutputItem } from "@domain/model-context/context-item/client-item/function-call-output"
 import { InputTokenDetails, OutputTokenDetails, TokenUsage } from "@domain/generative-model/token-usage"
 import { Tool } from "@domain/generative-model/tool"
 import { McpClient, type McpServerConfig, type McpToolSpec } from "@infra/mcp/mcp-client"
 import { McpToolRegistry } from "@infra/mcp/mcp-tool-registry"
-import { SystemMessageItem } from "@domain/model-context/context-item/client-item/system-message"
-import { SemanticEvent } from "@domain/agentic-environment/semantic-event/event"
+import { SemanticEvent } from "@domain/environment/semantic-event/event"
 import { Endpoint } from "@domain/generative-model/endpoint"
-import { InferenceInput, InferenceOutput, InferenceRunner } from "@domain/agent-loop/inference"
-import { Participant } from "@domain/agentic-environment/participant/participant"
-import { RuntimeState } from "@domain/agentic-environment/runtime-state"
+import { InferenceInput, InferenceOutput, InferenceRunner } from "@domain/agent/loop/states/inference"
+import { Participant } from "@domain/environment/participant/participant"
+import { DomainModel } from "@domain/environment/runtime-state"
 import { defineRuntime, type InferenceRunnerConfig } from "./define-runtime"
 import { supportedModels } from "@app/services/models"
 import { OpenAIResponses } from "@infra/providers/openai/endpoints/openai-responses"
 import { OpenAIChatCompletions } from "@infra/providers/openai/endpoints/openai-chat-completions"
 import { AnthropicMessages } from "@infra/providers/anthropic/endpoints/anthropic-messages"
 import { GeminiGenerateContent } from "@infra/providers/gemini/endpoints/gemini-generate-content"
-import { Agent } from "@domain/agentic-environment/participant/agent"
-import { ExternalParticipant } from "@domain/agentic-environment/participant/external-paricipant"
-import {
-	SituationContext,
-	SituationHandler,
-	SituationProcessor,
-} from "@domain/agentic-environment/situation/situation-handler"
-import { SituationSpecification } from "@domain/agentic-environment/situation/situation-specification"
+import { Agent } from "@domain/agent/agent"
+import { ExternalParticipant } from "@domain/environment/participant/external-paricipant"
+import { SituationContext, SituationHandler, SituationProcessor } from "@domain/environment/situation/situation-handler"
+import { SituationSpecification } from "@domain/environment/situation/situation-specification"
 import { DefaultInferenceRunner } from "@app/services/inference-runner"
-import { InterceptionHandler } from "@domain/agent-loop/interception"
+import { InterceptionHandler } from "@domain/agent/interception"
 import {
 	ExecutableLoopStateId,
 	ExecutableTransition,
 	LoopStateExecution,
 	LoopTransition,
-} from "@domain/agent-loop/loop-state"
+} from "@domain/agent/loop/loop-state"
+import { ContextItem } from "@domain/generative-model/context/item"
+import { UserMessageItem } from "@domain/generative-model/context/items/user-message"
+import { DeveloperMessageItem } from "@domain/generative-model/context/items/developer-message"
+import { SystemMessageItem } from "@domain/generative-model/context/items/system-message"
+import { ModelMessageItem } from "@domain/generative-model/context/items/model-message"
+import { FunctionCallItem } from "@domain/generative-model/context/items/function-call"
+import { FunctionCallOutputItem } from "@domain/generative-model/context/items/function-call-output"
+import { ReasoningItem } from "@domain/generative-model/context/items/reasoning"
 
 export {
 	defineRuntime,
-	RuntimeState,
+	DomainModel,
 	ModelContext,
 	ContextItem,
 	SemanticEvent,

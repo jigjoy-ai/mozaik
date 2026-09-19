@@ -3,13 +3,13 @@ import {
 	LoopStateExecution,
 	LoopStateExecutor,
 	LoopTransition,
-} from "@domain/agent-loop/loop-state"
-import { LoopVisitor } from "@domain/agent-loop/loop-visitor"
-import { FunctionCallState } from "@domain/agent-loop/states/function-call"
-import { InferenceState } from "@domain/agent-loop/states/inference"
-import { MessageReceivedState } from "@domain/agent-loop/states/message-received"
-import { ModelMessageState } from "@domain/agent-loop/states/model-message"
-import { InferenceStreamingState } from "@domain/agent-loop/states/inference-streaming"
+} from "@domain/agent/loop/loop-state"
+import { LoopVisitor } from "@domain/agent/loop/loop-visitor"
+import { FunctionCallState } from "@domain/agent/loop/states/function-call"
+import { InferenceState } from "@domain/agent/loop/states/inference"
+import { MessageReceivedState } from "@domain/agent/loop/states/message-received"
+import { ModelMessageState } from "@domain/agent/loop/states/model-message"
+import { InferenceStreamingState } from "@domain/agent/loop/states/inference-streaming"
 
 export class DefaultLoopStateExecutor implements LoopStateExecutor {
 	constructor(

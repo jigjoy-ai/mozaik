@@ -1,6 +1,7 @@
-import type { InferenceInput, InferenceOutput } from "@domain/agent-loop/inference"
 import type { InferenceEndpointMapper } from "./inference-endpoint-mapper"
-import { SemanticEvent } from "@domain/agentic-environment/semantic-event/event"
+import { InferenceInput } from "@domain/agent/loop/states/inference"
+import { InferenceOutput } from "@domain/agent/loop/states/inference"
+import { SemanticEvent } from "@domain/environment/semantic-event/event"
 
 export interface Endpoint {
 	endpointMapper: InferenceEndpointMapper

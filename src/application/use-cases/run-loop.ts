@@ -1,22 +1,22 @@
 import { RuntimeService } from "@app/services/runtime"
-import { AgentLoop } from "@domain/agent-loop/agent-loop"
-import { FunctionCallState } from "@domain/agent-loop/states/function-call"
-import { InferenceState } from "@domain/agent-loop/states/inference"
-import { InferenceInput } from "@domain/agent-loop/inference"
-import { MessageReceivedState } from "@domain/agent-loop/states/message-received"
-import { ModelMessageState } from "@domain/agent-loop/states/model-message"
-import { TransitionResolver } from "@domain/agent-loop/transition-resolver"
+import { AgentLoop } from "@domain/agent/loop/agent-loop"
+import { FunctionCallState } from "@domain/agent/loop/states/function-call"
+import { InferenceState } from "@domain/agent/loop/states/inference"
+import { InferenceInput } from "@domain/agent/loop/states/inference"
+import { MessageReceivedState } from "@domain/agent/loop/states/message-received"
+import { ModelMessageState } from "@domain/agent/loop/states/model-message"
+import { TransitionResolver } from "@domain/agent/loop/transition-resolver"
 import {
 	FunctionCallToInferenceRule,
 	InferenceToFunctionCallRule,
 	InferenceToModelMessageRule,
 	ContextPreparationToInferenceRule,
 	ModelMessageToIdleRule,
-} from "@domain/agent-loop/transition-rule"
-import { DomainModel } from "@domain/agentic-environment/runtime-state"
+} from "@domain/agent/loop/transition-rule"
+import { DomainModel } from "@domain/environment/runtime-state"
 import { EventPublisherLoopVisitor } from "@app/services/event-publisher-visitor"
-import { InferenceStreamingState } from "@domain/agent-loop/states/inference-streaming"
-import { InterceptionHandler } from "@domain/agent-loop/interception"
+import { InferenceStreamingState } from "@domain/agent/loop/states/inference-streaming"
+import { InterceptionHandler } from "@domain/agent/interception"
 import { DefaultLoopStateExecutor } from "@app/services/state-executor"
 import { createCloudClient } from "@mozaik-ai/cloud-sdk"
 

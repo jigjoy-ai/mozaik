@@ -1,7 +1,7 @@
-import { FunctionCallRunner } from "@domain/agent-loop/function-call"
+import { FunctionCallRunner } from "@domain/agent/loop/states/function-call"
+import { FunctionCallOutputItem } from "@domain/generative-model/context/items/function-call-output"
+import { FunctionCallItem } from "@domain/generative-model/context/items/function-call"
 import { Tool } from "@domain/generative-model/tool"
-import { FunctionCallOutputItem } from "@domain/model-context/context-item/client-item/function-call-output"
-import { FunctionCallItem } from "@domain/model-context/context-item/model-item/function-call"
 
 export class DefaultFunctionCallRunner implements FunctionCallRunner {
 	async run(input: FunctionCallItem, tool: Tool): Promise<FunctionCallOutputItem> {

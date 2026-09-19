@@ -1,14 +1,14 @@
-import type { InferenceInput, InferenceItem, InferenceOutput } from "@domain/agent-loop/states/inference"
+import type { InferenceInput, InferenceItem, InferenceOutput } from "@domain/agent/loop/states/inference"
 import type { InferenceEndpointMapper } from "@domain/generative-model/inference-endpoint-mapper"
 import { InputTokenDetails, OutputTokenDetails, TokenUsage } from "@domain/generative-model/token-usage"
-import { DeveloperMessageItem } from "@domain/model-context/context-item/client-item/developer-message"
-import { FunctionCallOutputItem } from "@domain/model-context/context-item/client-item/function-call-output"
-import { SystemMessageItem } from "@domain/model-context/context-item/client-item/system-message"
-import { UserMessageItem } from "@domain/model-context/context-item/client-item/user-message"
-import { InputText } from "@domain/model-context/context-item/item-content/input-text"
-import { FunctionCallItem } from "@domain/model-context/context-item/model-item/function-call"
-import { ModelMessageItem } from "@domain/model-context/context-item/model-item/model-message"
-import { ReasoningItem } from "@domain/model-context/context-item/model-item/reasoning"
+import { DeveloperMessageItem } from "@domain/generative-model/context/items/developer-message"
+import { FunctionCallOutputItem } from "@domain/generative-model/context/items/function-call-output"
+import { SystemMessageItem } from "@domain/generative-model/context/items/system-message"
+import { UserMessageItem } from "@domain/generative-model/context/items/user-message"
+import { InputText } from "@domain/generative-model/context/items/item-content/input-text"
+import { FunctionCallItem } from "@domain/generative-model/context/items/function-call"
+import { ModelMessageItem } from "@domain/generative-model/context/items/model-message"
+import { ReasoningItem } from "@domain/generative-model/context/items/reasoning"
 
 export class GeminiGenerateContentMapper implements InferenceEndpointMapper {
 	toRequest(inferenceInput: InferenceInput) {
