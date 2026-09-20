@@ -14,21 +14,6 @@ export class Environment {
 		this.participants = participants
 	}
 
-	addParticipant(participant: Participant): void {
-		const alreadyExists = this.participants.find((p) => p.getId() === participant.getId())
-
-		if (alreadyExists) return
-		this.participants.push(participant)
-
-		this.publish(ParticipantJoinedEvent.init(participant.getManifest()))
-	}
-
-	removeParticipant(participant: Participant): void {
-		this.participants = this.participants.filter((p) => p.getId() !== participant.getId())
-
-		this.publish(ParticipantLeftEvent.init(participant.getManifest()))
-	}
-
 	getId(): string {
 		return this.id
 	}
@@ -39,6 +24,30 @@ export class Environment {
 
 	getOwnerId(): string {
 		return this.ownerId
+	}
+
+	addParticipant(participant: Participant): void {
+		const alreadyExists = this.participants.find((p) => p.getId() === participant.getId())
+
+		if (alreadyExists) return
+		this.participants.push(participant)
+
+		this.publish(ParticipantJoinedEvent.init(participant.getManifest()))
+	}
+
+	getParticipant(id: string): Participant | undefined {
+		const participant = this.getParticipants().find((p) => p.getId() === id)
+		if (!participant) {
+			throw new Error(`Participant ${id} not found`)
+		}
+
+		return participant
+	}
+
+	removeParticipant(participant: Participant): void {
+		this.participants = this.participants.filter((p) => p.getId() !== participant.getId())
+
+		this.publish(ParticipantLeftEvent.init(participant.getManifest()))
 	}
 
 	getParticipants(): Participant[] {
@@ -61,15 +70,6 @@ export class Environment {
 		for (const participant of this.participants) {
 			this.process(event, participant)
 		}
-	}
-
-	getParticipant(id: string): Participant | undefined {
-		const participant = this.getParticipants().find((p) => p.getId() === id)
-		if (!participant) {
-			throw new Error(`Participant ${id} not found`)
-		}
-
-		return participant
 	}
 
 	static create(name: string, ownerId: string, participants: Participant[] = []): Environment {
