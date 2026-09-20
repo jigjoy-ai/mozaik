@@ -20,12 +20,6 @@ import { SituationContext, SituationHandler, SituationProcessor } from "@domain/
 import { SituationSpecification } from "@domain/runtime/situation-specification"
 import { DefaultInferenceRunner } from "@app/services/inference-runner"
 import { InterceptionHandler } from "@domain/agent/interception"
-import {
-	ExecutableLoopStateId,
-	ExecutableTransition,
-	LoopStateExecution,
-	LoopTransition,
-} from "@domain/agent/loop/loop-state"
 import { ContextItem } from "@domain/generative-model/context/item"
 import { UserMessageItem } from "@domain/generative-model/context/items/user-message"
 import { DeveloperMessageItem } from "@domain/generative-model/context/items/developer-message"
@@ -70,10 +64,6 @@ export {
 	SituationSpecification,
 	SituationContext,
 	InterceptionHandler,
-	LoopStateExecution,
-	LoopTransition,
-	ExecutableLoopStateId,
-	ExecutableTransition,
 	InferenceOutput,
 	InferenceInput,
 	InferenceRunner,

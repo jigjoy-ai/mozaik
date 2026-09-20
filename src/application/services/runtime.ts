@@ -1,6 +1,6 @@
 import { DomainModel } from "@domain/runtime/runtime-state"
 import { InferenceRunner } from "@domain/generative-model/inference-runner"
-import { FunctionCallRunner } from "@domain/agent/loop/states/function-call"
+import { FunctionCallRunner } from "@domain/generative-model/tool-call-runner"
 
 export class RuntimeService<TModel extends DomainModel> {
 	constructor(

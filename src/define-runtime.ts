@@ -1,9 +1,7 @@
 import { RuntimeService } from "@app/services/runtime"
 import { Participant } from "@domain/runtime/participant"
 import { DomainModel } from "@domain/runtime/runtime-state"
-import { EventProcessor } from "@domain/environment/event-processor"
 import { createSendMessage } from "@app/use-cases/send-message"
-import { createRunLoop } from "@app/use-cases/run-loop"
 import { InferenceRunner } from "@domain/generative-model/inference-runner"
 import { supportedModels } from "@app/services/models"
 import { GenerativeModel } from "@domain/generative-model/generative-model"
@@ -39,7 +37,6 @@ export class InMemoryAgentRepository implements AgentRepository {
 
 export function defineRuntime<TModel extends DomainModel>() {
 	let runtime: RuntimeService<TModel> | null = null
-	const processor = new EventProcessor()
 
 	function initializeRuntime(config: {
 		model: TModel
@@ -58,7 +55,7 @@ export function defineRuntime<TModel extends DomainModel>() {
 
 		const functionCallRunner = new DefaultFunctionCallRunner()
 
-		runtime = new RuntimeService(config.model, processor, inferenceRunner, functionCallRunner)
+		runtime = new RuntimeService(config.model, inferenceRunner, functionCallRunner)
 
 		return runtime
 	}
@@ -90,25 +87,23 @@ export function defineRuntime<TModel extends DomainModel>() {
 		return await createParticipantUseCase.execute(name, capabilities, handlers)
 	}
 
-	const join = () => async (participant: Participant) => {
-		resolveRuntime().join(participant)
-	}
-	const leave = () => async (participant: Participant) => {
-		resolveRuntime().leave(participant)
-	}
+	// const join = () => async (participant: Participant) => {
+	// 	resolveRuntime().join(participant)
+	// }
+	// const leave = () => async (participant: Participant) => {
+	// 	resolveRuntime().leave(participant)
+	// }
 	const sendMessage = createSendMessage(resolveRuntime)
 	const sendEvent = createSendEvent(resolveRuntime)
-	const runLoop = createRunLoop(resolveRuntime)
 
 	return {
 		initializeRuntime,
 		resolveRuntime,
 		createAgent,
 		createParticipant,
-		join,
-		leave,
+		// join,
+		// leave,
 		sendMessage,
 		sendEvent,
-		runLoop,
 	}
 }

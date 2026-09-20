@@ -1,6 +1,6 @@
-import { FunctionCallRunner } from "@domain/agent/loop/states/function-call"
 import { FunctionCallOutputItem } from "@domain/generative-model/context/items/function-call-output"
 import { FunctionCallItem } from "@domain/generative-model/context/items/function-call"
+import { FunctionCallRunner } from "@domain/generative-model/tool-call-runner"
 import { Tool } from "@domain/generative-model/tool"
 
 export class DefaultFunctionCallRunner implements FunctionCallRunner {
