@@ -1,6 +1,6 @@
 import { Agent } from "@domain/agent/agent"
 import { Tool } from "@domain/generative-model/tool"
-import { SituationHandler } from "@domain/environment/situation-handler"
+import { SituationHandler } from "@domain/runtime/situation-handler"
 import { AgentRepository } from "@domain/agent/agent-repository"
 
 export class CreateAgentUseCase {

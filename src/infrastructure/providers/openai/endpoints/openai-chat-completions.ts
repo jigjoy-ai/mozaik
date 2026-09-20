@@ -1,5 +1,5 @@
 import { InferenceOutput } from "@domain/agent/loop/states/inference"
-import { SemanticEvent } from "@domain/environment/event"
+import { RuntimeEvent } from "@domain/runtime/event"
 import type { Endpoint } from "@domain/generative-model/endpoint"
 import { OpenAIChatCompletionsMapper } from "./openai-chat-completions-mapper"
 import { InferenceInput } from "@domain/agent/loop/states/inference"
@@ -81,11 +81,11 @@ export class OpenAIChatCompletions implements Endpoint {
 		return this.endpointMapper.toResponse(response)
 	}
 
-	async *stream(inferenceInput: InferenceInput): AsyncIterable<SemanticEvent> {
+	async *stream(inferenceInput: InferenceInput): AsyncIterable<RuntimeEvent> {
 		const stream = this.client.chat.completions.stream(this.buildRequest(inferenceInput))
 
 		for await (const chunk of stream) {
-			yield chunk as unknown as SemanticEvent
+			yield chunk as unknown as RuntimeEvent
 		}
 
 		const output = this.endpointMapper.toResponse(await stream.finalChatCompletion())

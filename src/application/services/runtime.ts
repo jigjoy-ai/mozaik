@@ -1,4 +1,4 @@
-import { DomainModel } from "@domain/environment/runtime-state"
+import { DomainModel } from "@domain/runtime/runtime-state"
 import { InferenceRunner } from "@domain/generative-model/inference-runner"
 import { FunctionCallRunner } from "@domain/agent/loop/states/function-call"
 

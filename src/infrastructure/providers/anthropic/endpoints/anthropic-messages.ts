@@ -1,4 +1,4 @@
-import { SemanticEvent } from "@domain/environment/event"
+import { RuntimeEvent } from "@domain/runtime/event"
 import type { Endpoint } from "@domain/generative-model/endpoint"
 import type { InferenceInput, InferenceOutput } from "@domain/agent/loop/states/inference"
 import { AnthropicMessagesMapper } from "./anthropic-messages-mapper"
@@ -42,12 +42,12 @@ export class AnthropicMessages implements Endpoint {
 		return this.endpointMapper.toResponse(response)
 	}
 
-	async *stream(inferenceInput: InferenceInput): AsyncIterable<SemanticEvent> {
+	async *stream(inferenceInput: InferenceInput): AsyncIterable<RuntimeEvent> {
 		const request = this.endpointMapper.toRequest(inferenceInput)
 		const stream = this.client.messages.stream(request)
 
 		for await (const event of stream) {
-			yield event as unknown as SemanticEvent
+			yield event as unknown as RuntimeEvent
 		}
 
 		const output = this.endpointMapper.toResponse(await stream.finalMessage())

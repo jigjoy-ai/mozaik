@@ -1,9 +1,9 @@
 import type { InferenceEndpointMapper } from "./inference-endpoint-mapper"
 import { InferenceInput, InferenceOutput } from "./inference-runner"
-import { SemanticEvent } from "@domain/environment/event"
+import { RuntimeEvent } from "@domain/runtime/event"
 
 export interface Endpoint {
 	endpointMapper: InferenceEndpointMapper
 	infer(requestParams: InferenceInput): Promise<InferenceOutput>
-	stream(requestParams: InferenceInput): AsyncIterable<SemanticEvent>
+	stream(requestParams: InferenceInput): AsyncIterable<RuntimeEvent>
 }

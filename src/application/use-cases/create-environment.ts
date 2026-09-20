@@ -1,6 +1,6 @@
-import { Environment } from "@domain/environment/environment"
-import { EnvironmentRepository } from "@domain/environment/environment-repository"
-import { Participant } from "@domain/environment/participant"
+import { Environment } from "@domain/runtime/environment"
+import { EnvironmentRepository } from "@domain/runtime/environment-repository"
+import { Participant } from "@domain/runtime/participant"
 
 export class CreateEnvironmentUseCase {
 	private readonly environmentRepository: EnvironmentRepository

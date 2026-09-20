@@ -2,18 +2,17 @@ import { LoopTransition, ModelMessageParams, ReceivedMessage } from "@domain/age
 import { LoopVisitor } from "@domain/agent/loop/loop-visitor"
 import { FunctionCallOutputItem } from "@domain/generative-model/context/items/function-call-output"
 import { FunctionCallParams } from "@domain/agent/loop/states/function-call"
-import { RuntimeService } from "@app/services/runtime"
-import { DomainModel } from "@domain/environment/runtime-state"
-import { SemanticEvent } from "@domain/environment/event"
+import { RuntimeEvent } from "@domain/runtime/event"
 import { CloudClient } from "@mozaik-ai/cloud-sdk"
 import { Agent } from "@domain/agent/agent"
 import { InferenceInput, InferenceOutput } from "@domain/generative-model/inference-runner"
+import { Environment } from "@domain/runtime/environment"
 
 export class EventPublisherLoopVisitor implements LoopVisitor {
 	constructor(
 		private readonly agentId: string,
 		private readonly loopId: string,
-		private readonly runtime: RuntimeService<DomainModel>,
+		private readonly environment: Environment,
 		private readonly cloudClient: CloudClient,
 	) {}
 
@@ -29,7 +28,7 @@ export class EventPublisherLoopVisitor implements LoopVisitor {
 		this.publish("inference.started", input)
 	}
 
-	visitInferenceEvent(event: SemanticEvent): void {
+	visitInferenceEvent(event: RuntimeEvent): void {
 		this.publish("inference.stream", event)
 	}
 
@@ -58,14 +57,14 @@ export class EventPublisherLoopVisitor implements LoopVisitor {
 	}
 
 	private publish<TPayload>(type: string, payload: TPayload): void {
-		const event = new SemanticEvent(type, this.agentId, new Date(), {
+		const event = new RuntimeEvent(type, this.agentId, new Date(), {
 			...payload,
 			loopId: this.loopId,
 		})
-		this.runtime.publish(event)
+		this.environment.publish(event)
 
 		if (this.cloudClient.enabled) {
-			const participant = this.runtime.getParticipant(this.agentId)
+			const participant = this.environment.getParticipant(this.agentId)
 			const agent = participant as Agent
 			if (agent) {
 				this.cloudClient.send({

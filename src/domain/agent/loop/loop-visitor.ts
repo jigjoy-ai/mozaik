@@ -1,4 +1,4 @@
-import { SemanticEvent } from "@domain/environment/event"
+import { RuntimeEvent } from "@domain/runtime/event"
 import { FunctionCallOutputItem } from "@domain/generative-model/context/items/function-call-output"
 import { LoopTransition, ModelMessageParams, ReceivedMessage } from "./loop-state"
 import { InferenceInput, InferenceOutput } from "@domain/generative-model/inference-runner"
@@ -11,7 +11,7 @@ export interface LoopVisitor {
 
 	visitInferenceStarted(input: InferenceInput): void
 
-	visitInferenceEvent(event: SemanticEvent): void
+	visitInferenceEvent(event: RuntimeEvent): void
 
 	visitInferenceCompleted(output: InferenceOutput): void
 

@@ -14,7 +14,7 @@ import {
 	ContextPreparationToInferenceRule,
 	ModelMessageToIdleRule,
 } from "@domain/agent/loop/transition-rule"
-import { DomainModel } from "@domain/environment/runtime-state"
+import { DomainModel } from "@domain/runtime/runtime-state"
 import { EventPublisherLoopVisitor } from "@app/services/event-publisher-visitor"
 import { InferenceStreamingState } from "@domain/agent/loop/states/inference-streaming"
 import { InterceptionHandler } from "@domain/agent/interception"

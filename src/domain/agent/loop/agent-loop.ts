@@ -1,4 +1,4 @@
-import { SemanticEvent } from "@domain/environment/event"
+import { RuntimeEvent } from "@domain/runtime/event"
 import { ContextItem } from "@domain/generative-model/context/item"
 import { FunctionCallItem } from "@domain/generative-model/context/items/function-call"
 import { FunctionCallOutputItem } from "@domain/generative-model/context/items/function-call-output"
@@ -20,7 +20,7 @@ export interface AgentLoop {
 interface BehaviorResult {
 	contextItems?: ContextItem[]
 	directive?: LoopDirective
-	events?: SemanticEvent[]
+	events?: RuntimeEvent[]
 }
 
 export interface LoopDirective {}

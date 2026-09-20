@@ -1,4 +1,4 @@
-import { SemanticEvent } from "@domain/environment/event"
+import { RuntimeEvent } from "@domain/runtime/event"
 import { FunctionCallItem } from "./context/items/function-call"
 import { ModelMessageItem } from "./context/items/model-message"
 import { ReasoningItem } from "./context/items/reasoning"
@@ -27,5 +27,5 @@ export type InferenceOutput = {
 
 export interface InferenceRunner {
 	run(request: InferenceInput): Promise<InferenceOutput>
-	stream(request: InferenceInput): AsyncGenerator<SemanticEvent>
+	stream(request: InferenceInput): AsyncGenerator<RuntimeEvent>
 }

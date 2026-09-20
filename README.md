@@ -95,7 +95,7 @@ initializeRuntime({ state: new AppState() })
 | `resolveParticipant(id)`                                          | Look up a joined participant by id.           |
 | `join(participant)` / `leave(participant)`                        | Membership.                                   |
 | `sendMessage(message, senderId)`                                  | Publish a `message.sent` event.               |
-| `sendEvent(event, senderId)`                                      | Publish any `SemanticEvent`.                  |
+| `sendEvent(event, senderId)`                                      | Publish any `RuntimeEvent`.                   |
 | `runLoop(agentId, message, inferenceInput, interceptionHandler?)` | Start an agent loop.                          |
 
 Calling `initializeRuntime` a second time throws `"Runtime already initialized"`. Calling any of the other functions before `initializeRuntime` throws `"Runtime not initialized"`.
@@ -192,7 +192,7 @@ An agent can wait until a collaborator has joined (`participant.joined`) before 
 
 ## Semantic events
 
-The runtime is an event bus. Everything interesting is a **`SemanticEvent`**:
+The runtime is an event bus. Everything interesting is a **`RuntimeEvent`**:
 
 | Field        | Meaning                                                                  |
 | ------------ | ------------------------------------------------------------------------ |
@@ -249,9 +249,9 @@ flowchart LR
     Human[Participant] -->|"sendMessage(text, senderId)"| Runtime(("Runtime"))
     Agent[Participant] -->|"runLoop"| Runtime
     Observer[Participant] -->|join| Runtime
-    Runtime -->|"SemanticEvent"| Human
-    Runtime -->|"SemanticEvent"| Agent
-    Runtime -->|"SemanticEvent"| Observer
+    Runtime -->|"RuntimeEvent"| Human
+    Runtime -->|"RuntimeEvent"| Agent
+    Runtime -->|"RuntimeEvent"| Observer
 ```
 
 Fan-out is synchronous and does not await processors, so a slow listener never blocks producers or other listeners. Participants start receiving events as soon as they `join()`.

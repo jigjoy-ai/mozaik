@@ -1,4 +1,4 @@
-import { SemanticEvent } from "./event"
+import { RuntimeEvent } from "./event"
 import { Participant } from "./participant"
 import { SituationSpecification } from "./situation-specification"
 
@@ -7,7 +7,7 @@ export interface SituationHandler {
 	readonly processor: SituationProcessor
 }
 
-export type SituationContext<TEvent extends SemanticEvent = SemanticEvent> = {
+export type SituationContext<TEvent extends RuntimeEvent = RuntimeEvent> = {
 	readonly event: TEvent
 	readonly participant: Participant
 }

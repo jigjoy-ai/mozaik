@@ -1,12 +1,12 @@
-import { SemanticEvent } from "./event"
+import { RuntimeEvent } from "./event"
 import { Participant } from "./participant"
 
-export type SituationContext<TEvent extends SemanticEvent = SemanticEvent> = {
+export type SituationContext<TEvent extends RuntimeEvent = RuntimeEvent> = {
 	readonly event: TEvent
 	readonly participant: Participant
 }
 
-export abstract class SituationSpecification<TEvent extends SemanticEvent = SemanticEvent> {
+export abstract class SituationSpecification<TEvent extends RuntimeEvent = RuntimeEvent> {
 	abstract isSatisfiedBy(situationContext: SituationContext<TEvent>): boolean
 
 	and(other: SituationSpecification<TEvent>): SituationSpecification<TEvent> {
@@ -22,7 +22,7 @@ export abstract class SituationSpecification<TEvent extends SemanticEvent = Sema
 	}
 }
 
-class AndSituationSpecification<TEvent extends SemanticEvent> extends SituationSpecification<TEvent> {
+class AndSituationSpecification<TEvent extends RuntimeEvent> extends SituationSpecification<TEvent> {
 	constructor(
 		private readonly left: SituationSpecification<TEvent>,
 		private readonly right: SituationSpecification<TEvent>,
@@ -35,7 +35,7 @@ class AndSituationSpecification<TEvent extends SemanticEvent> extends SituationS
 	}
 }
 
-class OrSituationSpecification<TEvent extends SemanticEvent> extends SituationSpecification<TEvent> {
+class OrSituationSpecification<TEvent extends RuntimeEvent> extends SituationSpecification<TEvent> {
 	constructor(
 		private readonly left: SituationSpecification<TEvent>,
 		private readonly right: SituationSpecification<TEvent>,
@@ -48,7 +48,7 @@ class OrSituationSpecification<TEvent extends SemanticEvent> extends SituationSp
 	}
 }
 
-class NotSituationSpecification<TEvent extends SemanticEvent> extends SituationSpecification<TEvent> {
+class NotSituationSpecification<TEvent extends RuntimeEvent> extends SituationSpecification<TEvent> {
 	constructor(private readonly rule: SituationSpecification<TEvent>) {
 		super()
 	}

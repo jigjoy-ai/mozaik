@@ -1,4 +1,4 @@
-import { ParticipantJoinedEvent, ParticipantLeftEvent, SemanticEvent } from "./event"
+import { ParticipantJoinedEvent, ParticipantLeftEvent, RuntimeEvent } from "./event"
 import { Participant } from "./participant"
 
 export class Environment {
@@ -54,7 +54,7 @@ export class Environment {
 		return [...this.participants]
 	}
 
-	private process(event: SemanticEvent, consumer: Participant): void {
+	private process(event: RuntimeEvent, consumer: Participant): void {
 		for (const handler of consumer.getHandlers()) {
 			const isSatisfied = handler.specification.isSatisfiedBy({
 				event,
@@ -66,7 +66,7 @@ export class Environment {
 		}
 	}
 
-	private publish(event: SemanticEvent): void {
+	publish(event: RuntimeEvent): void {
 		for (const participant of this.participants) {
 			this.process(event, participant)
 		}

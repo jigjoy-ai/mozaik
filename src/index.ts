@@ -4,11 +4,11 @@ import { InputTokenDetails, OutputTokenDetails, TokenUsage } from "@domain/gener
 import { Tool } from "@domain/generative-model/tool"
 import { McpClient, type McpServerConfig, type McpToolSpec } from "@infra/mcp/mcp-client"
 import { McpToolRegistry } from "@infra/mcp/mcp-tool-registry"
-import { SemanticEvent } from "@domain/environment/event"
+import { RuntimeEvent } from "@domain/runtime/event"
 import { Endpoint } from "@domain/generative-model/endpoint"
 import { InferenceInput, InferenceOutput, InferenceRunner } from "@domain/generative-model/inference-runner"
-import { Participant } from "@domain/environment/participant"
-import { DomainModel } from "@domain/environment/runtime-state"
+import { Participant } from "@domain/runtime/participant"
+import { DomainModel } from "@domain/runtime/runtime-state"
 import { defineRuntime, type InferenceRunnerConfig } from "./define-runtime"
 import { supportedModels } from "@app/services/models"
 import { OpenAIResponses } from "@infra/providers/openai/endpoints/openai-responses"
@@ -16,8 +16,8 @@ import { OpenAIChatCompletions } from "@infra/providers/openai/endpoints/openai-
 import { AnthropicMessages } from "@infra/providers/anthropic/endpoints/anthropic-messages"
 import { GeminiGenerateContent } from "@infra/providers/gemini/endpoints/gemini-generate-content"
 import { Agent } from "@domain/agent/agent"
-import { SituationContext, SituationHandler, SituationProcessor } from "@domain/environment/situation-handler"
-import { SituationSpecification } from "@domain/environment/situation-specification"
+import { SituationContext, SituationHandler, SituationProcessor } from "@domain/runtime/situation-handler"
+import { SituationSpecification } from "@domain/runtime/situation-specification"
 import { DefaultInferenceRunner } from "@app/services/inference-runner"
 import { InterceptionHandler } from "@domain/agent/interception"
 import {
@@ -40,7 +40,7 @@ export {
 	DomainModel,
 	ModelContext,
 	ContextItem,
-	SemanticEvent,
+	RuntimeEvent,
 	UserMessageItem,
 	DeveloperMessageItem,
 	SystemMessageItem,

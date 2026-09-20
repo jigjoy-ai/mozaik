@@ -1,4 +1,4 @@
-import { SemanticEvent } from "@domain/environment/event"
+import { RuntimeEvent } from "@domain/runtime/event"
 import { InferenceOutput } from "@domain/agent/loop/states/inference"
 import type { Endpoint } from "@domain/generative-model/endpoint"
 import OpenAI from "openai"
@@ -25,7 +25,7 @@ export class OpenAIResponses implements Endpoint {
 		return this.endpointMapper.toResponse(response)
 	}
 
-	async *stream(inferenceInput: InferenceInput): AsyncIterable<SemanticEvent> {
+	async *stream(inferenceInput: InferenceInput): AsyncIterable<RuntimeEvent> {
 		const request = this.endpointMapper.toRequest(inferenceInput)
 		const stream: any = await this.client.responses.create({ ...request, stream: true })
 
