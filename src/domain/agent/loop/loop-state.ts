@@ -4,6 +4,7 @@ import { LoopVisitor } from "./loop-visitor"
 import { InterceptionOutput, InterceptionParams } from "../interception"
 import { InferenceInput, InferenceOutput } from "@domain/generative-model/inference-runner"
 import { FunctionCallParams } from "./states/function-call"
+import { AgentLoop } from "./agent-loop"
 
 export type LoopStateId =
 	| "message_received"
@@ -77,7 +78,7 @@ export type ExecutableTransition = LoopTransition<ExecutableLoopStateId>
 export interface LoopState<TInput, TOutput> {
 	readonly id: LoopStateId
 
-	run(input: TInput, visitor: LoopVisitor): Promise<TOutput>
+	run(input: TInput, agentLoop: AgentLoop, visitor: LoopVisitor): Promise<TOutput>
 }
 
 export type LoopStateExecution<TStateId extends ExecutableLoopStateId = ExecutableLoopStateId> = {
@@ -100,5 +101,9 @@ export type LoopTransition<TStateId extends LoopStateId = LoopStateId> = {
 }[TStateId]
 
 export interface LoopStateExecutor {
-	execute(transition: LoopTransition<ExecutableLoopStateId>, loopVisitor: LoopVisitor): Promise<LoopStateExecution>
+	execute(
+		transition: LoopTransition<ExecutableLoopStateId>,
+		agentLoop: AgentLoop,
+		loopVisitor: LoopVisitor,
+	): Promise<LoopStateExecution>
 }

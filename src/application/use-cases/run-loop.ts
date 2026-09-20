@@ -1,4 +1,5 @@
 import { RuntimeService } from "@app/services/runtime"
+import { AgentLoopRunner } from "@domain/agent/loop/agent-loop-runner"
 import { AgentLoop } from "@domain/agent/loop/agent-loop"
 import { FunctionCallState } from "@domain/agent/loop/states/function-call"
 import { InferenceState } from "@domain/agent/loop/states/inference"
@@ -25,6 +26,7 @@ export function createRunLoop<TModel extends DomainModel>(resolveRuntime: () => 
 		agentId: string,
 		message: string,
 		inferenceInput: InferenceInput,
+		agentLoop: AgentLoop,
 		interceptionHandler?: InterceptionHandler,
 	) {
 		const runtime = resolveRuntime()
@@ -48,17 +50,18 @@ export function createRunLoop<TModel extends DomainModel>(resolveRuntime: () => 
 			new ModelMessageState(),
 		)
 
-		const agentLoop = AgentLoop.create(stateExecutor, transitionResolver, interceptionHandler)
+		const agentLoopRunner = new AgentLoopRunner(stateExecutor, transitionResolver, interceptionHandler)
 
 		const cloudClient = createCloudClient()
 
 		const loopVisitor = new EventPublisherLoopVisitor(agentId, agentLoop.getLoopId(), runtime, cloudClient)
 
-		agentLoop.run(
+		agentLoopRunner.run(
 			{
 				content: message,
 				input: inferenceInput,
 			},
+			agentLoop,
 			loopVisitor,
 		)
 	}

@@ -4,6 +4,7 @@ import type { Tool } from "@domain/generative-model/tool"
 import type { LoopVisitor } from "@domain/agent/loop/loop-visitor"
 import { InferenceInput } from "@domain/generative-model/inference-runner"
 import { FunctionCallItem } from "@domain/generative-model/context/items/function-call"
+import { AgentLoop } from "../agent-loop"
 
 export interface FunctionCallParams {
 	call: FunctionCallItem
@@ -19,8 +20,13 @@ export class FunctionCallState implements LoopState<FunctionCallParams, LoopStat
 
 	constructor(private readonly functionCallRunner: FunctionCallRunner) {}
 
-	async run(input: FunctionCallParams, loopVisitor: LoopVisitor): Promise<LoopStateExecution<"function_call">> {
+	async run(
+		input: FunctionCallParams,
+		agentLoop: AgentLoop,
+		loopVisitor: LoopVisitor,
+	): Promise<LoopStateExecution<"function_call">> {
 		loopVisitor.visitFunctionCallStarted(input)
+		const behaviorResult = await agentLoop.beforeToolCall(input.call, input.inferenceInput.context)
 
 		const { call, inferenceInput } = input
 

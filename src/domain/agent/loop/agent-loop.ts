@@ -1,47 +1,26 @@
-import { InterceptionHandler } from "@domain/agent/interception"
-import { LoopTransition, ReceivedMessage } from "@domain/agent/loop/loop-state"
-import { LoopVisitor } from "@domain/agent/loop/loop-visitor"
-import { LoopStateExecutor } from "@domain/agent/loop/loop-state"
-import { TransitionResolver } from "@domain/agent/loop/transition-resolver"
+import { SemanticEvent } from "@domain/environment/event"
+import { ContextItem } from "@domain/generative-model/context/item"
+import { FunctionCallItem } from "@domain/generative-model/context/items/function-call"
+import { FunctionCallOutputItem } from "@domain/generative-model/context/items/function-call-output"
+import { ModelContext } from "@domain/generative-model/context/model-context"
+import { InferenceOutput } from "@domain/generative-model/inference-runner"
 
-export class AgentLoop {
-	private constructor(
-		private readonly loopId: string,
-		private readonly stateExecutor: LoopStateExecutor,
-		private readonly transitionResolver: TransitionResolver,
-		private readonly interceptionHandler?: InterceptionHandler,
-	) {}
+export interface AgentLoop {
+	beforeInference(context: ModelContext): Promise<BehaviorResult>
 
-	async run(message: ReceivedMessage, loopVisitor: LoopVisitor): Promise<void> {
-		let transition: LoopTransition = {
-			nextStateId: "message_received",
-			input: message,
-		}
+	afterInference(result: InferenceOutput, context: ModelContext): Promise<BehaviorResult>
 
-		while (transition.nextStateId !== "idle") {
-			const isInterceptionSatisfied = this.interceptionHandler?.isSatisfiedBy(transition)
+	beforeToolCall(call: FunctionCallItem, context: ModelContext): Promise<BehaviorResult>
 
-			if (isInterceptionSatisfied && this.interceptionHandler) {
-				loopVisitor.visitInterceptionStarted(transition)
-				transition = await this.interceptionHandler.handle(transition)
-				loopVisitor.visitInterceptionFinished(transition)
-			}
+	afterToolCall(output: FunctionCallOutputItem, context: ModelContext): Promise<BehaviorResult>
 
-			const execution = await this.stateExecutor.execute(transition, loopVisitor)
-			transition = this.transitionResolver.resolve(execution)
-		}
-	}
-
-	getLoopId(): string {
-		return this.loopId
-	}
-
-	static create(
-		stateExecutor: LoopStateExecutor,
-		transitionResolver: TransitionResolver,
-		interceptionHandler?: InterceptionHandler,
-	): AgentLoop {
-		const loopId = crypto.randomUUID()
-		return new AgentLoop(loopId, stateExecutor, transitionResolver, interceptionHandler)
-	}
+	getLoopId(): string
 }
+
+interface BehaviorResult {
+	contextItems?: ContextItem[]
+	directive?: LoopDirective
+	events?: SemanticEvent[]
+}
+
+export interface LoopDirective {}

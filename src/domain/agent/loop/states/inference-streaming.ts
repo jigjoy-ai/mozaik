@@ -2,13 +2,18 @@ import { LoopVisitor } from "@domain/agent/loop/loop-visitor"
 import { LoopState } from "@domain/agent/loop/loop-state"
 import { InferenceInput, InferenceOutput, InferenceRunner } from "@domain/generative-model/inference-runner"
 import { LoopStateExecution } from "@domain/agent/loop/loop-state"
+import { AgentLoop } from "../agent-loop"
 
 export class InferenceStreamingState implements LoopState<InferenceInput, LoopStateExecution<"inference_streaming">> {
 	readonly id = "inference_streaming"
 
 	constructor(private readonly inferenceRunner: InferenceRunner) {}
 
-	async run(input: InferenceInput, loopVisitor: LoopVisitor): Promise<LoopStateExecution<"inference_streaming">> {
+	async run(
+		input: InferenceInput,
+		agentLoop: AgentLoop,
+		loopVisitor: LoopVisitor,
+	): Promise<LoopStateExecution<"inference_streaming">> {
 		loopVisitor.visitInferenceStarted(input)
 
 		let output: InferenceOutput | undefined = undefined

@@ -10,6 +10,7 @@ import { InferenceState } from "@domain/agent/loop/states/inference"
 import { MessageReceivedState } from "@domain/agent/loop/states/message-received"
 import { ModelMessageState } from "@domain/agent/loop/states/model-message"
 import { InferenceStreamingState } from "@domain/agent/loop/states/inference-streaming"
+import { AgentLoop } from "@domain/agent/loop/agent-loop"
 
 export class DefaultLoopStateExecutor implements LoopStateExecutor {
 	constructor(
@@ -20,41 +21,23 @@ export class DefaultLoopStateExecutor implements LoopStateExecutor {
 		private readonly modelMessageState: ModelMessageState,
 	) {}
 
-	execute(
-		transition: LoopTransition<"message_received">,
-		loopVisitor: LoopVisitor,
-	): Promise<LoopStateExecution<"message_received">>
-
-	execute(transition: LoopTransition<"inference">, loopVisitor: LoopVisitor): Promise<LoopStateExecution<"inference">>
-
-	execute(
-		transition: LoopTransition<"function_call">,
-		loopVisitor: LoopVisitor,
-	): Promise<LoopStateExecution<"function_call">>
-
-	execute(
-		transition: LoopTransition<"model_message">,
-		loopVisitor: LoopVisitor,
-	): Promise<LoopStateExecution<"model_message">>
-
-	execute(transition: LoopTransition<ExecutableLoopStateId>, loopVisitor: LoopVisitor): Promise<LoopStateExecution>
-
 	async execute(
 		transition: LoopTransition<ExecutableLoopStateId>,
+		agentLoop: AgentLoop,
 		loopVisitor: LoopVisitor,
 	): Promise<LoopStateExecution> {
 		switch (transition.nextStateId) {
 			case "message_received":
-				return await this.messageReceivedState.run(transition.input, loopVisitor)
+				return await this.messageReceivedState.run(transition.input, agentLoop, loopVisitor)
 
 			case "inference":
-				return await this.inferenceState.run(transition.input, loopVisitor)
+				return await this.inferenceState.run(transition.input, agentLoop, loopVisitor)
 
 			case "inference_streaming":
-				return await this.inferenceStreamingState.run(transition.input, loopVisitor)
+				return await this.inferenceStreamingState.run(transition.input, agentLoop, loopVisitor)
 
 			case "function_call":
-				return await this.functionCallState.run(transition.input, loopVisitor)
+				return await this.functionCallState.run(transition.input, agentLoop, loopVisitor)
 
 			case "model_message":
 				return await this.modelMessageState.run(transition.input, loopVisitor)
