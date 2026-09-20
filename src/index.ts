@@ -6,9 +6,9 @@ import { McpClient, type McpServerConfig, type McpToolSpec } from "@infra/mcp/mc
 import { McpToolRegistry } from "@infra/mcp/mcp-tool-registry"
 import { RuntimeEvent } from "@domain/runtime/event"
 import { Endpoint } from "@domain/generative-model/endpoint"
-import { InferenceInput, InferenceOutput, InferenceRunner } from "@domain/generative-model/inference-runner"
+import { InferenceRequest, InferenceResult, InferenceRunner } from "@domain/generative-model/inference-runner"
 import { Participant } from "@domain/runtime/participant"
-import { DomainModel } from "@domain/runtime/runtime-state"
+import { DomainModel } from "@domain/runtime/domain-model"
 import { defineRuntime, type InferenceRunnerConfig } from "./define-runtime"
 import { supportedModels } from "@app/services/models"
 import { OpenAIResponses } from "@infra/providers/openai/endpoints/openai-responses"
@@ -19,14 +19,13 @@ import { Agent } from "@domain/agent/agent"
 import { SituationContext, SituationHandler, SituationProcessor } from "@domain/runtime/situation-handler"
 import { SituationSpecification } from "@domain/runtime/situation-specification"
 import { DefaultInferenceRunner } from "@app/services/inference-runner"
-import { InterceptionHandler } from "@domain/agent/interception"
 import { ContextItem } from "@domain/generative-model/context/item"
 import { UserMessageItem } from "@domain/generative-model/context/items/user-message"
 import { DeveloperMessageItem } from "@domain/generative-model/context/items/developer-message"
 import { SystemMessageItem } from "@domain/generative-model/context/items/system-message"
 import { ModelMessageItem } from "@domain/generative-model/context/items/model-message"
-import { FunctionCallItem } from "@domain/generative-model/context/items/function-call"
-import { FunctionCallOutputItem } from "@domain/generative-model/context/items/function-call-output"
+import { ToolUseRequest } from "@domain/generative-model/context/items/tool-use-request"
+import { ToolUseResult } from "@domain/generative-model/context/items/tool-use-result"
 import { ReasoningItem } from "@domain/generative-model/context/items/reasoning"
 
 export {
@@ -39,8 +38,8 @@ export {
 	DeveloperMessageItem,
 	SystemMessageItem,
 	ModelMessageItem,
-	FunctionCallItem,
-	FunctionCallOutputItem,
+	ToolUseRequest,
+	ToolUseResult,
 	ReasoningItem,
 	StructuredOutputFormat,
 	TokenUsage,
@@ -63,9 +62,8 @@ export {
 	SituationProcessor,
 	SituationSpecification,
 	SituationContext,
-	InterceptionHandler,
-	InferenceOutput,
-	InferenceInput,
+	InferenceResult,
+	InferenceRequest,
 	InferenceRunner,
 	DefaultInferenceRunner,
 	InferenceRunnerConfig,

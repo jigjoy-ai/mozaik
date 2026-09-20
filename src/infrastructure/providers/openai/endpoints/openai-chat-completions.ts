@@ -1,8 +1,7 @@
-import { InferenceOutput } from "@domain/agent/loop/states/inference"
+import { InferenceRequest, InferenceResult } from "@domain/generative-model/inference-runner"
 import { RuntimeEvent } from "@domain/runtime/event"
 import type { Endpoint } from "@domain/generative-model/endpoint"
 import { OpenAIChatCompletionsMapper } from "./openai-chat-completions-mapper"
-import { InferenceInput } from "@domain/agent/loop/states/inference"
 import OpenAI from "openai"
 import type { InferenceEndpointMapper } from "@domain/generative-model/inference-endpoint-mapper"
 
@@ -68,21 +67,21 @@ export class OpenAIChatCompletions implements Endpoint {
 		}))
 	}
 
-	private buildRequest(inferenceInput: InferenceInput): any {
+	private buildRequest(inferenceRequest: InferenceRequest): any {
 		return {
 			...this.extraBody,
-			...this.endpointMapper.toRequest(inferenceInput),
+			...this.endpointMapper.toRequest(inferenceRequest),
 		}
 	}
 
-	async infer(inferenceInput: InferenceInput): Promise<InferenceOutput> {
-		const response = await this.client.chat.completions.create(this.buildRequest(inferenceInput))
+	async infer(inferenceRequest: InferenceRequest): Promise<InferenceResult> {
+		const response = await this.client.chat.completions.create(this.buildRequest(inferenceRequest))
 
 		return this.endpointMapper.toResponse(response)
 	}
 
-	async *stream(inferenceInput: InferenceInput): AsyncIterable<RuntimeEvent> {
-		const stream = this.client.chat.completions.stream(this.buildRequest(inferenceInput))
+	async *stream(inferenceRequest: InferenceRequest): AsyncIterable<RuntimeEvent> {
+		const stream = this.client.chat.completions.stream(this.buildRequest(inferenceRequest))
 
 		for await (const chunk of stream) {
 			yield chunk as unknown as RuntimeEvent
@@ -94,7 +93,7 @@ export class OpenAIChatCompletions implements Endpoint {
 			type: "inference.output",
 			payload: output,
 			occurredAt: new Date(),
-			producerId: inferenceInput.model,
+			producerId: inferenceRequest.model,
 		}
 	}
 }

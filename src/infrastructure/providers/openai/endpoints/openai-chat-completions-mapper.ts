@@ -1,24 +1,24 @@
-import type { InferenceInput, InferenceItem, InferenceOutput } from "@domain/agent/loop/states/inference"
+import type { InferenceRequest, InferenceItem, InferenceResult } from "@domain/generative-model/inference-runner"
 import type { InferenceEndpointMapper } from "@domain/generative-model/inference-endpoint-mapper"
 import { DeveloperMessageItem } from "@domain/generative-model/context/items/developer-message"
-import { FunctionCallOutputItem } from "@domain/generative-model/context/items/function-call-output"
+import { ToolUseResult } from "@domain/generative-model/context/items/tool-use-result"
 import { SystemMessageItem } from "@domain/generative-model/context/items/system-message"
 import { UserMessageItem } from "@domain/generative-model/context/items/user-message"
-import { FunctionCallItem } from "@domain/generative-model/context/items/function-call"
+import { ToolUseRequest } from "@domain/generative-model/context/items/tool-use-request"
 import { ModelMessageItem } from "@domain/generative-model/context/items/model-message"
 import { InputText } from "@domain/generative-model/context/items/item-content/input-text"
 import { ReasoningItem } from "@domain/generative-model/context/items/reasoning"
 import { InputTokenDetails, OutputTokenDetails, TokenUsage } from "@domain/generative-model/token-usage"
 
 export class OpenAIChatCompletionsMapper implements InferenceEndpointMapper {
-	toRequest(inferenceInput: InferenceInput) {
+	toRequest(inferenceRequest: InferenceRequest) {
 		const request: any = {
-			model: inferenceInput.model,
-			messages: this.mapContextItems(inferenceInput),
+			model: inferenceRequest.model,
+			messages: this.mapContextItems(inferenceRequest),
 		}
 
-		if (inferenceInput.tools && inferenceInput.tools.length > 0) {
-			request.tools = inferenceInput.tools.map((tool) => ({
+		if (inferenceRequest.tools && inferenceRequest.tools.length > 0) {
+			request.tools = inferenceRequest.tools.map((tool) => ({
 				type: "function",
 				function: {
 					name: tool.name,
@@ -28,21 +28,21 @@ export class OpenAIChatCompletionsMapper implements InferenceEndpointMapper {
 			}))
 		}
 
-		if (inferenceInput.reasoningEffort) {
-			request.reasoning_effort = inferenceInput.reasoningEffort
+		if (inferenceRequest.reasoningEffort) {
+			request.reasoning_effort = inferenceRequest.reasoningEffort
 		}
 
-		if (inferenceInput.streaming) {
-			request.stream = inferenceInput.streaming
+		if (inferenceRequest.streaming) {
+			request.stream = inferenceRequest.streaming
 		}
 
 		return request
 	}
 
-	mapContextItems(inferenceInput: InferenceInput): any[] {
+	mapContextItems(inferenceRequest: InferenceRequest): any[] {
 		const messages: any[] = []
 
-		for (const item of inferenceInput.context.getItems()) {
+		for (const item of inferenceRequest.context.getItems()) {
 			if (item instanceof DeveloperMessageItem || item instanceof SystemMessageItem) {
 				messages.push({ role: "system", content: item.content.text })
 				continue
@@ -58,7 +58,7 @@ export class OpenAIChatCompletionsMapper implements InferenceEndpointMapper {
 				continue
 			}
 
-			if (item instanceof FunctionCallItem) {
+			if (item instanceof ToolUseRequest) {
 				const toolCall = {
 					id: item.callId,
 					type: "function",
@@ -74,7 +74,7 @@ export class OpenAIChatCompletionsMapper implements InferenceEndpointMapper {
 				continue
 			}
 
-			if (item instanceof FunctionCallOutputItem) {
+			if (item instanceof ToolUseResult) {
 				messages.push({ role: "tool", tool_call_id: item.callId, content: item.output.text })
 			}
 		}
@@ -95,7 +95,7 @@ export class OpenAIChatCompletionsMapper implements InferenceEndpointMapper {
 		)
 	}
 
-	toResponse(response: any): InferenceOutput {
+	toResponse(response: any): InferenceResult {
 		const items: InferenceItem[] = []
 		const message = response.choices?.[0]?.message
 		if (!message) {
@@ -118,7 +118,7 @@ export class OpenAIChatCompletionsMapper implements InferenceEndpointMapper {
 
 		for (const toolCall of message.tool_calls ?? []) {
 			items.push(
-				FunctionCallItem.rehydrate({
+				ToolUseRequest.rehydrate({
 					callId: toolCall.id,
 					name: toolCall.function.name,
 					args: toolCall.function.arguments,

@@ -1,12 +1,12 @@
 import type { RequestValidationRule } from "./rule"
 import type { ModelSpecification } from "../generative-model"
-import { InferenceInput } from "../inference-runner"
+import { InferenceRequest } from "../inference-runner"
 
-export class ToolCallingValidation implements RequestValidationRule {
+export class ToolUseRequestingValidation implements RequestValidationRule {
 	readonly name = "tool-calling"
 
-	isValid(inferenceInput: InferenceInput, model: ModelSpecification): boolean {
-		if (inferenceInput.tools === undefined) {
+	isValid(inferenceRequest: InferenceRequest, model: ModelSpecification): boolean {
+		if (inferenceRequest.tools === undefined) {
 			return true
 		}
 

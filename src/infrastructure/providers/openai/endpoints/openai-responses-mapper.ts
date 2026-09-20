@@ -1,27 +1,25 @@
-import { InferenceInput } from "@domain/agent/loop/states/inference"
-import { InferenceItem } from "@domain/agent/loop/states/inference"
+import { InferenceRequest, InferenceItem, InferenceResult } from "@domain/generative-model/inference-runner"
 import type { InferenceEndpointMapper } from "@domain/generative-model/inference-endpoint-mapper"
 import { DeveloperMessageItem } from "@domain/generative-model/context/items/developer-message"
-import { FunctionCallOutputItem } from "@domain/generative-model/context/items/function-call-output"
+import { ToolUseResult } from "@domain/generative-model/context/items/tool-use-result"
 import { SystemMessageItem } from "@domain/generative-model/context/items/system-message"
 import { UserMessageItem } from "@domain/generative-model/context/items/user-message"
-import { FunctionCallItem } from "@domain/generative-model/context/items/function-call"
+import { ToolUseRequest } from "@domain/generative-model/context/items/tool-use-request"
 import { ModelMessageItem } from "@domain/generative-model/context/items/model-message"
 import { ReasoningItem } from "@domain/generative-model/context/items/reasoning"
 import { SummaryText } from "@domain/generative-model/context/items/item-content/summary-text"
-import { InferenceOutput } from "@domain/agent/loop/states/inference"
 import { InputTokenDetails, OutputTokenDetails, TokenUsage } from "@domain/generative-model/token-usage"
 import type OpenAI from "openai"
 
 export class OpenAIResponsesMapper implements InferenceEndpointMapper {
-	toRequest(inferenceInput: InferenceInput): any {
+	toRequest(inferenceRequest: InferenceRequest): any {
 		const request: any = {
-			model: inferenceInput.model,
-			input: this.mapContextItems(inferenceInput),
+			model: inferenceRequest.model,
+			input: this.mapContextItems(inferenceRequest),
 		}
 
-		if (inferenceInput.tools && inferenceInput.tools.length > 0) {
-			request.tools = inferenceInput.tools.map((tool) => ({
+		if (inferenceRequest.tools && inferenceRequest.tools.length > 0) {
+			request.tools = inferenceRequest.tools.map((tool) => ({
 				type: tool.type,
 				name: tool.name,
 				description: tool.description,
@@ -29,14 +27,14 @@ export class OpenAIResponsesMapper implements InferenceEndpointMapper {
 			}))
 		}
 
-		if (inferenceInput.reasoningEffort) {
+		if (inferenceRequest.reasoningEffort) {
 			request.reasoning = {
-				effort: inferenceInput.reasoningEffort,
+				effort: inferenceRequest.reasoningEffort,
 			}
 		}
 
-		if (inferenceInput.structuredOutput) {
-			const format = inferenceInput.structuredOutput
+		if (inferenceRequest.structuredOutput) {
+			const format = inferenceRequest.structuredOutput
 			request.text = {
 				format: {
 					type: "json_schema",
@@ -47,17 +45,17 @@ export class OpenAIResponsesMapper implements InferenceEndpointMapper {
 			}
 		}
 
-		if (inferenceInput.streaming) {
-			request.stream = inferenceInput.streaming
+		if (inferenceRequest.streaming) {
+			request.stream = inferenceRequest.streaming
 		}
 
 		return request
 	}
 
-	mapContextItems(inferenceInput: InferenceInput): any[] {
+	mapContextItems(inferenceRequest: InferenceRequest): any[] {
 		const input: any[] = []
 
-		for (const item of inferenceInput.context.getItems()) {
+		for (const item of inferenceRequest.context.getItems()) {
 			if (
 				item instanceof DeveloperMessageItem ||
 				item instanceof SystemMessageItem ||
@@ -80,7 +78,7 @@ export class OpenAIResponsesMapper implements InferenceEndpointMapper {
 				continue
 			}
 
-			if (item instanceof FunctionCallItem) {
+			if (item instanceof ToolUseRequest) {
 				input.push({
 					type: item.type,
 					call_id: item.callId,
@@ -90,7 +88,7 @@ export class OpenAIResponsesMapper implements InferenceEndpointMapper {
 				continue
 			}
 
-			if (item instanceof FunctionCallOutputItem) {
+			if (item instanceof ToolUseResult) {
 				input.push({
 					type: item.type,
 					call_id: item.callId,
@@ -127,7 +125,7 @@ export class OpenAIResponsesMapper implements InferenceEndpointMapper {
 		)
 	}
 
-	toResponse(response: any): InferenceOutput {
+	toResponse(response: any): InferenceResult {
 		const items: InferenceItem[] = []
 
 		for (const item of response.output ?? []) {
@@ -140,7 +138,7 @@ export class OpenAIResponsesMapper implements InferenceEndpointMapper {
 			}
 			if (item.type === "function_call") {
 				items.push(
-					FunctionCallItem.rehydrate({
+					ToolUseRequest.rehydrate({
 						callId: item.call_id,
 						name: item.name,
 						args: item.arguments,

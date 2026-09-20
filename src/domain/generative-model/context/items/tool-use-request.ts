@@ -1,6 +1,6 @@
 import { ContextItem } from "@domain/generative-model/context/item"
 
-export class FunctionCallItem extends ContextItem {
+export class ToolUseRequest extends ContextItem {
 	readonly type = "function_call"
 	readonly callId: string
 	readonly name: string
@@ -13,7 +13,7 @@ export class FunctionCallItem extends ContextItem {
 		this.args = args
 	}
 
-	static rehydrate(data: { callId: string; name: string; args: string }): FunctionCallItem {
-		return new FunctionCallItem(data.callId, data.name, data.args)
+	static rehydrate(data: { callId: string; name: string; args: string }): ToolUseRequest {
+		return new ToolUseRequest(data.callId, data.name, data.args)
 	}
 }

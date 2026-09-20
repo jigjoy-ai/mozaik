@@ -1,20 +1,18 @@
 import { RuntimeService } from "@app/services/runtime"
-import { Participant } from "@domain/runtime/participant"
-import { DomainModel } from "@domain/runtime/runtime-state"
-import { createSendMessage } from "@app/use-cases/send-message"
+import { DomainModel } from "@domain/runtime/domain-model"
 import { InferenceRunner } from "@domain/generative-model/inference-runner"
 import { supportedModels } from "@app/services/models"
 import { GenerativeModel } from "@domain/generative-model/generative-model"
-import { InferenceInputValidator } from "@domain/generative-model/request-validation/inference-request-validator"
+import { InferenceRequestValidator } from "@domain/generative-model/request-validation/inference-request-validator"
 import { DefaultInferenceRunner } from "@app/services/inference-runner"
-import { DefaultFunctionCallRunner } from "@app/services/function-call"
-import { createSendEvent } from "@app/use-cases/send-event"
+import { LocalToolUseRunner } from "@app/services/function-call"
 import { CreateAgentUseCase } from "@app/use-cases/create-agent"
 import { Agent } from "@domain/agent/agent"
 import { Tool } from "@domain/generative-model/tool"
 import { SituationHandler } from "@domain/runtime/situation-handler"
 import { AgentRepository } from "@domain/agent/agent-repository"
 import { CreateParticipantUseCase } from "@app/use-cases/create-participant"
+import { IdGenerator } from "@domain/common/id-generator"
 
 export type InferenceRunnerConfig = {
 	supportedModels?: GenerativeModel[]
@@ -22,6 +20,9 @@ export type InferenceRunnerConfig = {
 }
 
 export class InMemoryAgentRepository implements AgentRepository {
+	exists(id: string): Promise<boolean> {
+		throw new Error("Method not implemented.")
+	}
 	getById(id: string): Promise<Agent | undefined> {
 		throw new Error("Method not implemented.")
 	}
@@ -50,12 +51,12 @@ export function defineRuntime<TModel extends DomainModel>() {
 			config.inferenceRunnerConfig?.runner ??
 			new DefaultInferenceRunner(
 				config.inferenceRunnerConfig?.supportedModels ?? supportedModels,
-				new InferenceInputValidator(),
+				new InferenceRequestValidator(),
 			)
 
-		const functionCallRunner = new DefaultFunctionCallRunner()
+		const toolUseRunner = new LocalToolUseRunner()
 
-		runtime = new RuntimeService(config.model, inferenceRunner, functionCallRunner)
+		runtime = new RuntimeService(config.model, inferenceRunner, toolUseRunner)
 
 		return runtime
 	}
@@ -68,7 +69,7 @@ export function defineRuntime<TModel extends DomainModel>() {
 		return runtime
 	}
 
-	const createAgentUseCase = new CreateAgentUseCase(new InMemoryAgentRepository())
+	const createAgentUseCase = new CreateAgentUseCase(new InMemoryAgentRepository(), new IdGenerator())
 
 	const createAgent =
 		() =>
@@ -93,8 +94,8 @@ export function defineRuntime<TModel extends DomainModel>() {
 	// const leave = () => async (participant: Participant) => {
 	// 	resolveRuntime().leave(participant)
 	// }
-	const sendMessage = createSendMessage(resolveRuntime)
-	const sendEvent = createSendEvent(resolveRuntime)
+	// const sendMessage = createSendMessage(resolveRuntime)
+	// const sendEvent = createSendEvent(resolveRuntime)
 
 	return {
 		initializeRuntime,
@@ -103,7 +104,7 @@ export function defineRuntime<TModel extends DomainModel>() {
 		createParticipant,
 		// join,
 		// leave,
-		sendMessage,
-		sendEvent,
+		// sendMessage,
+		// sendEvent,
 	}
 }

@@ -2,23 +2,15 @@ import { Memory } from "@domain/agent/memory"
 import { Participant, ParticipantManifest } from "@domain/runtime/participant"
 import { Tool } from "@domain/generative-model/tool"
 import { SituationHandler } from "@domain/runtime/situation-handler"
-import { DeveloperMessageItem } from "@domain/generative-model/context/items/developer-message"
+import { AgentRecord } from "./types"
 
 export class Agent extends Participant {
 	private memory: Memory
-	private developerMessage: string
 	private tools: Tool[]
 
-	constructor(
-		manifest: ParticipantManifest,
-		developerMessage: string,
-		tools: Tool[],
-		memory: Memory,
-		handlers: SituationHandler[],
-	) {
+	constructor(manifest: ParticipantManifest, tools: Tool[], memory: Memory, handlers: SituationHandler[]) {
 		super(manifest, handlers)
 		this.memory = memory
-		this.developerMessage = developerMessage
 		this.tools = tools
 	}
 
@@ -26,33 +18,26 @@ export class Agent extends Participant {
 		return this.tools
 	}
 
-	getDeveloperMessage(): string {
-		return this.developerMessage
-	}
-
 	getMemory(): Memory {
 		return this.memory
 	}
 
 	static create({
-		name,
-		instruction,
+		manifest,
 		tools,
-		capabilities,
+		memory,
 		handlers,
 	}: {
-		instruction: string
+		manifest: ParticipantManifest
 		tools: Tool[]
-		name: string
-		capabilities: readonly string[]
+		memory: Memory
 		handlers: SituationHandler[]
 	}): Agent {
-		const id = crypto.randomUUID()
-		const memory = Memory.create()
-		const manifest: ParticipantManifest = { id, name, capabilities, role: "agent" }
+		return new Agent(manifest, tools, memory, handlers)
+	}
 
-		const developerMessage = DeveloperMessageItem.create(instruction)
-		memory.getContext().addContextItem(developerMessage)
-		return new Agent(manifest, instruction, tools, memory, handlers)
+	static rehydrate(record: AgentRecord): Agent {
+		const agent = new Agent(record.manifest, record.tools, record.memory, record.handlers)
+		return agent
 	}
 }

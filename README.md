@@ -88,15 +88,15 @@ initializeRuntime({ state: new AppState() })
 
 `defineRuntime` returns the functions you use for the rest of the session. They are **not** top-level package exports — keep them in module scope (or re-export them yourself):
 
-| Function                                                          | Role                                          |
-| ----------------------------------------------------------------- | --------------------------------------------- |
-| `initializeRuntime({ state, inferenceRunnerConfig? })`            | Create the runtime. Throws if called twice.   |
-| `resolveRuntime()`                                                | The initialized runtime (including `.state`). |
-| `resolveParticipant(id)`                                          | Look up a joined participant by id.           |
-| `join(participant)` / `leave(participant)`                        | Membership.                                   |
-| `sendMessage(message, senderId)`                                  | Publish a `message.sent` event.               |
-| `sendEvent(event, senderId)`                                      | Publish any `RuntimeEvent`.                   |
-| `runLoop(agentId, message, inferenceInput, interceptionHandler?)` | Start an agent loop.                          |
+| Function                                                            | Role                                          |
+| ------------------------------------------------------------------- | --------------------------------------------- |
+| `initializeRuntime({ state, inferenceRunnerConfig? })`              | Create the runtime. Throws if called twice.   |
+| `resolveRuntime()`                                                  | The initialized runtime (including `.state`). |
+| `resolveParticipant(id)`                                            | Look up a joined participant by id.           |
+| `join(participant)` / `leave(participant)`                          | Membership.                                   |
+| `sendMessage(message, senderId)`                                    | Publish a `message.sent` event.               |
+| `sendEvent(event, senderId)`                                        | Publish any `RuntimeEvent`.                   |
+| `runLoop(agentId, message, inferenceRequest, interceptionHandler?)` | Start an agent loop.                          |
 
 Calling `initializeRuntime` a second time throws `"Runtime already initialized"`. Calling any of the other functions before `initializeRuntime` throws `"Runtime not initialized"`.
 
@@ -221,19 +221,19 @@ Producer is the agent whose loop is running:
 | Event                        | Published when                                     | Payload                                                  |
 | ---------------------------- | -------------------------------------------------- | -------------------------------------------------------- |
 | `message_received.started`   | The loop begins appending the user message         | Received message plus `loopId`                           |
-| `message_received.completed` | Context is ready for inference                     | `InferenceInput` plus `loopId`                           |
-| `inference.started`          | The model call begins                              | `InferenceInput`                                         |
+| `message_received.completed` | Context is ready for inference                     | `InferenceRequest` plus `loopId`                         |
+| `inference.started`          | The model call begins                              | `InferenceRequest`                                       |
 | `inference.stream`           | Each streaming chunk (only when `streaming: true`) | The inner provider event                                 |
-| `inference.completed`        | The model call finished                            | `InferenceOutput` (`items`, `tokenUsage`, `rowResponse`) |
-| `function_call.started`      | A tool is about to run                             | `{ call, inferenceInput }`                               |
-| `function_call.completed`    | The tool returned                                  | `FunctionCallOutputItem`                                 |
+| `inference.completed`        | The model call finished                            | `InferenceResult` (`items`, `tokenUsage`, `rowResponse`) |
+| `function_call.started`      | A tool is about to run                             | `{ call, inferenceRequest }`                             |
+| `function_call.completed`    | The tool returned                                  | `ToolOutput`                                             |
 | `model.answer`               | The assistant message is committed                 | `{ answer: ModelMessageItem }`                           |
 | `interception.started`       | An `InterceptionHandler` matched a transition      | The pending `LoopTransition`                             |
 | `interception.finished`      | The handler returned (possibly rewritten)          | The transition that will execute                         |
 
 ### Streaming
 
-Pass `streaming: true` on the `InferenceInput` you give `runLoop`. The loop takes the `inference_streaming` path and publishes each provider chunk as `inference.stream` (the inner event is the payload). Requesting streaming for a model whose specification has `supportsStreaming: false` fails validation before the API is called.
+Pass `streaming: true` on the `InferenceRequest` you give `runLoop`. The loop takes the `inference_streaming` path and publishes each provider chunk as `inference.stream` (the inner event is the payload). Requesting streaming for a model whose specification has `supportsStreaming: false` fails validation before the API is called.
 
 ---
 
@@ -345,7 +345,7 @@ Three things to note:
 
 ## The agent loop
 
-`runLoop(agentId, message, inferenceInput, interceptionHandler?)` drives one agent turn as a state machine. It starts at `message_received` and runs until `idle`. Tool execution and the follow-up inference live inside the loop — you do not call a separate function-call runner.
+`runLoop(agentId, message, inferenceRequest, interceptionHandler?)` drives one agent turn as a state machine. It starts at `message_received` and runs until `idle`. Tool execution and the follow-up inference live inside the loop — you do not call a separate function-call runner.
 
 Each step: optionally intercept the pending transition, execute the state, then resolve the next transition.
 
@@ -399,7 +399,7 @@ const inspectFunctionCalls: InterceptionHandler = {
 	},
 }
 
-runLoop(agent.getId(), message, inferenceInput, inspectFunctionCalls)
+runLoop(agent.getId(), message, inferenceRequest, inspectFunctionCalls)
 ```
 
 Use it to steer loop execution by rewriting the next state — for example, swapping a tool call’s input — without putting that logic inside the agent’s situation handlers. That is how you keep a human in the loop, or another agent, to control what runs next.

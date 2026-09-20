@@ -1,6 +1,6 @@
-import type { InferenceInput, InferenceOutput } from "./inference-runner"
+import type { InferenceRequest, InferenceResult } from "./inference-runner"
 
 export interface InferenceEndpointMapper {
-	toRequest(inferenceInput: InferenceInput): any
-	toResponse(response: any): InferenceOutput
+	toRequest(inferenceRequest: InferenceRequest): any
+	toResponse(response: any): InferenceResult
 }

@@ -1,9 +1,9 @@
 import type { ContextItem } from "@domain/generative-model/context/item"
-import { FunctionCallItem } from "@domain/generative-model/context/items/function-call"
+import { ToolUseRequest } from "@domain/generative-model/context/items/tool-use-request"
 import { ModelMessageItem } from "@domain/generative-model/context/items/model-message"
 import { ReasoningItem } from "@domain/generative-model/context/items/reasoning"
 
-export type ModelContextItem = ModelMessageItem | FunctionCallItem | ReasoningItem
+export type ModelContextItem = ModelMessageItem | ToolUseRequest | ReasoningItem
 
 export class ModelContext {
 	readonly id: string

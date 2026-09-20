@@ -1,4 +1,4 @@
-import type { InferenceInput } from "../inference-runner"
+import type { InferenceRequest } from "../inference-runner"
 import type { ModelSpecification } from "../generative-model"
 import type { RequestValidationRule } from "./rule"
 
@@ -11,8 +11,8 @@ export type StructuredOutputFormat = {
 export class StructuredOutputValidation implements RequestValidationRule {
 	readonly name = "structured-output"
 
-	isValid(inferenceInput: InferenceInput, model: ModelSpecification): boolean {
-		if (inferenceInput.structuredOutput === undefined) {
+	isValid(inferenceRequest: InferenceRequest, model: ModelSpecification): boolean {
+		if (inferenceRequest.structuredOutput === undefined) {
 			return true
 		}
 

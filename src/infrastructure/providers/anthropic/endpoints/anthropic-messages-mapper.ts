@@ -1,9 +1,9 @@
-import type { InferenceInput, InferenceItem, InferenceOutput } from "@domain/agent/loop/states/inference"
+import type { InferenceRequest, InferenceItem, InferenceResult } from "@domain/generative-model/inference-runner"
 import { DeveloperMessageItem } from "@domain/generative-model/context/items/developer-message"
-import { FunctionCallOutputItem } from "@domain/generative-model/context/items/function-call-output"
+import { ToolUseResult } from "@domain/generative-model/context/items/tool-use-result"
 import { SystemMessageItem } from "@domain/generative-model/context/items/system-message"
 import { UserMessageItem } from "@domain/generative-model/context/items/user-message"
-import { FunctionCallItem } from "@domain/generative-model/context/items/function-call"
+import { ToolUseRequest } from "@domain/generative-model/context/items/tool-use-request"
 import { ModelMessageItem } from "@domain/generative-model/context/items/model-message"
 import type { InferenceEndpointMapper } from "@domain/generative-model/inference-endpoint-mapper"
 import { ReasoningItem } from "@domain/generative-model/context/items/reasoning"
@@ -12,47 +12,47 @@ import { InputTokenDetails, OutputTokenDetails, TokenUsage } from "@domain/gener
 import type Anthropic from "@anthropic-ai/sdk"
 
 export class AnthropicMessagesMapper implements InferenceEndpointMapper {
-	toRequest(inferenceInput: InferenceInput) {
-		const { messages, system } = this.mapContextItems(inferenceInput)
+	toRequest(inferenceRequest: InferenceRequest) {
+		const { messages, system } = this.mapContextItems(inferenceRequest)
 		const outputConfig: any = {}
 
 		const request: any = {
-			model: inferenceInput.model,
+			model: inferenceRequest.model,
 			messages,
 		}
 
-		request.max_tokens = inferenceInput.maxOutputTokens!
+		request.max_tokens = inferenceRequest.maxOutputTokens!
 
 		if (system) {
 			request.system = system
 		}
 
-		if (inferenceInput.tools && inferenceInput.tools.length > 0) {
-			request.tools = inferenceInput.tools.map((tool) => ({
+		if (inferenceRequest.tools && inferenceRequest.tools.length > 0) {
+			request.tools = inferenceRequest.tools.map((tool) => ({
 				name: tool.name,
 				description: tool.description,
 				input_schema: tool.parameters,
 			}))
 		}
 
-		if (inferenceInput.structuredOutput) {
+		if (inferenceRequest.structuredOutput) {
 			outputConfig.format = {
 				type: "json_schema",
-				schema: inferenceInput.structuredOutput.schema,
+				schema: inferenceRequest.structuredOutput.schema,
 			}
 		}
 
-		if (inferenceInput.reasoningEffort) {
+		if (inferenceRequest.reasoningEffort) {
 			request.thinking = { type: "adaptive" }
-			outputConfig.effort = inferenceInput.reasoningEffort
+			outputConfig.effort = inferenceRequest.reasoningEffort
 		}
 
 		if (Object.keys(outputConfig).length > 0) {
 			request.output_config = outputConfig
 		}
 
-		if (inferenceInput.streaming) {
-			request.stream = inferenceInput.streaming
+		if (inferenceRequest.streaming) {
+			request.stream = inferenceRequest.streaming
 		}
 
 		return request
@@ -71,8 +71,8 @@ export class AnthropicMessagesMapper implements InferenceEndpointMapper {
 		})
 	}
 
-	mapContextItems(inferenceInput: InferenceInput): { messages: any[]; system?: string } {
-		const context = inferenceInput.context
+	mapContextItems(inferenceRequest: InferenceRequest): { messages: any[]; system?: string } {
+		const context = inferenceRequest.context
 		const messages: any[] = []
 		const system: string[] = []
 
@@ -101,7 +101,7 @@ export class AnthropicMessagesMapper implements InferenceEndpointMapper {
 				continue
 			}
 
-			if (item instanceof FunctionCallItem) {
+			if (item instanceof ToolUseRequest) {
 				let input: any
 				try {
 					input = JSON.parse(item.args)
@@ -117,7 +117,7 @@ export class AnthropicMessagesMapper implements InferenceEndpointMapper {
 				continue
 			}
 
-			if (item instanceof FunctionCallOutputItem) {
+			if (item instanceof ToolUseResult) {
 				this.addContentBlock(messages, "user", {
 					type: "tool_result",
 					tool_use_id: item.callId,
@@ -147,7 +147,7 @@ export class AnthropicMessagesMapper implements InferenceEndpointMapper {
 		)
 	}
 
-	toResponse(response: Anthropic.Messages.Message): InferenceOutput {
+	toResponse(response: Anthropic.Messages.Message): InferenceResult {
 		const items: InferenceItem[] = []
 
 		for (const block of response.content as any[]) {
@@ -157,7 +157,7 @@ export class AnthropicMessagesMapper implements InferenceEndpointMapper {
 			}
 			if (block.type === "tool_use") {
 				items.push(
-					FunctionCallItem.rehydrate({
+					ToolUseRequest.rehydrate({
 						callId: block.id,
 						name: block.name,
 						args: JSON.stringify(block.input ?? {}),

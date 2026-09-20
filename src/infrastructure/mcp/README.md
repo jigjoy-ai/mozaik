@@ -51,7 +51,7 @@ const mcpTools = await registry.discoverTools() // FunctionTool[]
 
 ## How an agent gets these tools
 
-The same way it gets any tool — they go in `InferenceInput.tools`:
+The same way it gets any tool — they go in `InferenceRequest.tools`:
 
 ```ts
 await runInference.execute({

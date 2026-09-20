@@ -1,6 +1,6 @@
 import { RuntimeEvent } from "@domain/runtime/event"
 import type { Endpoint } from "@domain/generative-model/endpoint"
-import type { InferenceInput, InferenceOutput } from "@domain/agent/loop/states/inference"
+import type { InferenceRequest, InferenceResult } from "@domain/generative-model/inference-runner"
 import { AnthropicMessagesMapper } from "./anthropic-messages-mapper"
 import Anthropic from "@anthropic-ai/sdk"
 import type { InferenceEndpointMapper } from "@domain/generative-model/inference-endpoint-mapper"
@@ -35,15 +35,15 @@ export class AnthropicMessages implements Endpoint {
 		}))
 	}
 
-	async infer(inferenceInput: InferenceInput): Promise<InferenceOutput> {
-		const request = this.endpointMapper.toRequest(inferenceInput)
+	async infer(inferenceRequest: InferenceRequest): Promise<InferenceResult> {
+		const request = this.endpointMapper.toRequest(inferenceRequest)
 		const response = await this.client.messages.create(request)
 
 		return this.endpointMapper.toResponse(response)
 	}
 
-	async *stream(inferenceInput: InferenceInput): AsyncIterable<RuntimeEvent> {
-		const request = this.endpointMapper.toRequest(inferenceInput)
+	async *stream(inferenceRequest: InferenceRequest): AsyncIterable<RuntimeEvent> {
+		const request = this.endpointMapper.toRequest(inferenceRequest)
 		const stream = this.client.messages.stream(request)
 
 		for await (const event of stream) {
