@@ -1,4 +1,4 @@
-import { RuntimeEvent } from "src/runtime/domain/runtime/event"
+import { RuntimeEvent } from "src/environment/domain/runtime/event"
 import { InferenceRequest, InferenceResult } from "src/inference/inference-runner"
 import type { Endpoint } from "src/inference/endpoint"
 import OpenAI from "openai"

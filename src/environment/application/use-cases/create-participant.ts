@@ -1,5 +1,5 @@
-import { Participant, ParticipantManifest } from "src/runtime/domain/runtime/participant"
-import { SituationHandler } from "src/runtime/domain/runtime/situation-handler"
+import { Participant, ParticipantManifest } from "src/environment/domain/runtime/participant"
+import { SituationHandler } from "src/environment/domain/runtime/situation-handler"
 
 export class CreateParticipantUseCase {
 	async execute(name: string, capabilities: readonly string[], handlers: SituationHandler[]): Promise<Participant> {

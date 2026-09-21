@@ -1,9 +1,9 @@
 import { ToolUseRequest } from "src/runtime/domain/generative-model/context/items/tool-use-request"
 import { InferenceRequest } from "src/runtime/domain/generative-model/inference-runner"
 import { Tool } from "src/runtime/domain/generative-model/tool"
-import { ParticipantManifest } from "src/runtime/domain/runtime/participant"
+import { ParticipantManifest } from "src/environment/domain/runtime/participant"
 import { Memory } from "./memory"
-import { SituationHandler } from "src/runtime/domain/runtime/situation-handler"
+import { SituationHandler } from "src/environment/domain/runtime/situation-handler"
 
 export type LoopStateId = "idle" | "awaiting_inference" | "awaiting_tool_output" | "stopped" | "completed"
 

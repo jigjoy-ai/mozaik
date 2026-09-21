@@ -3,7 +3,7 @@ import { AgentLoopRepository } from "src/agent/domain/agent-loop-repository"
 import { AgentRepository } from "src/agent/domain/agent-repository"
 import { Clock } from "src/util/clock"
 import { IdGenerator } from "src/util/id-generator"
-import { InferenceRequest } from "src/runtime/domain/generative-model/inference-runner"
+import { InferenceRequest } from "src/inference/inference-runner"
 
 export class CreateAgentLoopUseCase {
 	constructor(

@@ -1,40 +1,23 @@
-import { RuntimeService } from "src/runtime/application/services/runtime"
-import { DomainModel } from "src/runtime/domain/runtime/domain-model"
+import { RuntimeService } from "src/environment/application/services/runtime"
+import { DomainModel } from "src/environment/domain/runtime/domain-model"
 import { InferenceRunner } from "src/inference/inference-runner"
-import { supportedModels } from "src/runtime/application/services/models"
+import { supportedModels } from "@infra/models"
 import { GenerativeModel } from "src/inference/generative-model"
 import { InferenceRequestValidator } from "src/inference/request-validation/inference-request-validator"
 import { DefaultInferenceRunner } from "src/agent/application/services/inference-runner"
 import { LocalToolRunner } from "src/agent/application/services/local-tool-runner"
-import { SituationHandler } from "src/runtime/domain/runtime/situation-handler"
-import { CreateParticipantUseCase } from "src/runtime/application/use-cases/create-participant"
-
-export type InferenceRunnerConfig = {
-	supportedModels?: GenerativeModel[]
-	runner?: InferenceRunner
-}
+import { SituationHandler } from "src/environment/domain/runtime/situation-handler"
+import { CreateParticipantUseCase } from "src/environment/application/use-cases/create-participant"
 
 export function defineRuntime<TModel extends DomainModel>() {
 	let runtime: RuntimeService<TModel> | null = null
 
-	function initializeRuntime(config: {
-		model: TModel
-		inferenceRunnerConfig?: InferenceRunnerConfig
-	}): RuntimeService<TModel> {
+	function initializeRuntime(config: { model: TModel }): RuntimeService<TModel> {
 		if (runtime) {
 			throw new Error("Runtime already initialized")
 		}
 
-		const inferenceRunner =
-			config.inferenceRunnerConfig?.runner ??
-			new DefaultInferenceRunner(
-				config.inferenceRunnerConfig?.supportedModels ?? supportedModels,
-				new InferenceRequestValidator(),
-			)
-
-		const toolUseRunner = new LocalToolRunner()
-
-		runtime = new RuntimeService(config.model, inferenceRunner, toolUseRunner)
+		runtime = new RuntimeService(config.model)
 
 		return runtime
 	}

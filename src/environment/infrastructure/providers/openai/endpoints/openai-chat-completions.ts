@@ -1,5 +1,5 @@
 import { InferenceRequest, InferenceResult } from "src/inference/inference-runner"
-import { RuntimeEvent } from "src/runtime/domain/runtime/event"
+import { RuntimeEvent } from "src/environment/domain/runtime/event"
 import type { Endpoint } from "src/inference/endpoint"
 import { OpenAIChatCompletionsMapper } from "./openai-chat-completions-mapper"
 import OpenAI from "openai"

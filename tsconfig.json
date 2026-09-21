@@ -12,14 +12,14 @@
 		"moduleResolution": "node",
 		"baseUrl": ".",
 		"paths": {
-			"@app/*": ["src/runtime/application/*"],
-			"@domain/*": ["src/runtime/domain/*"],
-			"@infra/*": ["src/runtime/infrastructure/*"]
+			"@app/*": ["src/environment/application/*"],
+			"@domain/*": ["src/environment/domain/*"],
+			"@infra/*": ["src/environment/infrastructure/*"]
 		},
 		"esModuleInterop": true,
 		"skipLibCheck": true,
 		"forceConsistentCasingInFileNames": true
 	},
-	"include": ["src", "src/runtime/domain/types", "examples"],
+	"include": ["src", "src/environment/domain/types", "examples"],
 	"exclude": ["node_modules", "dist"] // For now excluded tests
 }

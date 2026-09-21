@@ -1,4 +1,4 @@
-import { RuntimeEvent } from "src/runtime/domain/runtime/event"
+import { RuntimeEvent } from "src/environment/domain/runtime/event"
 import { GoogleGenAI } from "@google/genai"
 import type { Endpoint } from "src/inference/endpoint"
 import type { InferenceRequest, InferenceResult } from "src/inference/inference-runner"

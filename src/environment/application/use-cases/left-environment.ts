@@ -1,7 +1,7 @@
-import { EnvironmentRepository } from "src/runtime/domain/runtime/environment-repository"
-import { Participant } from "src/runtime/domain/runtime/participant"
+import { EnvironmentRepository } from "src/environment/domain/runtime/environment-repository"
+import { Participant } from "src/environment/domain/runtime/participant"
 
-export class JoinEnvironmentUseCase {
+export class LeftEnvironmentUseCase {
 	private readonly environmentRepository: EnvironmentRepository
 
 	constructor(environmentRepository: EnvironmentRepository) {
@@ -13,7 +13,7 @@ export class JoinEnvironmentUseCase {
 		if (!environment) {
 			throw new Error("Environment not found")
 		}
-		environment.addParticipant(participant)
+		environment.removeParticipant(participant)
 		await this.environmentRepository.save(environment)
 	}
 }

@@ -1,11 +1,11 @@
 import { Agent } from "src/agent/domain/agent"
-import { Tool } from "src/runtime/domain/generative-model/tool"
-import { SituationHandler } from "src/runtime/domain/runtime/situation-handler"
+import { Tool } from "src/inference/tool"
+import { SituationHandler } from "src/environment/domain/runtime/situation-handler"
 import { AgentRepository } from "src/agent/domain/agent-repository"
 import { IdGenerator } from "src/util/id-generator"
-import { ParticipantManifest } from "src/runtime/domain/runtime/participant"
+import { ParticipantManifest } from "src/environment/domain/runtime/participant"
 import { Memory } from "src/agent/domain/memory"
-import { DeveloperMessageItem } from "src/runtime/domain/generative-model/context/items/developer-message"
+import { DeveloperMessageItem } from "src/inference/context/items/developer-message"
 import { AgentRecord } from "src/agent/domain/types"
 
 export class CreateAgentUseCase {

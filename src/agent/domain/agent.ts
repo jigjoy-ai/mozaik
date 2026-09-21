@@ -1,7 +1,7 @@
 import { Memory } from "src/agent/domain/memory"
-import { Participant, ParticipantManifest } from "src/runtime/domain/runtime/participant"
+import { Participant, ParticipantManifest } from "src/environment/domain/runtime/participant"
 import { Tool } from "src/runtime/domain/generative-model/tool"
-import { SituationHandler } from "src/runtime/domain/runtime/situation-handler"
+import { SituationHandler } from "src/environment/domain/runtime/situation-handler"
 import { AgentRecord } from "./types"
 
 export class Agent extends Participant {

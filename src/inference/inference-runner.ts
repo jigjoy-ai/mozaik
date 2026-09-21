@@ -1,4 +1,4 @@
-import { RuntimeEvent } from "src/runtime/domain/runtime/event"
+import { RuntimeEvent } from "src/environment/domain/runtime/event"
 import { ToolUseRequest } from "./context/items/tool-use-request"
 import { ModelMessageItem } from "./context/items/model-message"
 import { ReasoningItem } from "./context/items/reasoning"
