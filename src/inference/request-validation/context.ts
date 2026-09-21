@@ -1,26 +1,22 @@
 import type { InferenceRequest } from "../inference-runner"
 import type { RequestValidationRule } from "./rule"
 import type { ModelSpecification } from "../generative-model"
-import { ContextItem } from "src/inference/context/item"
-import { UserMessageItem } from "src/inference/context/items/user-message"
-import { SystemMessageItem } from "src/inference/context/items/system-message"
-import { DeveloperMessageItem } from "src/inference/context/items/developer-message"
-import { ModelMessageItem } from "src/inference/context/items/model-message"
+import type { ContextItem } from "src/inference/context"
 
 function getContextItemValidationKey(item: ContextItem): string {
-	if (item instanceof UserMessageItem) {
+	if (item.type === "user_message") {
 		return "user_message"
 	}
-	if (item instanceof SystemMessageItem) {
+	if (item.type === "system_message") {
 		return "system_message"
 	}
-	if (item instanceof DeveloperMessageItem) {
+	if (item.type === "developer_message") {
 		return "developer_message"
 	}
-	if (item instanceof ModelMessageItem) {
+	if (item.type === "model_message") {
 		return "model_message"
 	}
-	return item.getType()
+	return item.type
 }
 
 export class ContextValidation implements RequestValidationRule {

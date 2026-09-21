@@ -1,11 +1,9 @@
 import { RuntimeEvent } from "src/environment/domain/runtime/event"
-import { ToolUseRequest } from "./context/items/tool-use-request"
-import { ModelMessageItem } from "./context/items/model-message"
-import { ReasoningItem } from "./context/items/reasoning"
-import { ModelContext } from "./context/model-context"
+import { ModelContext } from "./context"
 import { StructuredOutputFormat } from "./request-validation/structured-output"
 import { TokenUsage } from "./token-usage"
 import { Tool } from "./tool"
+import { ModelOutputItem } from "./context"
 
 export type InferenceRequest = {
 	model: string
@@ -17,10 +15,8 @@ export type InferenceRequest = {
 	context: ModelContext
 }
 
-export type InferenceItem = ToolUseRequest | ReasoningItem | ModelMessageItem
-
 export type InferenceResult = {
-	items: InferenceItem[]
+	items: ModelOutputItem[]
 	tokenUsage: TokenUsage | undefined
 	rowResponse: any
 }

@@ -1,4 +1,3 @@
-import { ModelContext } from "src/inference/context/model-context"
 import { StructuredOutputFormat } from "src/inference/request-validation/structured-output"
 import { InputTokenDetails, OutputTokenDetails, TokenUsage } from "src/inference/token-usage"
 import { Tool } from "src/inference/tool"
@@ -23,28 +22,11 @@ import {
 } from "src/environment/domain/runtime/situation-handler"
 import { SituationSpecification } from "src/environment/domain/runtime/situation-specification"
 import { DefaultInferenceRunner } from "src/agent/application/services/inference-runner"
-import { ContextItem } from "src/inference/context/item"
-import { UserMessageItem } from "src/inference/context/items/user-message"
-import { DeveloperMessageItem } from "src/inference/context/items/developer-message"
-import { SystemMessageItem } from "src/inference/context/items/system-message"
-import { ModelMessageItem } from "src/inference/context/items/model-message"
-import { ToolUseRequest } from "src/inference/context/items/tool-use-request"
-import { ToolUseResult } from "src/inference/context/items/tool-use-result"
-import { ReasoningItem } from "src/inference/context/items/reasoning"
 
 export {
 	defineRuntime,
 	DomainModel,
-	ModelContext,
-	ContextItem,
 	RuntimeEvent,
-	UserMessageItem,
-	DeveloperMessageItem,
-	SystemMessageItem,
-	ModelMessageItem,
-	ToolUseRequest,
-	ToolUseResult,
-	ReasoningItem,
 	StructuredOutputFormat,
 	TokenUsage,
 	InputTokenDetails,

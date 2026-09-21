@@ -1,13 +1,14 @@
-import type { InferenceRequest, InferenceItem, InferenceResult } from "src/inference/inference-runner"
-import { DeveloperMessageItem } from "src/inference/context/items/developer-message"
-import { ToolUseResult } from "src/inference/context/items/tool-use-result"
-import { SystemMessageItem } from "src/inference/context/items/system-message"
-import { UserMessageItem } from "src/inference/context/items/user-message"
-import { ToolUseRequest } from "src/inference/context/items/tool-use-request"
-import { ModelMessageItem } from "src/inference/context/items/model-message"
+import type { InferenceRequest, InferenceResult } from "src/inference/inference-runner"
+import type {
+	InputText,
+	MessageItem,
+	ModelMessageItem,
+	ModelOutputItem,
+	ReasoningItem,
+	ToolUseRequest,
+	ToolUseResult,
+} from "src/inference/context"
 import type { InferenceEndpointMapper } from "src/inference/inference-endpoint-mapper"
-import { ReasoningItem } from "src/inference/context/items/reasoning"
-import { InputText } from "src/inference/context/items/item-content/input-text"
 import { InputTokenDetails, OutputTokenDetails, TokenUsage } from "src/inference/token-usage"
 import type Anthropic from "@anthropic-ai/sdk"
 
@@ -76,52 +77,59 @@ export class AnthropicMessagesMapper implements InferenceEndpointMapper {
 		const messages: any[] = []
 		const system: string[] = []
 
-		for (const item of context.getItems()) {
-			if (item instanceof DeveloperMessageItem || item instanceof SystemMessageItem) {
-				system.push(item.content.text)
-				continue
+		for (const item of context.items) {
+			if (item.type === "message") {
+				const message = item as MessageItem
+				if (message.role === "developer" || message.role === "system") {
+					system.push((message.content as InputText).text)
+					continue
+				}
+
+				if (message.role === "user") {
+					this.addContentBlock(messages, "user", { type: "text", text: (message.content as InputText).text })
+					continue
+				}
+
+				if (message.role === "assistant") {
+					const modelMessage = item as ModelMessageItem
+					this.addContentBlock(messages, "assistant", { type: "text", text: modelMessage.content.text })
+					continue
+				}
 			}
 
-			if (item instanceof UserMessageItem) {
-				this.addContentBlock(messages, "user", { type: "text", text: item.content.text })
-				continue
-			}
-
-			if (item instanceof ModelMessageItem) {
-				this.addContentBlock(messages, "assistant", { type: "text", text: item.content.text })
-				continue
-			}
-
-			if (item instanceof ReasoningItem) {
+			if (item.type === "reasoning") {
+				const reasoning = item as ReasoningItem
 				this.addContentBlock(messages, "assistant", {
 					type: "thinking",
-					thinking: item.content?.text ?? "",
-					signature: item.encryptedContent ?? "",
+					thinking: reasoning.content?.text ?? "",
+					signature: reasoning.encryptedContent ?? "",
 				})
 				continue
 			}
 
-			if (item instanceof ToolUseRequest) {
+			if (item.type === "tool_use_request") {
+				const toolUseRequest = item as ToolUseRequest
 				let input: any
 				try {
-					input = JSON.parse(item.args)
+					input = JSON.parse(toolUseRequest.toolArguments)
 				} catch {
-					input = item.args
+					input = toolUseRequest.toolArguments
 				}
 				this.addContentBlock(messages, "assistant", {
 					type: "tool_use",
-					id: item.callId,
-					name: item.name,
+					id: toolUseRequest.requestId,
+					name: toolUseRequest.toolName,
 					input: input,
 				})
 				continue
 			}
 
-			if (item instanceof ToolUseResult) {
+			if (item.type === "tool_use_result") {
+				const toolUseResult = item as ToolUseResult
 				this.addContentBlock(messages, "user", {
 					type: "tool_result",
-					tool_use_id: item.callId,
-					content: item.output.text,
+					tool_use_id: toolUseResult.requestId,
+					content: toolUseResult.result.text,
 				})
 			}
 		}
@@ -148,31 +156,33 @@ export class AnthropicMessagesMapper implements InferenceEndpointMapper {
 	}
 
 	toResponse(response: Anthropic.Messages.Message): InferenceResult {
-		const items: InferenceItem[] = []
+		const items: ModelOutputItem[] = []
 
 		for (const block of response.content as any[]) {
 			if (block.type === "text") {
-				items.push(ModelMessageItem.rehydrate({ text: block.text }))
+				items.push({
+					type: "message",
+					role: "assistant",
+					content: { type: "output_text", text: block.text },
+				})
 				continue
 			}
 			if (block.type === "tool_use") {
-				items.push(
-					ToolUseRequest.rehydrate({
-						callId: block.id,
-						name: block.name,
-						args: JSON.stringify(block.input ?? {}),
-					}),
-				)
+				items.push({
+					type: "tool_use_request",
+					requestId: block.id,
+					toolName: block.name,
+					toolArguments: JSON.stringify(block.input ?? {}),
+				})
 				continue
 			}
 			if (block.type === "thinking") {
-				items.push(
-					ReasoningItem.rehydrate({
-						content: block.thinking ? InputText.rehydrate({ text: block.thinking }) : undefined,
-						encryptedContent: block.signature,
-						summary: [],
-					}),
-				)
+				items.push({
+					type: "reasoning",
+					content: block.thinking ? { type: "input_text", text: block.thinking } : undefined,
+					encryptedContent: block.signature,
+					summary: [],
+				})
 			}
 		}
 

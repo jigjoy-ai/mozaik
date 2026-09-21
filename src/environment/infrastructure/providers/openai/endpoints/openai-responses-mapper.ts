@@ -1,13 +1,14 @@
-import { InferenceRequest, InferenceItem, InferenceResult } from "src/inference/inference-runner"
+import type { InferenceRequest, InferenceResult } from "src/inference/inference-runner"
 import type { InferenceEndpointMapper } from "src/inference/inference-endpoint-mapper"
-import { DeveloperMessageItem } from "src/inference/context/items/developer-message"
-import { ToolUseResult } from "src/inference/context/items/tool-use-result"
-import { SystemMessageItem } from "src/inference/context/items/system-message"
-import { UserMessageItem } from "src/inference/context/items/user-message"
-import { ToolUseRequest } from "src/inference/context/items/tool-use-request"
-import { ModelMessageItem } from "src/inference/context/items/model-message"
-import { ReasoningItem } from "src/inference/context/items/reasoning"
-import { SummaryText } from "src/inference/context/items/item-content/summary-text"
+import type {
+	InputText,
+	MessageItem,
+	ModelMessageItem,
+	ModelOutputItem,
+	ReasoningItem,
+	ToolUseRequest,
+	ToolUseResult,
+} from "src/inference/context"
 import { InputTokenDetails, OutputTokenDetails, TokenUsage } from "src/inference/token-usage"
 import type OpenAI from "openai"
 
@@ -55,55 +56,58 @@ export class OpenAIResponsesMapper implements InferenceEndpointMapper {
 	mapContextItems(inferenceRequest: InferenceRequest): any[] {
 		const input: any[] = []
 
-		for (const item of inferenceRequest.context.getItems()) {
-			if (
-				item instanceof DeveloperMessageItem ||
-				item instanceof SystemMessageItem ||
-				item instanceof UserMessageItem
-			) {
-				input.push({
-					type: item.type,
-					role: item.role,
-					content: [{ type: "input_text", text: item.content.text }],
-				})
-				continue
-			}
-
-			if (item instanceof ModelMessageItem) {
-				input.push({
-					type: item.type,
-					role: item.role,
-					content: [{ type: "output_text", text: item.content.text }],
-				})
-				continue
-			}
-
-			if (item instanceof ToolUseRequest) {
-				input.push({
-					type: item.type,
-					call_id: item.callId,
-					name: item.name,
-					arguments: item.args,
-				})
-				continue
-			}
-
-			if (item instanceof ToolUseResult) {
-				input.push({
-					type: item.type,
-					call_id: item.callId,
-					output: [{ type: "input_text", text: item.output.text }],
-				})
-				continue
-			}
-
-			if (item instanceof ReasoningItem) {
-				const reasoningInput: Record<string, unknown> = {
-					type: item.type,
-					summary: item.summary.map((summary) => ({ type: "summary_text", text: summary.text })),
+		for (const item of inferenceRequest.context.items) {
+			if (item.type === "message") {
+				const message = item as MessageItem
+				if (message.role === "developer" || message.role === "system" || message.role === "user") {
+					input.push({
+						type: "message",
+						role: message.role,
+						content: [{ type: "input_text", text: (message.content as InputText).text }],
+					})
+					continue
 				}
-				if (item.encryptedContent !== undefined) {
-					reasoningInput.encrypted_content = item.encryptedContent
+
+				if (message.role === "assistant") {
+					const modelMessage = item as ModelMessageItem
+					input.push({
+						type: "message",
+						role: modelMessage.role,
+						content: [{ type: "output_text", text: modelMessage.content.text }],
+					})
+					continue
+				}
+			}
+
+			if (item.type === "tool_use_request") {
+				const toolUseRequest = item as ToolUseRequest
+				input.push({
+					type: "function_call",
+					call_id: toolUseRequest.requestId,
+					name: toolUseRequest.toolName,
+					arguments: toolUseRequest.toolArguments,
+				})
+				continue
+			}
+
+			if (item.type === "tool_use_result") {
+				const toolUseResult = item as ToolUseResult
+				input.push({
+					type: "function_call_output",
+					call_id: toolUseResult.requestId,
+					output: [{ type: "input_text", text: toolUseResult.result.text }],
+				})
+				continue
+			}
+
+			if (item.type === "reasoning") {
+				const reasoning = item as ReasoningItem
+				const reasoningInput: Record<string, unknown> = {
+					type: "reasoning",
+					summary: reasoning.summary.map((summary) => ({ type: "summary_text", text: summary.text })),
+				}
+				if (reasoning.encryptedContent !== undefined) {
+					reasoningInput.encrypted_content = reasoning.encryptedContent
 				}
 				input.push(reasoningInput)
 			}
@@ -126,36 +130,40 @@ export class OpenAIResponsesMapper implements InferenceEndpointMapper {
 	}
 
 	toResponse(response: any): InferenceResult {
-		const items: InferenceItem[] = []
+		const items: ModelOutputItem[] = []
 
 		for (const item of response.output ?? []) {
 			if (item.type === "message" && item.role === "assistant") {
 				const firstContent = item.content?.[0]
 				if (firstContent) {
-					items.push(ModelMessageItem.rehydrate(firstContent as { text: string }))
+					items.push({
+						type: "message",
+						role: "assistant",
+						content: { type: "output_text", text: firstContent.text },
+					})
 				}
 				continue
 			}
 			if (item.type === "function_call") {
-				items.push(
-					ToolUseRequest.rehydrate({
-						callId: item.call_id,
-						name: item.name,
-						args: item.arguments,
-					}),
-				)
+				const toolUseRequest: ToolUseRequest = {
+					type: "tool_use_request",
+					requestId: item.call_id,
+					toolName: item.name,
+					toolArguments: item.arguments,
+				}
+				items.push(toolUseRequest)
 				continue
 			}
 			if (item.type === "reasoning") {
-				items.push(
-					ReasoningItem.rehydrate({
-						content: undefined,
-						encryptedContent: item.encrypted_content,
-						summary: (item.summary ?? []).map((summary: { text: string }) =>
-							SummaryText.rehydrate({ text: summary.text }),
-						),
-					}),
-				)
+				items.push({
+					type: "reasoning",
+					content: undefined,
+					encryptedContent: item.encrypted_content,
+					summary: (item.summary ?? []).map((summary: { text: string }) => ({
+						type: "summary_text" as const,
+						text: summary.text,
+					})),
+				})
 			}
 		}
 

@@ -1,4 +1,4 @@
-import { ModelContext } from "src/inference/context/model-context"
+import { ModelContext } from "src/inference/context"
 
 export class Memory {
 	private readonly context: ModelContext
@@ -11,7 +11,9 @@ export class Memory {
 	}
 
 	static create(): Memory {
-		const context = ModelContext.create()
+		const context: ModelContext = {
+			items: [],
+		}
 		return new Memory(context)
 	}
 }

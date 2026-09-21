@@ -5,7 +5,7 @@ import { AgentRepository } from "src/agent/domain/agent-repository"
 import { IdGenerator } from "src/util/id-generator"
 import { ParticipantManifest } from "src/environment/domain/runtime/participant"
 import { Memory } from "src/agent/domain/memory"
-import { DeveloperMessageItem } from "src/inference/context/items/developer-message"
+import { DeveloperMessageItem } from "src/inference/context"
 import { AgentRecord } from "src/agent/domain/types"
 
 export class CreateAgentUseCase {
@@ -27,7 +27,15 @@ export class CreateAgentUseCase {
 		const id = this.ids.generate()
 		const manifest: ParticipantManifest = { id, name, capabilities, role: "agent" }
 		const memory = Memory.create()
-		memory.getContext().addContextItem(DeveloperMessageItem.create(instruction))
+		const developerMessageItem: DeveloperMessageItem = {
+			type: "message",
+			role: "developer",
+			content: {
+				type: "input_text",
+				text: instruction,
+			},
+		}
+		memory.getContext().items.push(developerMessageItem)
 
 		const agentRecord: AgentRecord = { id, manifest, tools, memory, handlers }
 		const agent = Agent.create(agentRecord)

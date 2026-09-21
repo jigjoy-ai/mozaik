@@ -1,4 +1,4 @@
-import { ToolUseRequest } from "src/inference/context/items/tool-use-request"
+import { ToolUseRequest } from "src/inference/context"
 import { InferenceRequest } from "src/inference/inference-runner"
 import { Tool } from "src/inference/tool"
 import { ParticipantManifest } from "src/environment/domain/runtime/participant"

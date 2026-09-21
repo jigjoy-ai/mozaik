@@ -1,5 +1,4 @@
-import { ToolUseRequest } from "./context/items/tool-use-request"
-import { ToolUseResult } from "./context/items/tool-use-result"
+import { ToolUseRequest, ToolUseResult } from "./context"
 import { Tool } from "./tool"
 
 export interface ToolUseRunner {

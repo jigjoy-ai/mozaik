@@ -1,5 +1,4 @@
-import { ToolUseRequest } from "src/inference/context/items/tool-use-request"
-import { ToolUseResult } from "src/inference/context/items/tool-use-result"
+import { ToolUseRequest, ToolUseResult } from "src/inference/context"
 import { InferenceRequest, InferenceResult } from "src/inference/inference-runner"
 import {
 	LoopStateId,
@@ -149,7 +148,7 @@ export class AgentLoop {
 			throw new Error("Inference request is not provided")
 		}
 
-		this.inferenceRequest.context.addContextItems(result.items)
+		this.inferenceRequest.context.items.push(...result.items)
 
 		this.pendingOperation = undefined
 
@@ -171,7 +170,7 @@ export class AgentLoop {
 			throw new Error("Inference request is not provided")
 		}
 
-		this.inferenceRequest.context.addContextItem(result)
+		this.inferenceRequest.context.items.push(result)
 
 		this.pendingOperation = undefined
 

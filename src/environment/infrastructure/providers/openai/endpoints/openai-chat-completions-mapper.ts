@@ -1,13 +1,13 @@
-import type { InferenceRequest, InferenceItem, InferenceResult } from "src/inference/inference-runner"
+import type { InferenceRequest, InferenceResult } from "src/inference/inference-runner"
 import type { InferenceEndpointMapper } from "src/inference/inference-endpoint-mapper"
-import { DeveloperMessageItem } from "src/inference/context/items/developer-message"
-import { ToolUseResult } from "src/inference/context/items/tool-use-result"
-import { SystemMessageItem } from "src/inference/context/items/system-message"
-import { UserMessageItem } from "src/inference/context/items/user-message"
-import { ToolUseRequest } from "src/inference/context/items/tool-use-request"
-import { ModelMessageItem } from "src/inference/context/items/model-message"
-import { InputText } from "src/inference/context/items/item-content/input-text"
-import { ReasoningItem } from "src/inference/context/items/reasoning"
+import type {
+	InputText,
+	MessageItem,
+	ModelMessageItem,
+	ModelOutputItem,
+	ToolUseRequest,
+	ToolUseResult,
+} from "src/inference/context"
 import { InputTokenDetails, OutputTokenDetails, TokenUsage } from "src/inference/token-usage"
 
 export class OpenAIChatCompletionsMapper implements InferenceEndpointMapper {
@@ -42,27 +42,32 @@ export class OpenAIChatCompletionsMapper implements InferenceEndpointMapper {
 	mapContextItems(inferenceRequest: InferenceRequest): any[] {
 		const messages: any[] = []
 
-		for (const item of inferenceRequest.context.getItems()) {
-			if (item instanceof DeveloperMessageItem || item instanceof SystemMessageItem) {
-				messages.push({ role: "system", content: item.content.text })
-				continue
+		for (const item of inferenceRequest.context.items) {
+			if (item.type === "message") {
+				const message = item as MessageItem
+				if (message.role === "developer" || message.role === "system") {
+					messages.push({ role: "system", content: (message.content as InputText).text })
+					continue
+				}
+
+				if (message.role === "user") {
+					messages.push({ role: "user", content: (message.content as InputText).text })
+					continue
+				}
+
+				if (message.role === "assistant") {
+					const modelMessage = item as ModelMessageItem
+					messages.push({ role: "assistant", content: modelMessage.content.text })
+					continue
+				}
 			}
 
-			if (item instanceof UserMessageItem) {
-				messages.push({ role: "user", content: item.content.text })
-				continue
-			}
-
-			if (item instanceof ModelMessageItem) {
-				messages.push({ role: "assistant", content: item.content.text })
-				continue
-			}
-
-			if (item instanceof ToolUseRequest) {
+			if (item.type === "tool_use_request") {
+				const toolUseRequest = item as ToolUseRequest
 				const toolCall = {
-					id: item.callId,
+					id: toolUseRequest.requestId,
 					type: "function",
-					function: { name: item.name, arguments: item.args },
+					function: { name: toolUseRequest.toolName, arguments: toolUseRequest.toolArguments },
 				}
 				const last = messages[messages.length - 1]
 				if (last?.role === "assistant") {
@@ -74,8 +79,9 @@ export class OpenAIChatCompletionsMapper implements InferenceEndpointMapper {
 				continue
 			}
 
-			if (item instanceof ToolUseResult) {
-				messages.push({ role: "tool", tool_call_id: item.callId, content: item.output.text })
+			if (item.type === "tool_use_result") {
+				const toolUseResult = item as ToolUseResult
+				messages.push({ role: "tool", tool_call_id: toolUseResult.requestId, content: toolUseResult.result.text })
 			}
 		}
 
@@ -96,34 +102,36 @@ export class OpenAIChatCompletionsMapper implements InferenceEndpointMapper {
 	}
 
 	toResponse(response: any): InferenceResult {
-		const items: InferenceItem[] = []
+		const items: ModelOutputItem[] = []
 		const message = response.choices?.[0]?.message
 		if (!message) {
 			return { items: [], tokenUsage: this.extractTokenUsage(response), rowResponse: response }
 		}
 
 		if (message.reasoning_content) {
-			items.push(
-				ReasoningItem.rehydrate({
-					content: InputText.rehydrate({ text: message.reasoning_content }),
-					encryptedContent: undefined,
-					summary: [],
-				}),
-			)
+			items.push({
+				type: "reasoning",
+				content: { type: "input_text", text: message.reasoning_content },
+				encryptedContent: undefined,
+				summary: [],
+			})
 		}
 
 		if (message.content) {
-			items.push(ModelMessageItem.rehydrate({ text: message.content }))
+			items.push({
+				type: "message",
+				role: "assistant",
+				content: { type: "output_text", text: message.content },
+			})
 		}
 
 		for (const toolCall of message.tool_calls ?? []) {
-			items.push(
-				ToolUseRequest.rehydrate({
-					callId: toolCall.id,
-					name: toolCall.function.name,
-					args: toolCall.function.arguments,
-				}),
-			)
+			items.push({
+				type: "tool_use_request",
+				requestId: toolCall.id,
+				toolName: toolCall.function.name,
+				toolArguments: toolCall.function.arguments,
+			})
 		}
 
 		return { items, tokenUsage: this.extractTokenUsage(response), rowResponse: response }
