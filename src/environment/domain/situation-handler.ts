@@ -1,6 +1,6 @@
-import { RuntimeEvent } from "./event"
-import { Participant } from "./participant"
-import { SituationSpecification } from "./situation-specification"
+import { RuntimeEvent } from "@environment/domain/event"
+import { Participant } from "@environment/domain/participant"
+import { SituationSpecification } from "@environment/domain/situation-specification"
 
 export interface SituationHandler {
 	readonly specification: SituationSpecification

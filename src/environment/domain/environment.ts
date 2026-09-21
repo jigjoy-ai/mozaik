@@ -1,5 +1,5 @@
-import { ParticipantJoinedEvent, ParticipantLeftEvent, RuntimeEvent } from "./event"
-import { Participant } from "./participant"
+import { ParticipantJoinedEvent, ParticipantLeftEvent, RuntimeEvent } from "@environment/domain/event"
+import { Participant } from "@environment/domain/participant"
 
 export class Environment {
 	private readonly id: string

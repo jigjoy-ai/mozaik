@@ -1,4 +1,4 @@
-import { AgentLoop } from "./agent-loop"
+import { AgentLoop } from "@agent/domain/agent-loop"
 
 export interface AgentLoopRepository {
 	save(agentLoop: AgentLoop): Promise<void>

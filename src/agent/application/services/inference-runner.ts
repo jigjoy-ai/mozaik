@@ -1,7 +1,7 @@
 import type { InferenceRequest, InferenceResult, InferenceRunner } from "src/inference/inference-runner"
 import type { InferenceRequestValidator } from "src/inference/request-validation/inference-request-validator"
 import { GenerativeModel } from "src/inference/generative-model"
-import { RuntimeEvent } from "src/environment/domain/runtime/event"
+import { RuntimeEvent } from "@environment/domain/event"
 
 export type InferenceCompletedParams = { answer: string; producerId: string; price?: number }
 

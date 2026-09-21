@@ -1,4 +1,4 @@
-import { Environment } from "./environment"
+import { Environment } from "@environment/domain/environment"
 
 export interface EnvironmentRepository {
 	save(environment: Environment): Promise<void>

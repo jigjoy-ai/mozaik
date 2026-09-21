@@ -1,4 +1,4 @@
-import { SituationHandler } from "./situation-handler"
+import { SituationHandler } from "@environment/domain/situation-handler"
 
 export type ParticipantRole = "agent" | "external"
 

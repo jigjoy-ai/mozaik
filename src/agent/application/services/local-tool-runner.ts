@@ -1,7 +1,7 @@
-import { ToolUseResult } from "src/inference/context"
-import { ToolUseRequest } from "src/inference/context"
-import { ToolUseRunner } from "src/inference/tool-use-runner"
-import { Tool } from "src/inference/tool"
+import { ToolUseResult } from "@inference/context"
+import { ToolUseRequest } from "@inference/context"
+import { ToolUseRunner } from "@inference/tool-use-runner"
+import { Tool } from "@inference/tool"
 
 export class LocalToolRunner implements ToolUseRunner {
 	async run(input: ToolUseRequest, tool: Tool): Promise<ToolUseResult> {

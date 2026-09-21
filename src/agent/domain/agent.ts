@@ -1,8 +1,8 @@
-import { Memory } from "src/agent/domain/memory"
-import { Participant, ParticipantManifest } from "src/environment/domain/runtime/participant"
-import { Tool } from "src/inference/tool"
-import { SituationHandler } from "src/environment/domain/runtime/situation-handler"
-import { AgentRecord } from "./types"
+import { Memory } from "@agent/domain/memory"
+import { Participant, ParticipantManifest } from "@environment/domain/participant"
+import { Tool } from "@inference/tool"
+import { SituationHandler } from "@environment/domain/situation-handler"
+import { AgentRecord } from "@agent/domain/types"
 
 export class Agent extends Participant {
 	private memory: Memory

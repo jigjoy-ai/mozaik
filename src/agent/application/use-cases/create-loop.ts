@@ -1,8 +1,8 @@
-import { AgentLoop } from "src/agent/domain/agent-loop"
-import { AgentLoopRepository } from "src/agent/domain/agent-loop-repository"
-import { AgentRepository } from "src/agent/domain/agent-repository"
-import { Clock } from "src/util/clock"
-import { IdGenerator } from "src/util/id-generator"
+import { AgentLoop } from "@agent/domain/agent-loop"
+import { AgentLoopRepository } from "@agent/domain/agent-loop-repository"
+import { AgentRepository } from "@agent/domain/agent-repository"
+import { Clock } from "@util/clock"
+import { IdGenerator } from "@util/id-generator"
 
 export class CreateAgentLoopUseCase {
 	constructor(

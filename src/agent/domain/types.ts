@@ -1,9 +1,9 @@
 import { ToolUseRequest } from "src/inference/context"
 import { InferenceRequest } from "src/inference/inference-runner"
 import { Tool } from "src/inference/tool"
-import { ParticipantManifest } from "src/environment/domain/runtime/participant"
+import { ParticipantManifest } from "@environment/domain/participant"
 import { Memory } from "./memory"
-import { SituationHandler } from "src/environment/domain/runtime/situation-handler"
+import { SituationHandler } from "@environment/domain/situation-handler"
 
 export type LoopStateId = "idle" | "awaiting_inference" | "awaiting_tool_output" | "stopped" | "completed"
 

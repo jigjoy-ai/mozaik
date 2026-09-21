@@ -1,5 +1,5 @@
-import { ToolUseRequest, ToolUseResult } from "src/inference/context"
-import { InferenceRequest, InferenceResult } from "src/inference/inference-runner"
+import { ToolUseRequest, ToolUseResult } from "@inference/context"
+import { InferenceRequest, InferenceResult } from "@inference/inference-runner"
 import {
 	LoopStateId,
 	PendingOperation,

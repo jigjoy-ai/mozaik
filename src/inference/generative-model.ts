@@ -1,4 +1,4 @@
-import type { Endpoint } from "./endpoint"
+import type { Endpoint } from "@inference/endpoint"
 
 export type GenerativeModel = {
 	endpoint: Endpoint

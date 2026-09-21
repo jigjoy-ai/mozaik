@@ -1,5 +1,5 @@
-import { AgentLoop } from "../domain/agent-loop"
-import { AgentLoopRepository } from "../domain/agent-loop-repository"
+import { AgentLoop } from "@agent/domain/agent-loop"
+import { AgentLoopRepository } from "@agent/domain/agent-loop-repository"
 
 export class InMemoryAgentLoopRepository implements AgentLoopRepository {
 	private agentLoops: AgentLoop[] = []

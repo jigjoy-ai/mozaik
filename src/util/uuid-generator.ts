@@ -1,4 +1,4 @@
-import { IdGenerator } from "./id-generator"
+import { IdGenerator } from "@util/id-generator"
 
 export class UuidGenerator implements IdGenerator {
 	generate(): string {

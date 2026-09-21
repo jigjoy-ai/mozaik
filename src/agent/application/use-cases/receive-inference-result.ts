@@ -1,6 +1,6 @@
-import { AgentLoopRepository } from "src/agent/domain/agent-loop-repository"
-import { InferenceResult } from "src/inference/inference-runner"
-import { Clock } from "src/util/clock"
+import { AgentLoopRepository } from "@agent/domain/agent-loop-repository"
+import { InferenceResult } from "@inference/inference-runner"
+import { Clock } from "@util/clock"
 
 export class ReceiveInferenceResultUseCase {
 	private readonly agentLoopRepository: AgentLoopRepository

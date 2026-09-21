@@ -1,5 +1,5 @@
-import { RuntimeEvent } from "./event"
-import { Participant } from "./participant"
+import { RuntimeEvent } from "@environment/domain/event"
+import { Participant } from "@environment/domain/participant"
 
 export type SituationContext<TEvent extends RuntimeEvent = RuntimeEvent> = {
 	readonly event: TEvent

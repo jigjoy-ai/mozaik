@@ -1,8 +1,8 @@
-import { AgentLoopRepository } from "src/agent/domain/agent-loop-repository"
-import { PendingInference } from "src/agent/domain/types"
-import { IdGenerator } from "src/util/id-generator"
-import { Clock } from "src/util/clock"
-import { InferenceRequest } from "src/inference/inference-runner"
+import { AgentLoopRepository } from "@agent/domain/agent-loop-repository"
+import { PendingInference } from "@agent/domain/types"
+import { IdGenerator } from "@util/id-generator"
+import { Clock } from "@util/clock"
+import { InferenceRequest } from "@inference/inference-runner"
 
 export class RequestInferenceUseCase {
 	constructor(

@@ -1,7 +1,7 @@
-import { RuntimeService } from "src/environment/application/services/runtime"
-import { DomainModel } from "src/environment/domain/domain-model"
-import { SituationHandler } from "src/environment/domain/runtime/situation-handler"
-import { CreateParticipantUseCase } from "src/environment/application/use-cases/create-participant"
+import { RuntimeService } from "@environment/application/services/runtime"
+import { DomainModel } from "@environment/domain/domain-model"
+import { SituationHandler } from "@environment/domain/situation-handler"
+import { CreateParticipantUseCase } from "@environment/application/use-cases/create-participant"
 
 export function defineRuntime<TModel extends DomainModel>() {
 	let runtime: RuntimeService<TModel> | null = null

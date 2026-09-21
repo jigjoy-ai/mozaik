@@ -1,4 +1,4 @@
-import { ParticipantManifest } from "./participant"
+import { ParticipantManifest } from "@environment/domain/participant"
 
 export class RuntimeEvent<TType extends string = string, TPayload = unknown> {
 	readonly type: TType

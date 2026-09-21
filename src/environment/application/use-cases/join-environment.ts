@@ -1,5 +1,5 @@
-import { EnvironmentRepository } from "src/environment/domain/runtime/environment-repository"
-import { Participant } from "src/environment/domain/runtime/participant"
+import { EnvironmentRepository } from "@environment/domain/environment-repository"
+import { Participant } from "@environment/domain/participant"
 
 export class JoinEnvironmentUseCase {
 	private readonly environmentRepository: EnvironmentRepository
