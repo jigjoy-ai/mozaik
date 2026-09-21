@@ -1,6 +1,6 @@
-import { ToolUseRequest } from "src/runtime/domain/generative-model/context/items/tool-use-request"
-import { ToolUseResult } from "src/runtime/domain/generative-model/context/items/tool-use-result"
-import { InferenceRequest, InferenceResult } from "src/runtime/domain/generative-model/inference-runner"
+import { ToolUseRequest } from "src/inference/context/items/tool-use-request"
+import { ToolUseResult } from "src/inference/context/items/tool-use-result"
+import { InferenceRequest, InferenceResult } from "src/inference/inference-runner"
 import {
 	LoopStateId,
 	PendingOperation,
@@ -12,19 +12,25 @@ import {
 
 export class AgentLoop {
 	private readonly loopId: string
+	private readonly subject: string
+	private readonly createdAt: Date
 	private state: LoopStateId
 	private pendingOperation: PendingOperation | undefined
 	private readonly transitionHistory: AgentLoopTransition[]
-	private readonly inferenceRequest: InferenceRequest
+	private inferenceRequest: InferenceRequest | undefined
 
 	private constructor(
 		loopId: string,
+		subject: string,
+		createdAt: Date,
 		state: LoopStateId,
-		inferenceRequest: InferenceRequest,
+		inferenceRequest: InferenceRequest | undefined,
 		pendingOperation: PendingOperation | undefined,
 		transitionHistory: AgentLoopTransition[],
 	) {
 		this.loopId = loopId
+		this.subject = subject
+		this.createdAt = createdAt
 		this.state = state
 		this.inferenceRequest = inferenceRequest
 		this.pendingOperation = pendingOperation
@@ -50,6 +56,8 @@ export class AgentLoop {
 	record(): AgentLoopRecord {
 		return {
 			id: this.id,
+			subject: this.subject,
+			createdAt: this.createdAt,
 			state: this.state,
 			inferenceRequest: this.inferenceRequest,
 			pendingOperation: this.pendingOperation,
@@ -76,9 +84,9 @@ export class AgentLoop {
 		this.transitionTo("awaiting_tool_output", "tool_execution_requested", occurredAt, operation.id)
 	}
 
-	requestInference(operationId: string, requestedAt: Date): PendingInference {
+	requestInference(operationId: string, request: InferenceRequest, requestedAt: Date): PendingInference {
 		this.assertIdle()
-
+		this.inferenceRequest = request
 		const operation: PendingInference = {
 			id: operationId,
 			type: "inference",
@@ -137,6 +145,10 @@ export class AgentLoop {
 			throw new Error(`Inference result does not match pending operation ${operationId}`)
 		}
 
+		if (!this.inferenceRequest) {
+			throw new Error("Inference request is not provided")
+		}
+
 		this.inferenceRequest.context.addContextItems(result.items)
 
 		this.pendingOperation = undefined
@@ -155,6 +167,10 @@ export class AgentLoop {
 			throw new Error(`Tool output does not match pending operation ${operationId}`)
 		}
 
+		if (!this.inferenceRequest) {
+			throw new Error("Inference request is not provided")
+		}
+
 		this.inferenceRequest.context.addContextItem(result)
 
 		this.pendingOperation = undefined
@@ -162,13 +178,19 @@ export class AgentLoop {
 		this.transitionTo("idle", "tool_execution_completed", occurredAt, operationId)
 	}
 
-	static create(id: string, input: InferenceRequest): AgentLoop {
-		return new AgentLoop(id, "idle", input, undefined, [])
+	static create(id: string, subject: string, createdAt: Date): AgentLoop {
+		return new AgentLoop(id, subject, createdAt, "idle", undefined, undefined, [])
 	}
 
-	static rehydrate(snapshot: AgentLoopRecord): AgentLoop {
-		return new AgentLoop(snapshot.id, snapshot.state, snapshot.inferenceRequest, snapshot.pendingOperation, [
-			...snapshot.transitionHistory,
-		])
+	static rehydrate(record: AgentLoopRecord): AgentLoop {
+		return new AgentLoop(
+			record.id,
+			record.subject,
+			record.createdAt,
+			record.state,
+			record.inferenceRequest,
+			record.pendingOperation,
+			[...record.transitionHistory],
+		)
 	}
 }

@@ -1,11 +1,11 @@
 import type { InferenceRequest } from "../inference-runner"
 import type { RequestValidationRule } from "./rule"
 import type { ModelSpecification } from "../generative-model"
-import { ContextItem } from "src/runtime/domain/generative-model/context/item"
-import { UserMessageItem } from "src/runtime/domain/generative-model/context/items/user-message"
-import { SystemMessageItem } from "src/runtime/domain/generative-model/context/items/system-message"
-import { DeveloperMessageItem } from "src/runtime/domain/generative-model/context/items/developer-message"
-import { ModelMessageItem } from "src/runtime/domain/generative-model/context/items/model-message"
+import { ContextItem } from "src/inference/context/item"
+import { UserMessageItem } from "src/inference/context/items/user-message"
+import { SystemMessageItem } from "src/inference/context/items/system-message"
+import { DeveloperMessageItem } from "src/inference/context/items/developer-message"
+import { ModelMessageItem } from "src/inference/context/items/model-message"
 
 function getContextItemValidationKey(item: ContextItem): string {
 	if (item instanceof UserMessageItem) {

@@ -1,6 +1,6 @@
-import { ToolUseRequest } from "src/runtime/domain/generative-model/context/items/tool-use-request"
-import { InferenceRequest } from "src/runtime/domain/generative-model/inference-runner"
-import { Tool } from "src/runtime/domain/generative-model/tool"
+import { ToolUseRequest } from "src/inference/context/items/tool-use-request"
+import { InferenceRequest } from "src/inference/inference-runner"
+import { Tool } from "src/inference/tool"
 import { ParticipantManifest } from "src/environment/domain/runtime/participant"
 import { Memory } from "./memory"
 import { SituationHandler } from "src/environment/domain/runtime/situation-handler"
@@ -34,8 +34,10 @@ export interface AgentLoopTransition {
 
 export interface AgentLoopRecord {
 	id: string
+	subject: string
+	createdAt: Date
 	state: LoopStateId
-	inferenceRequest: InferenceRequest
+	inferenceRequest?: InferenceRequest
 	pendingOperation?: PendingOperation
 	transitionHistory: AgentLoopTransition[]
 }

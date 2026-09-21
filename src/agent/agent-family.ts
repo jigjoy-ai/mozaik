@@ -79,8 +79,8 @@ export function defineAgentFamily(config: AgentFamilyConfig = {}) {
 			return await createAgentUseCase.execute(name, instruction, capabilities, tools, handlers)
 		}
 
-	const createAgentLoop = () => async (agentId: string, inferenceRequest: InferenceRequest) => {
-		return await createAgentLoopUseCase.execute(agentId, inferenceRequest)
+	const createAgentLoop = () => async (agentId: string, subject: string) => {
+		return await createAgentLoopUseCase.execute(agentId, subject)
 	}
 
 	const receiveInferenceResult =
@@ -88,8 +88,8 @@ export function defineAgentFamily(config: AgentFamilyConfig = {}) {
 			return await receiveInferenceResultUseCase.execute(agentLoopId, operationId, inferenceResult)
 		}
 
-	const requestInference = () => async (agentLoopId: string) => {
-		return await requestInferenceUseCase.execute(agentLoopId)
+	const requestInference = () => async (agentLoopId: string, request: InferenceRequest) => {
+		return await requestInferenceUseCase.execute(agentLoopId, request)
 	}
 
 	const requestToolUse = () => async (agentLoopId: string, toolUseRequest: ToolUseRequest) => {

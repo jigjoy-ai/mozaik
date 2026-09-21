@@ -1,4 +1,4 @@
-import { ContextItem } from "src/runtime/domain/generative-model/context/item"
+import { ContextItem } from "src/inference/context/item"
 
 export class ToolUseRequest extends ContextItem {
 	readonly type = "function_call"

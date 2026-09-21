@@ -1,4 +1,4 @@
-import type { ModelSpecification } from "src/runtime/domain/generative-model/generative-model"
+import type { ModelSpecification } from "src/inference/generative-model"
 import type { RequestValidationRule } from "./rule"
 import type { InferenceRequest } from "../inference-runner"
 

@@ -1,4 +1,4 @@
-import { ModelContext } from "src/runtime/domain/generative-model/context/model-context"
+import { ModelContext } from "src/inference/context/model-context"
 
 export class Memory {
 	private readonly context: ModelContext

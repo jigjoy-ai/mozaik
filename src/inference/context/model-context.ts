@@ -1,7 +1,7 @@
-import type { ContextItem } from "src/runtime/domain/generative-model/context/item"
-import { ToolUseRequest } from "src/runtime/domain/generative-model/context/items/tool-use-request"
-import { ModelMessageItem } from "src/runtime/domain/generative-model/context/items/model-message"
-import { ReasoningItem } from "src/runtime/domain/generative-model/context/items/reasoning"
+import type { ContextItem } from "src/inference/context/item"
+import { ToolUseRequest } from "src/inference/context/items/tool-use-request"
+import { ModelMessageItem } from "src/inference/context/items/model-message"
+import { ReasoningItem } from "src/inference/context/items/reasoning"
 
 export type ModelContextItem = ModelMessageItem | ToolUseRequest | ReasoningItem
 

@@ -1,6 +1,6 @@
 import { Memory } from "src/agent/domain/memory"
 import { Participant, ParticipantManifest } from "src/environment/domain/runtime/participant"
-import { Tool } from "src/runtime/domain/generative-model/tool"
+import { Tool } from "src/inference/tool"
 import { SituationHandler } from "src/environment/domain/runtime/situation-handler"
 import { AgentRecord } from "./types"
 

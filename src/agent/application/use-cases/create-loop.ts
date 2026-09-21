@@ -3,7 +3,6 @@ import { AgentLoopRepository } from "src/agent/domain/agent-loop-repository"
 import { AgentRepository } from "src/agent/domain/agent-repository"
 import { Clock } from "src/util/clock"
 import { IdGenerator } from "src/util/id-generator"
-import { InferenceRequest } from "src/inference/inference-runner"
 
 export class CreateAgentLoopUseCase {
 	constructor(
@@ -13,14 +12,14 @@ export class CreateAgentLoopUseCase {
 		private readonly clock: Clock,
 	) {}
 
-	async execute(agentId: string, inferenceRequest: InferenceRequest): Promise<AgentLoop> {
+	async execute(agentId: string, subject: string): Promise<AgentLoop> {
 		const agentExists = await this.agentRepository.exists(agentId)
 
 		if (!agentExists) {
 			throw new Error(`Agent with id ${agentId} not found`)
 		}
 
-		const agentLoop = AgentLoop.create(this.ids.generate(), inferenceRequest)
+		const agentLoop = AgentLoop.create(this.ids.generate(), subject, this.clock.now())
 		await this.agentLoopRepository.save(agentLoop)
 		return agentLoop
 	}

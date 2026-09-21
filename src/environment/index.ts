@@ -9,7 +9,7 @@ import { Endpoint } from "src/inference/endpoint"
 import { InferenceRequest, InferenceResult, InferenceRunner } from "src/inference/inference-runner"
 import { Participant } from "src/environment/domain/runtime/participant"
 import { DomainModel } from "src/environment/domain/runtime/domain-model"
-import { defineRuntime, type InferenceRunnerConfig } from "./define-runtime"
+import { defineRuntime } from "./define-runtime"
 import { supportedModels } from "@infra/models"
 import { OpenAIResponses } from "src/environment/infrastructure/providers/openai/endpoints/openai-responses"
 import { OpenAIChatCompletions } from "src/environment/infrastructure/providers/openai/endpoints/openai-chat-completions"
@@ -70,5 +70,4 @@ export {
 	InferenceRequest,
 	InferenceRunner,
 	DefaultInferenceRunner,
-	InferenceRunnerConfig,
 }

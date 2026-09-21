@@ -1,5 +1,5 @@
-import { ContextItem } from "src/runtime/domain/generative-model/context/item"
-import { InputText } from "src/runtime/domain/generative-model/context/items/item-content/input-text"
+import { ContextItem } from "src/inference/context/item"
+import { InputText } from "src/inference/context/items/item-content/input-text"
 
 export class UserMessageItem extends ContextItem {
 	readonly type = "message"

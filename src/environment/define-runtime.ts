@@ -1,11 +1,5 @@
 import { RuntimeService } from "src/environment/application/services/runtime"
 import { DomainModel } from "src/environment/domain/runtime/domain-model"
-import { InferenceRunner } from "src/inference/inference-runner"
-import { supportedModels } from "@infra/models"
-import { GenerativeModel } from "src/inference/generative-model"
-import { InferenceRequestValidator } from "src/inference/request-validation/inference-request-validator"
-import { DefaultInferenceRunner } from "src/agent/application/services/inference-runner"
-import { LocalToolRunner } from "src/agent/application/services/local-tool-runner"
 import { SituationHandler } from "src/environment/domain/runtime/situation-handler"
 import { CreateParticipantUseCase } from "src/environment/application/use-cases/create-participant"
 

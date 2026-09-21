@@ -1,6 +1,6 @@
-import type { InputText } from "src/runtime/domain/generative-model/context/items/item-content/input-text"
-import type { SummaryText } from "src/runtime/domain/generative-model/context/items/item-content/summary-text"
-import { ContextItem } from "src/runtime/domain/generative-model/context/item"
+import type { InputText } from "src/inference/context/items/item-content/input-text"
+import type { SummaryText } from "src/inference/context/items/item-content/summary-text"
+import { ContextItem } from "src/inference/context/item"
 
 export class ReasoningItem extends ContextItem {
 	readonly type = "reasoning"
