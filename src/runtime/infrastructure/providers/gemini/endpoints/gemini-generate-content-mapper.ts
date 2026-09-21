@@ -1,18 +1,14 @@
-import type {
-	InferenceRequest,
-	InferenceItem,
-	InferenceResult,
-} from "src/runtime/domain/generative-model/inference-runner"
-import type { InferenceEndpointMapper } from "src/runtime/domain/generative-model/inference-endpoint-mapper"
-import { InputTokenDetails, OutputTokenDetails, TokenUsage } from "src/runtime/domain/generative-model/token-usage"
-import { DeveloperMessageItem } from "src/runtime/domain/generative-model/context/items/developer-message"
-import { ToolUseResult } from "src/runtime/domain/generative-model/context/items/tool-use-result"
-import { SystemMessageItem } from "src/runtime/domain/generative-model/context/items/system-message"
-import { UserMessageItem } from "src/runtime/domain/generative-model/context/items/user-message"
-import { InputText } from "src/runtime/domain/generative-model/context/items/item-content/input-text"
-import { ToolUseRequest } from "src/runtime/domain/generative-model/context/items/tool-use-request"
-import { ModelMessageItem } from "src/runtime/domain/generative-model/context/items/model-message"
-import { ReasoningItem } from "src/runtime/domain/generative-model/context/items/reasoning"
+import type { InferenceRequest, InferenceItem, InferenceResult } from "src/inference/inference-runner"
+import type { InferenceEndpointMapper } from "src/inference/inference-endpoint-mapper"
+import { InputTokenDetails, OutputTokenDetails, TokenUsage } from "src/inference/token-usage"
+import { DeveloperMessageItem } from "src/inference/context/items/developer-message"
+import { ToolUseResult } from "src/inference/context/items/tool-use-result"
+import { SystemMessageItem } from "src/inference/context/items/system-message"
+import { UserMessageItem } from "src/inference/context/items/user-message"
+import { InputText } from "src/inference/context/items/item-content/input-text"
+import { ToolUseRequest } from "src/inference/context/items/tool-use-request"
+import { ModelMessageItem } from "src/inference/context/items/model-message"
+import { ReasoningItem } from "src/inference/context/items/reasoning"
 
 export class GeminiGenerateContentMapper implements InferenceEndpointMapper {
 	toRequest(inferenceRequest: InferenceRequest) {

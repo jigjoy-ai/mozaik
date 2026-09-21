@@ -1,4 +1,4 @@
-import type { ModelSpecification } from "src/runtime/domain/generative-model/generative-model"
+import type { ModelSpecification } from "src/inference/generative-model"
 
 export const gpt54MiniSpecification: ModelSpecification = {
 	name: "gpt-5.4-mini",

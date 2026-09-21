@@ -1,5 +1,5 @@
-import type { FunctionTool } from "src/runtime/domain/generative-model/tool.js"
-import { McpClient, type McpServerConfig } from "./mcp-client.js"
+import type { FunctionTool } from "src/inference/tool"
+import { McpClient, type McpServerConfig } from "./mcp-client"
 
 /** The slice of an MCP client the registry needs — lets tests inject a fake. */
 export interface McpClientLike {

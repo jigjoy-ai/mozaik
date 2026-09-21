@@ -1,4 +1,4 @@
-import type { ModelSpecification } from "src/runtime/domain/generative-model/generative-model"
+import type { ModelSpecification } from "src/inference/generative-model"
 
 export const claudeHaiku45Specification: ModelSpecification = {
 	name: "claude-haiku-4-5",

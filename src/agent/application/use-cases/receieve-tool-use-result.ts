@@ -1,5 +1,5 @@
 import { AgentLoopRepository } from "src/agent/domain/agent-loop-repository"
-import { ToolUseResult } from "src/generative-model/context/items/tool-use-result"
+import { ToolUseResult } from "src/inference/context/items/tool-use-result"
 import { Clock } from "src/util/clock"
 
 export class ReceiveToolUseResultUseCase {

@@ -1,7 +1,7 @@
-import { ToolUseResult } from "src/generative-model/context/items/tool-use-result"
-import { ToolUseRequest } from "src/generative-model/context/items/tool-use-request"
-import { ToolUseRunner } from "src/generative-model/tool-use-runner"
-import { Tool } from "src/generative-model/tool"
+import { ToolUseResult } from "src/inference/context/items/tool-use-result"
+import { ToolUseRequest } from "src/inference/context/items/tool-use-request"
+import { ToolUseRunner } from "src/inference/tool-use-runner"
+import { Tool } from "src/inference/tool"
 
 export class LocalToolRunner implements ToolUseRunner {
 	async run(input: ToolUseRequest, tool: Tool): Promise<ToolUseResult> {

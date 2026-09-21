@@ -1,9 +1,9 @@
 import { RuntimeEvent } from "src/runtime/domain/runtime/event"
-import { InferenceRequest, InferenceResult } from "src/runtime/domain/generative-model/inference-runner"
-import type { Endpoint } from "src/runtime/domain/generative-model/endpoint"
+import { InferenceRequest, InferenceResult } from "src/inference/inference-runner"
+import type { Endpoint } from "src/inference/endpoint"
 import OpenAI from "openai"
 import { OpenAIResponsesMapper } from "./openai-responses-mapper"
-import type { InferenceEndpointMapper } from "src/runtime/domain/generative-model/inference-endpoint-mapper"
+import type { InferenceEndpointMapper } from "src/inference/inference-endpoint-mapper"
 
 export class OpenAIResponses implements Endpoint {
 	endpointMapper: InferenceEndpointMapper

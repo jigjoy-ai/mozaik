@@ -1,5 +1,5 @@
-import { Client } from "@modelcontextprotocol/sdk/client/index.js"
-import { StreamableHTTPClientTransport } from "@modelcontextprotocol/sdk/client/streamableHttp.js"
+import { Client } from "@modelcontextprotocol/sdk/client/index"
+import { StreamableHTTPClientTransport } from "@modelcontextprotocol/sdk/client/streamableHttp"
 
 export interface McpServerConfig {
 	/** The MCP server URL, e.g. https://api.githubcopilot.com/mcp/ */
@@ -83,7 +83,10 @@ function extractText(res: unknown): string {
 	const content = (res as { content?: unknown }).content
 	if (!Array.isArray(content)) return ""
 	return content
-		.filter((c): c is { type: "text"; text: string } => (c as { type?: string })?.type === "text" && typeof (c as { text?: unknown }).text === "string")
+		.filter(
+			(c): c is { type: "text"; text: string } =>
+				(c as { type?: string })?.type === "text" && typeof (c as { text?: unknown }).text === "string",
+		)
 		.map((c) => c.text)
 		.join("\n")
 }

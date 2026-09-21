@@ -1,5 +1,5 @@
 import { AgentLoopRepository } from "src/agent/domain/agent-loop-repository"
-import { InferenceResult } from "src/generative-model/inference-runner"
+import { InferenceResult } from "src/inference/inference-runner"
 import { Clock } from "src/util/clock"
 
 export class ReceiveInferenceResultUseCase {

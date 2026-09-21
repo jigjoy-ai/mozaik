@@ -1,6 +1,6 @@
 import { DomainModel } from "src/runtime/domain/runtime/domain-model"
-import { InferenceRunner } from "src/runtime/domain/generative-model/inference-runner"
-import { ToolUseRunner } from "src/runtime/domain/generative-model/tool-use-runner"
+import { InferenceRunner } from "src/inference/inference-runner"
+import { ToolUseRunner } from "src/inference/tool-use-runner"
 
 export class RuntimeService<TModel extends DomainModel> {
 	constructor(
