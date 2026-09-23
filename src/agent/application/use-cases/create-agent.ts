@@ -1,11 +1,11 @@
 import { Agent } from "@agent/domain/agent"
-import { Tool } from "@inference/tool"
+import { Tool } from "@agent/domain/inference/tool"
 import { SituationHandler } from "@environment/domain/situation-handler"
 import { AgentRepository } from "@agent/domain/agent-repository"
 import { IdGenerator } from "@util/id-generator"
 import { ParticipantManifest } from "@environment/domain/participant"
 import { Memory } from "@agent/domain/memory"
-import { DeveloperMessageItem } from "@inference/context"
+import { DeveloperMessageItem } from "@agent/domain/inference/context"
 import { AgentRecord } from "@agent/domain/types"
 
 export class CreateAgentUseCase {

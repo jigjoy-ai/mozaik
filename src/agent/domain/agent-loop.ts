@@ -1,5 +1,5 @@
-import { ToolUseRequest, ToolUseResult } from "@inference/context"
-import { InferenceRequest, InferenceResult } from "@inference/inference-runner"
+import { ToolUseRequest, ToolUseResult } from "@agent/domain/inference/context"
+import { InferenceRequest, InferenceResult } from "@agent/domain/inference/inference-runner"
 import {
 	LoopStateId,
 	PendingOperation,
@@ -64,8 +64,8 @@ export class AgentLoop {
 		}
 	}
 
-	moveToIdle(reason: string, occurredAt: Date): void {
-		this.transitionTo("idle", reason, occurredAt)
+	moveToIdle(reason: string, occurredAt: Date, transitionId: string): void {
+		this.transitionTo("idle", reason, occurredAt, transitionId)
 		this.pendingOperation = undefined
 	}
 
@@ -113,12 +113,18 @@ export class AgentLoop {
 		return operation
 	}
 
-	private transitionTo(nextState: LoopStateId, reason: string, occurredAt: Date, operationId?: string): void {
+	private transitionTo(
+		nextState: LoopStateId,
+		reason: string,
+		occurredAt: Date,
+		transitionId: string,
+		operationId?: string,
+	): void {
 		const previousState = this.state
 		this.state = nextState
 
 		this.transitionHistory.push({
-			id: crypto.randomUUID(),
+			id: transitionId,
 			occurredAt,
 			previousState,
 			nextState,

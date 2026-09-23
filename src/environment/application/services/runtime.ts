@@ -1,5 +1,5 @@
-import { DomainModel } from "@environment/domain/domain-model"
+import { SharedMemory } from "@environment/domain/shared-memory"
 
-export class RuntimeService<TModel extends DomainModel> {
-	constructor(public readonly model: TModel) {}
+export class RuntimeService<TSharedMemory extends SharedMemory> {
+	constructor(public readonly sharedMemory: TSharedMemory) {}
 }

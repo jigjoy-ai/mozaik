@@ -1,10 +1,13 @@
 import { Participant, ParticipantManifest } from "@environment/domain/participant"
 import { SituationHandler } from "@environment/domain/situation-handler"
+import { IdGenerator } from "@util/id-generator"
 
 export class CreateParticipantUseCase {
+	constructor(private readonly idGenerator: IdGenerator) {}
+
 	async execute(name: string, capabilities: readonly string[], handlers: SituationHandler[]): Promise<Participant> {
 		const manifest: ParticipantManifest = {
-			id: crypto.randomUUID(),
+			id: this.idGenerator.generate(),
 			name,
 			capabilities,
 			role: "external",

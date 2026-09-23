@@ -26,13 +26,13 @@ export class Environment {
 		return this.ownerId
 	}
 
-	addParticipant(participant: Participant): void {
+	addParticipant(participant: Participant, occurredAt: Date): void {
 		const alreadyExists = this.participants.find((p) => p.getId() === participant.getId())
 
 		if (alreadyExists) return
 		this.participants.push(participant)
 
-		this.publish(ParticipantJoinedEvent.init(participant.getManifest()))
+		this.publish(ParticipantJoinedEvent.init(participant.getManifest(), occurredAt))
 	}
 
 	getParticipant(id: string): Participant | undefined {
@@ -44,10 +44,10 @@ export class Environment {
 		return participant
 	}
 
-	removeParticipant(participant: Participant): void {
+	removeParticipant(participant: Participant, occurredAt: Date): void {
 		this.participants = this.participants.filter((p) => p.getId() !== participant.getId())
 
-		this.publish(ParticipantLeftEvent.init(participant.getManifest()))
+		this.publish(ParticipantLeftEvent.init(participant.getManifest(), occurredAt))
 	}
 
 	getParticipants(): Participant[] {
@@ -72,8 +72,7 @@ export class Environment {
 		}
 	}
 
-	static create(name: string, ownerId: string, participants: Participant[] = []): Environment {
-		const id = crypto.randomUUID()
+	static create(id: string, name: string, ownerId: string, participants: Participant[] = []): Environment {
 		return new Environment(id, name, ownerId, participants)
 	}
 

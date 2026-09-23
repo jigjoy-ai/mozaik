@@ -14,7 +14,7 @@
 		"paths": {
 			"@environment/*": ["src/environment/*"],
 			"@agent/*": ["src/agent/*"],
-			"@inference/*": ["src/inference/*"],
+			"@inference/*": ["src/agent/domain/inference/*"],
 			"@util/*": ["src/util/*"]
 		},
 		"esModuleInterop": true,

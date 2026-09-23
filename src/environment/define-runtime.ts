@@ -2,6 +2,7 @@ import { RuntimeService } from "@environment/application/services/runtime"
 import { SituationHandler } from "@environment/domain/situation-handler"
 import { CreateParticipantUseCase } from "@environment/application/use-cases/create-participant"
 import { SharedMemory } from "./domain/shared-memory"
+import { UuidGenerator } from "@util/uuid-generator"
 
 export function defineRuntime<TSharedMemory extends SharedMemory>() {
 	let runtime: RuntimeService<TSharedMemory> | null = null
@@ -24,7 +25,7 @@ export function defineRuntime<TSharedMemory extends SharedMemory>() {
 		return runtime
 	}
 
-	const createParticipantUseCase = new CreateParticipantUseCase()
+	const createParticipantUseCase = new CreateParticipantUseCase(new UuidGenerator())
 
 	const createParticipant = async (name: string, capabilities: readonly string[], handlers: SituationHandler[]) => {
 		return await createParticipantUseCase.execute(name, capabilities, handlers)

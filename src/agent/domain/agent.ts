@@ -1,6 +1,6 @@
 import { Memory } from "@agent/domain/memory"
 import { Participant, ParticipantManifest } from "@environment/domain/participant"
-import { Tool } from "@inference/tool"
+import { Tool } from "@agent/domain/inference/tool"
 import { SituationHandler } from "@environment/domain/situation-handler"
 import { AgentRecord } from "@agent/domain/types"
 

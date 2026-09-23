@@ -8,12 +8,12 @@ export class JoinEnvironmentUseCase {
 		this.environmentRepository = environmentRepository
 	}
 
-	async execute(environmentId: string, participant: Participant): Promise<void> {
+	async execute(environmentId: string, participant: Participant, occurredAt: Date): Promise<void> {
 		const environment = await this.environmentRepository.getById(environmentId)
 		if (!environment) {
 			throw new Error("Environment not found")
 		}
-		environment.addParticipant(participant)
+		environment.addParticipant(participant, occurredAt)
 		await this.environmentRepository.save(environment)
 	}
 }

@@ -2,7 +2,7 @@ import { AgentLoopRepository } from "@agent/domain/agent-loop-repository"
 import { PendingToolExecution } from "@agent/domain/types"
 import { Clock } from "@util/clock"
 import { IdGenerator } from "@util/id-generator"
-import { ToolUseRequest } from "@inference/context"
+import { ToolUseRequest } from "@agent/domain/inference/context"
 
 export class RequestToolUseUseCase {
 	constructor(

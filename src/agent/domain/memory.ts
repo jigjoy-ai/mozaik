@@ -1,7 +1,8 @@
-import { ModelContext } from "@inference/context"
+import { ModelContext } from "@agent/domain/inference/context"
 
 export class Memory {
 	private readonly context: ModelContext
+
 	private constructor(context: ModelContext) {
 		this.context = context
 	}
