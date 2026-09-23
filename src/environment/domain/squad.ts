@@ -1,7 +1,7 @@
 import { ParticipantJoinedEvent, ParticipantLeftEvent, RuntimeEvent } from "@environment/domain/event"
 import { Participant } from "@environment/domain/participant"
 
-export class Environment {
+export class Squad {
 	private readonly id: string
 	private readonly ownerId: string
 	private name: string
@@ -26,13 +26,14 @@ export class Environment {
 		return this.ownerId
 	}
 
-	addParticipant(participant: Participant, occurredAt: Date): void {
+	addParticipant(participant: Participant, occurredAt: Date): RuntimeEvent | undefined {
 		const alreadyExists = this.participants.find((p) => p.getId() === participant.getId())
 
 		if (alreadyExists) return
+
 		this.participants.push(participant)
 
-		this.publish(ParticipantJoinedEvent.init(participant.getManifest(), occurredAt))
+		return ParticipantJoinedEvent.init(participant.getManifest(), occurredAt)
 	}
 
 	getParticipant(id: string): Participant | undefined {
@@ -44,36 +45,18 @@ export class Environment {
 		return participant
 	}
 
-	removeParticipant(participant: Participant, occurredAt: Date): void {
+	removeParticipant(participant: Participant, occurredAt: Date): RuntimeEvent {
 		this.participants = this.participants.filter((p) => p.getId() !== participant.getId())
 
-		this.publish(ParticipantLeftEvent.init(participant.getManifest(), occurredAt))
+		return ParticipantLeftEvent.init(participant.getManifest(), occurredAt)
 	}
 
 	getParticipants(): Participant[] {
 		return [...this.participants]
 	}
 
-	private process(event: RuntimeEvent, consumer: Participant): void {
-		for (const handler of consumer.getHandlers()) {
-			const isSatisfied = handler.specification.isSatisfiedBy({
-				event,
-				participant: consumer,
-			})
-			if (isSatisfied) {
-				handler.processor.apply({ event, participant: consumer })
-			}
-		}
-	}
-
-	publish(event: RuntimeEvent): void {
-		for (const participant of this.participants) {
-			this.process(event, participant)
-		}
-	}
-
-	static create(id: string, name: string, ownerId: string, participants: Participant[] = []): Environment {
-		return new Environment(id, name, ownerId, participants)
+	static create(id: string, name: string, ownerId: string, participants: Participant[] = []): Squad {
+		return new Squad(id, name, ownerId, participants)
 	}
 
 	static rehydrate({
@@ -86,7 +69,7 @@ export class Environment {
 		name: string
 		ownerId: string
 		participants: Participant[]
-	}): Environment {
-		return new Environment(id, name, ownerId, participants)
+	}): Squad {
+		return new Squad(id, name, ownerId, participants)
 	}
 }
