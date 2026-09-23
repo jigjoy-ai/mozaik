@@ -1,12 +1,12 @@
 import { RuntimeService } from "@environment/application/services/runtime"
-import { DomainModel } from "@environment/domain/domain-model"
 import { SituationHandler } from "@environment/domain/situation-handler"
 import { CreateParticipantUseCase } from "@environment/application/use-cases/create-participant"
+import { SharedMemory } from "./domain/shared-memory"
 
-export function defineRuntime<TModel extends DomainModel>() {
-	let runtime: RuntimeService<TModel> | null = null
+export function defineRuntime<TSharedMemory extends SharedMemory>() {
+	let runtime: RuntimeService<TSharedMemory> | null = null
 
-	function initializeRuntime(config: { model: TModel }): RuntimeService<TModel> {
+	function initializeRuntime(config: { model: TSharedMemory }): RuntimeService<TSharedMemory> {
 		if (runtime) {
 			throw new Error("Runtime already initialized")
 		}
@@ -16,7 +16,7 @@ export function defineRuntime<TModel extends DomainModel>() {
 		return runtime
 	}
 
-	function resolveRuntime(): RuntimeService<TModel> {
+	function resolveRuntime(): RuntimeService<TSharedMemory> {
 		if (!runtime) {
 			throw new Error("Runtime not initialized")
 		}
