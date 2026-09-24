@@ -12,9 +12,10 @@
 		"moduleResolution": "node",
 		"baseUrl": ".",
 		"paths": {
-			"@environment/*": ["src/environment/*"],
 			"@agent/*": ["src/agent/*"],
-			"@inference/*": ["src/agent/inference/*"],
+			"@environment/*": ["src/environment/*"],
+			"@inference/*": ["src/inference/*"],
+			"@providers/*": ["src/providers/*"],
 			"@util/*": ["src/util/*"]
 		},
 		"esModuleInterop": true,

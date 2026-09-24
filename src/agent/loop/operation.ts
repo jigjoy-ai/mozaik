@@ -1,5 +1,5 @@
-import { ToolUseRequest, ToolUseResult } from "@agent/inference/context"
-import { InferenceRequest, InferenceResult } from "@agent/inference/inference-runner"
+import { ToolUseRequest, ToolUseResult } from "@inference/context"
+import { InferenceRequest, InferenceResult } from "@inference/inference-runner"
 
 export type CompletedOperation =
 	| {

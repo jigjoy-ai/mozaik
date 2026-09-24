@@ -1,7 +1,7 @@
-import { RuntimeService } from "@environment/application/services/runtime"
-import { SituationHandler } from "@environment/domain/situation-handler"
-import { CreateParticipantUseCase } from "@environment/application/use-cases/create-participant"
-import { SharedMemory } from "./domain/shared-memory"
+import { RuntimeService } from "@environment/runtime"
+import { SituationHandler } from "@environment/situation-handler"
+import { CreateParticipantUseCase } from "src/mozaik/use-cases/create-participant"
+import { SharedMemory } from "./shared-memory"
 import { UuidGenerator } from "@util/uuid-generator"
 
 export function defineRuntime<TSharedMemory extends SharedMemory>() {
@@ -30,15 +30,6 @@ export function defineRuntime<TSharedMemory extends SharedMemory>() {
 	const createParticipant = async (name: string, capabilities: readonly string[], handlers: SituationHandler[]) => {
 		return await createParticipantUseCase.execute(name, capabilities, handlers)
 	}
-
-	// const join = () => async (participant: Participant) => {
-	// 	resolveRuntime().join(participant)
-	// }
-	// const leave = () => async (participant: Participant) => {
-	// 	resolveRuntime().leave(participant)
-	// }
-	// const sendMessage = createSendMessage(resolveRuntime)
-	// const sendEvent = createSendEvent(resolveRuntime)
 
 	return {
 		initializeRuntime,

@@ -1,5 +1,5 @@
-import { ToolUseRequest } from "@agent/inference/context"
-import { InferenceRequest } from "@agent/inference/inference-runner"
+import { ToolUseRequest } from "@inference/context"
+import { InferenceRequest } from "@inference/inference-runner"
 
 export type LoopControlDirective =
 	| { type: "request_inference"; request: InferenceRequest }

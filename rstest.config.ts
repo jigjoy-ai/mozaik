@@ -15,9 +15,11 @@ export default defineConfig({
 	// way the source does, regardless of tsconfig auto-detection.
 	resolve: {
 		alias: {
-			"@app": "./src/application",
-			"@domain": "./src/domain",
-			"@infra": "./src/infrastructure",
+			"@agent": "./src/agent",
+			"@environment": "./src/environment",
+			"@inference": "./src/inference",
+			"@providers": "./src/providers",
+			"@util": "./src/util",
 		},
 	},
 	// Coverage is opt-in via the --coverage flag (npm run test:coverage).

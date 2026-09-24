@@ -1,9 +1,9 @@
-import { RuntimeEvent } from "@environment/domain/event"
-import { Participant } from "@environment/domain/participant"
-import { SharedMemory } from "@environment/domain/shared-memory"
+import { RuntimeEvent } from "@environment/event"
+import { Participant } from "@environment/participant"
+import { SharedMemory } from "@environment/shared-memory"
 import { defineRuntime } from "@environment/define-runtime"
-import { SituationContext, SituationHandler, SituationProcessor } from "@environment/domain/situation-handler"
-import { SituationSpecification } from "@environment/domain/situation-specification"
+import { SituationContext, SituationHandler, SituationProcessor } from "@environment/situation-handler"
+import { SituationSpecification } from "@environment/situation-specification"
 
 export {
 	defineRuntime,

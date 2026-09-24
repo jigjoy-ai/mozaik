@@ -1,7 +1,7 @@
-import { Tool } from "@agent/inference/tool"
-import { ParticipantManifest } from "@environment/domain/participant"
+import { Tool } from "@inference/tool"
+import { ParticipantManifest } from "@environment/participant"
 import { Memory } from "./memory"
-import { SituationHandler } from "@environment/domain/situation-handler"
+import { SituationHandler } from "@environment/situation-handler"
 import { LoopController } from "./loop/controller"
 
 export type AgentRecord = {

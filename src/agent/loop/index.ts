@@ -1,5 +1,5 @@
-import { ToolUseRequest, ToolUseResult } from "@agent/inference/context"
-import { InferenceRequest, InferenceResult } from "@agent/inference/inference-runner"
+import { ToolUseRequest, ToolUseResult } from "@inference/context"
+import { InferenceRequest, InferenceResult } from "@inference/inference-runner"
 import { PendingOperation, PendingInference, PendingToolExecution, CompletedOperation } from "@agent/loop/operation"
 import { LoopTransition } from "@agent/loop/transition"
 import { LoopRecord } from "@agent/loop/record"
