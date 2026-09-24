@@ -1,8 +1,8 @@
-import { ToolUseResult } from "@agent/domain/inference/context"
-import { ToolUseRequest } from "@agent/domain/inference/context"
-import { ToolUseRunner } from "@agent/domain/inference/tool-use-runner"
-import { Tool } from "@agent/domain/inference/tool"
-import { ToolUseItemFactory } from "@agent/domain/inference/tool-use-item-factory"
+import { ToolUseResult } from "@agent/inference/context"
+import { ToolUseRequest } from "@agent/inference/context"
+import { ToolUseRunner } from "@agent/inference/tool-use-runner"
+import { Tool } from "@agent/inference/tool"
+import { ToolUseItemFactory } from "@agent/inference/tool-use-item-factory"
 
 export class LocalToolRunner implements ToolUseRunner {
 	private readonly toolUseItemFactory = new ToolUseItemFactory()

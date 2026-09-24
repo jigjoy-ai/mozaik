@@ -1,27 +1,27 @@
 import { UuidGenerator } from "@util/uuid-generator"
 import { CreateAgentUseCase } from "@agent/application/use-cases/create-agent"
 import { InMemoryAgentRepository } from "@agent/infrastructure/in-memory-agent-repository"
-import { Tool } from "@agent/domain/inference/tool"
+import { Tool } from "@agent/inference/tool"
 import { SituationHandler } from "@environment/domain/situation-handler"
 import { CreateAgentLoopUseCase } from "@agent/application/use-cases/create-loop"
 import { SystemClock } from "@util/system-clock"
-import { InMemoryAgentLoopRepository } from "@agent/infrastructure/in-memory-agent-loop-repository"
-import { InferenceRequest, InferenceResult, InferenceRunner } from "@agent/domain/inference/inference-runner"
+import { InMemoryLoopRepository } from "@agent/infrastructure/in-memory-loop-repository"
+import { InferenceRequest, InferenceResult, InferenceRunner } from "@agent/inference/inference-runner"
 import { ReceiveInferenceResultUseCase } from "@agent/application/use-cases/receive-inference-result"
 import { ReceiveToolUseResultUseCase } from "@agent/application/use-cases/receieve-tool-use-result"
-import { ToolUseRequest, ToolUseResult } from "@agent/domain/inference/context"
+import { ToolUseRequest, ToolUseResult } from "@agent/inference/context"
 import { RequestInferenceUseCase } from "@agent/application/use-cases/request-inference"
 import { RequestToolUseUseCase } from "@agent/application/use-cases/request-tool-use"
-import { AgentRepository } from "@agent/domain/agent-repository"
-import { AgentLoopRepository } from "@agent/domain/agent-loop-repository"
+import { AgentRepository } from "@agent/agent-repository"
+import { LoopRepository } from "@agent/loop/repository"
 import { Clock } from "@util/clock"
 import { IdGenerator } from "@util/id-generator"
-import { ToolUseRunner } from "@agent/domain/inference/tool-use-runner"
+import { ToolUseRunner } from "@agent/inference/tool-use-runner"
 import { LocalToolRunner } from "@agent/application/services/local-tool-runner"
 import { DefaultInferenceRunner } from "@agent/application/services/inference-runner"
-import { GenerativeModel } from "@agent/domain/inference/generative-model"
-import { InferenceRequestValidator } from "@agent/domain/inference/request-validation/inference-request-validator"
-import { supportedModels } from "@agent/domain/inference/models"
+import { GenerativeModel } from "@agent/inference/generative-model"
+import { InferenceRequestValidator } from "@agent/inference/request-validation/inference-request-validator"
+import { supportedModels } from "@agent/inference/models"
 
 export type InferenceRunnerConfig = {
 	supportedModels?: GenerativeModel[]
@@ -30,7 +30,7 @@ export type InferenceRunnerConfig = {
 
 export type AgentFamilyConfig = {
 	agentRepository?: AgentRepository
-	agentLoopRepository?: AgentLoopRepository
+	agentLoopRepository?: LoopRepository
 	clock?: Clock
 	uuidGenerator?: IdGenerator
 	inferenceRunnerConfig?: InferenceRunnerConfig
@@ -41,7 +41,7 @@ export function defineAgentFamily(config: AgentFamilyConfig = {}) {
 	// Dependencies
 	const agentRepository = config.agentRepository ?? new InMemoryAgentRepository()
 	const uuidGenerator = config.uuidGenerator ?? new UuidGenerator()
-	const agentLoopRepository = config.agentLoopRepository ?? new InMemoryAgentLoopRepository()
+	const agentLoopRepository = config.agentLoopRepository ?? new InMemoryLoopRepository()
 	const clock = config.clock ?? new SystemClock()
 
 	const inferenceRunner =

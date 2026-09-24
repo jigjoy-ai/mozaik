@@ -14,7 +14,7 @@ import { gpt54MiniSpecification } from "@agent/infrastructure/providers/openai/m
 import { gpt54NanoSpecification } from "@agent/infrastructure/providers/openai/models/gpt-5-4-nano"
 import { gpt55Specification } from "@agent/infrastructure/providers/openai/models/gpt-5-5"
 import { claudeHaiku45Specification } from "@agent/infrastructure/providers/anthropic/models/claude-4-5-haiku"
-import type { GenerativeModel } from "@agent/domain/inference/generative-model"
+import type { GenerativeModel } from "@agent/inference/generative-model"
 
 export const supportedModels: GenerativeModel[] = [
 	{

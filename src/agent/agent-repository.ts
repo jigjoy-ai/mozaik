@@ -1,4 +1,4 @@
-import { Agent } from "@agent/domain/agent"
+import { Agent } from "@agent/agent"
 
 export interface AgentRepository {
 	save(agent: Agent): Promise<void>

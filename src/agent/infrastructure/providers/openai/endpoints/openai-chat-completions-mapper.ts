@@ -1,5 +1,5 @@
-import type { InferenceRequest, InferenceResult } from "@agent/domain/inference/inference-runner"
-import type { InferenceEndpointMapper } from "@agent/domain/inference/inference-endpoint-mapper"
+import type { InferenceRequest, InferenceResult } from "@agent/inference/inference-runner"
+import type { InferenceEndpointMapper } from "@agent/inference/inference-endpoint-mapper"
 import type {
 	InputText,
 	MessageItem,
@@ -7,8 +7,8 @@ import type {
 	ModelOutputItem,
 	ToolUseRequest,
 	ToolUseResult,
-} from "@agent/domain/inference/context"
-import { InputTokenDetails, OutputTokenDetails, TokenUsage } from "@agent/domain/inference/token-usage"
+} from "@agent/inference/context"
+import { InputTokenDetails, OutputTokenDetails, TokenUsage } from "@agent/inference/token-usage"
 
 export class OpenAIChatCompletionsMapper implements InferenceEndpointMapper {
 	toRequest(inferenceRequest: InferenceRequest) {

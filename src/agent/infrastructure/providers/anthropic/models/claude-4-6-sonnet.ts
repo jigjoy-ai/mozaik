@@ -1,4 +1,4 @@
-import type { ModelSpecification } from "@agent/domain/inference/generative-model"
+import type { ModelSpecification } from "@agent/inference/generative-model"
 
 export const claudeSonnet46Specification: ModelSpecification = {
 	name: "claude-sonnet-4-6",

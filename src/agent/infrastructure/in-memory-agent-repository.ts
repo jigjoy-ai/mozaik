@@ -1,5 +1,5 @@
-import { Agent } from "@agent/domain/agent"
-import { AgentRepository } from "@agent/domain/agent-repository"
+import { Agent } from "@agent/agent"
+import { AgentRepository } from "@agent/agent-repository"
 
 export class InMemoryAgentRepository implements AgentRepository {
 	private readonly agents: Agent[] = []

@@ -1,9 +1,9 @@
-import { InferenceRequest, InferenceResult } from "@agent/domain/inference/inference-runner"
+import { InferenceRequest, InferenceResult } from "@agent/inference/inference-runner"
 import { RuntimeEvent } from "@environment/domain/event"
-import type { Endpoint } from "@agent/domain/inference/endpoint"
+import type { Endpoint } from "@agent/inference/endpoint"
 import { OpenAIChatCompletionsMapper } from "@agent/infrastructure/providers/openai/endpoints/openai-chat-completions-mapper"
 import OpenAI from "openai"
-import type { InferenceEndpointMapper } from "@agent/domain/inference/inference-endpoint-mapper"
+import type { InferenceEndpointMapper } from "@agent/inference/inference-endpoint-mapper"
 
 /**
  * Optional connection config. When omitted, the `openai` SDK reads

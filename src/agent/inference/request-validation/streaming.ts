@@ -1,6 +1,6 @@
-import type { ModelSpecification } from "@agent/domain/inference/generative-model"
-import type { RequestValidationRule } from "@agent/domain/inference/request-validation/rule"
-import type { InferenceRequest } from "@agent/domain/inference/inference-runner"
+import type { ModelSpecification } from "@agent/inference/generative-model"
+import type { RequestValidationRule } from "@agent/inference/request-validation/rule"
+import type { InferenceRequest } from "@agent/inference/inference-runner"
 
 export class StreamingValidation implements RequestValidationRule {
 	readonly name = "streaming"

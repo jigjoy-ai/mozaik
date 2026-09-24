@@ -1,4 +1,4 @@
-import type { ModelSpecification } from "@agent/domain/inference/generative-model"
+import type { ModelSpecification } from "@agent/inference/generative-model"
 
 export const gemini31ProSpecification: ModelSpecification = {
 	name: "gemini-3.1-pro-preview",

@@ -1,7 +1,7 @@
-import type { InferenceRequest } from "@agent/domain/inference/inference-runner"
-import type { RequestValidationRule } from "@agent/domain/inference/request-validation/rule"
-import type { ModelSpecification } from "@agent/domain/inference/generative-model"
-import type { ContextItem } from "@agent/domain/inference/context"
+import type { InferenceRequest } from "@agent/inference/inference-runner"
+import type { RequestValidationRule } from "@agent/inference/request-validation/rule"
+import type { ModelSpecification } from "@agent/inference/generative-model"
+import type { ContextItem } from "@agent/inference/context"
 
 function getContextItemValidationKey(item: ContextItem): string {
 	if (item.type === "user_message") {

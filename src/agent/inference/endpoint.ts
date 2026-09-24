@@ -1,5 +1,5 @@
-import type { InferenceEndpointMapper } from "@agent/domain/inference/inference-endpoint-mapper"
-import { InferenceRequest, InferenceResult } from "@agent/domain/inference/inference-runner"
+import type { InferenceEndpointMapper } from "@agent/inference/inference-endpoint-mapper"
+import { InferenceRequest, InferenceResult } from "@agent/inference/inference-runner"
 import { RuntimeEvent } from "@environment/domain/event"
 
 export interface Endpoint {

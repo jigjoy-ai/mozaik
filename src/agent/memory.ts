@@ -1,4 +1,4 @@
-import { ModelContext } from "@agent/domain/inference/context"
+import { ModelContext } from "@agent/inference/context"
 
 export class Memory {
 	private readonly context: ModelContext

@@ -1,6 +1,6 @@
-import type { InferenceRequest, InferenceResult } from "@agent/domain/inference/inference-runner"
-import type { InferenceEndpointMapper } from "@agent/domain/inference/inference-endpoint-mapper"
-import { InputTokenDetails, OutputTokenDetails, TokenUsage } from "@agent/domain/inference/token-usage"
+import type { InferenceRequest, InferenceResult } from "@agent/inference/inference-runner"
+import type { InferenceEndpointMapper } from "@agent/inference/inference-endpoint-mapper"
+import { InputTokenDetails, OutputTokenDetails, TokenUsage } from "@agent/inference/token-usage"
 import type {
 	InputText,
 	MessageItem,
@@ -8,7 +8,7 @@ import type {
 	ModelOutputItem,
 	ToolUseRequest,
 	ToolUseResult,
-} from "@agent/domain/inference/context"
+} from "@agent/inference/context"
 
 export class GeminiGenerateContentMapper implements InferenceEndpointMapper {
 	toRequest(inferenceRequest: InferenceRequest) {

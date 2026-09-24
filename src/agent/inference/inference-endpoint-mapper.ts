@@ -1,4 +1,4 @@
-import type { InferenceRequest, InferenceResult } from "@agent/domain/inference/inference-runner"
+import type { InferenceRequest, InferenceResult } from "@agent/inference/inference-runner"
 
 export interface InferenceEndpointMapper {
 	toRequest(inferenceRequest: InferenceRequest): any

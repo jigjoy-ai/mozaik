@@ -1,9 +1,9 @@
 import { RuntimeEvent } from "@environment/domain/event"
 import { GoogleGenAI } from "@google/genai"
-import type { Endpoint } from "@agent/domain/inference/endpoint"
-import type { InferenceRequest, InferenceResult } from "@agent/domain/inference/inference-runner"
+import type { Endpoint } from "@agent/inference/endpoint"
+import type { InferenceRequest, InferenceResult } from "@agent/inference/inference-runner"
 import { GeminiGenerateContentMapper } from "@agent/infrastructure/providers/gemini/endpoints/gemini-generate-content-mapper"
-import type { InferenceEndpointMapper } from "@agent/domain/inference/inference-endpoint-mapper"
+import type { InferenceEndpointMapper } from "@agent/inference/inference-endpoint-mapper"
 
 export interface GeminiConnectionConfig {
 	baseURL?: string

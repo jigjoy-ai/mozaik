@@ -1,9 +1,9 @@
 import { RuntimeEvent } from "@environment/domain/event"
-import type { Endpoint } from "@agent/domain/inference/endpoint"
-import type { InferenceRequest, InferenceResult } from "@agent/domain/inference/inference-runner"
+import type { Endpoint } from "@agent/inference/endpoint"
+import type { InferenceRequest, InferenceResult } from "@agent/inference/inference-runner"
 import { AnthropicMessagesMapper } from "@agent/infrastructure/providers/anthropic/endpoints/anthropic-messages-mapper"
 import Anthropic from "@anthropic-ai/sdk"
-import type { InferenceEndpointMapper } from "@agent/domain/inference/inference-endpoint-mapper"
+import type { InferenceEndpointMapper } from "@agent/inference/inference-endpoint-mapper"
 
 export interface AnthropicConnectionConfig {
 	baseURL?: string

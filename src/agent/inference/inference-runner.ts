@@ -1,9 +1,9 @@
 import { RuntimeEvent } from "@environment/domain/event"
-import { ModelContext } from "@agent/domain/inference/context"
-import { StructuredOutputFormat } from "@agent/domain/inference/request-validation/structured-output"
-import { TokenUsage } from "@agent/domain/inference/token-usage"
-import { Tool } from "@agent/domain/inference/tool"
-import { ModelOutputItem } from "@agent/domain/inference/context"
+import { ModelContext } from "@agent/inference/context"
+import { StructuredOutputFormat } from "@agent/inference/request-validation/structured-output"
+import { TokenUsage } from "@agent/inference/token-usage"
+import { Tool } from "@agent/inference/tool"
+import { ModelOutputItem } from "@agent/inference/context"
 
 export type InferenceRequest = {
 	model: string

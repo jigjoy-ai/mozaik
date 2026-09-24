@@ -1,25 +1,25 @@
-import { AgentLoopRepository } from "@agent/domain/agent-loop-repository"
-import { InferenceResult } from "@agent/domain/inference/inference-runner"
+import { LoopRepository } from "@agent/loop/repository"
+import { InferenceResult } from "@agent/inference/inference-runner"
 import { Clock } from "@util/clock"
 
 export class ReceiveInferenceResultUseCase {
-	private readonly agentLoopRepository: AgentLoopRepository
+	private readonly loopRepository: LoopRepository
 	private readonly clock: Clock
 
-	constructor(agentLoopRepository: AgentLoopRepository, clock: Clock) {
-		this.agentLoopRepository = agentLoopRepository
+	constructor(loopRepository: LoopRepository, clock: Clock) {
+		this.loopRepository = loopRepository
 		this.clock = clock
 	}
 
-	async execute(agentLoopId: string, operationId: string, inferenceResult: InferenceResult): Promise<void> {
-		const agentLoop = await this.agentLoopRepository.getById(agentLoopId)
+	async execute(loopId: string, operationId: string, inferenceResult: InferenceResult): Promise<void> {
+		const loop = await this.loopRepository.getById(loopId)
 
-		if (!agentLoop) {
-			throw new Error(`Agent loop with id ${agentLoopId} not found`)
+		if (!loop) {
+			throw new Error(`Loop with id ${loopId} not found`)
 		}
 
 		const occuredAt = this.clock.now()
-		agentLoop.receiveInferenceResult(operationId, inferenceResult, occuredAt)
-		await this.agentLoopRepository.save(agentLoop)
+		loop.receiveInferenceResult(operationId, inferenceResult, occuredAt)
+		await this.loopRepository.save(loop)
 	}
 }

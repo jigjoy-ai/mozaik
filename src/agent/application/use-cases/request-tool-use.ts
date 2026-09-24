@@ -1,12 +1,12 @@
-import { AgentLoopRepository } from "@agent/domain/agent-loop-repository"
-import { PendingToolExecution } from "@agent/domain/types"
+import { LoopRepository } from "@agent/loop/repository"
+import { PendingToolExecution } from "@agent/record"
 import { Clock } from "@util/clock"
 import { IdGenerator } from "@util/id-generator"
-import { ToolUseRequest } from "@agent/domain/inference/context"
+import { ToolUseRequest } from "@agent/inference/context"
 
 export class RequestToolUseUseCase {
 	constructor(
-		private readonly loops: AgentLoopRepository,
+		private readonly loops: LoopRepository,
 		private readonly ids: IdGenerator,
 		private readonly clock: Clock,
 	) {}

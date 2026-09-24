@@ -1,12 +1,12 @@
-import { Agent } from "@agent/domain/agent"
-import { Tool } from "@agent/domain/inference/tool"
+import { Agent } from "@agent/agent"
+import { Tool } from "@agent/inference/tool"
 import { SituationHandler } from "@environment/domain/situation-handler"
-import { AgentRepository } from "@agent/domain/agent-repository"
+import { AgentRepository } from "@agent/agent-repository"
 import { IdGenerator } from "@util/id-generator"
 import { ParticipantManifest } from "@environment/domain/participant"
-import { Memory } from "@agent/domain/memory"
-import { DeveloperMessageItem } from "@agent/domain/inference/context"
-import { AgentRecord } from "@agent/domain/types"
+import { Memory } from "@agent/memory"
+import { DeveloperMessageItem } from "@agent/inference/context"
+import { AgentRecord } from "@agent/record"
 
 export class CreateAgentUseCase {
 	private readonly agentRepository: AgentRepository

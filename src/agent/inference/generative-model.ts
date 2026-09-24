@@ -1,4 +1,4 @@
-import type { Endpoint } from "@agent/domain/inference/endpoint"
+import type { Endpoint } from "@agent/inference/endpoint"
 
 export type GenerativeModel = {
 	endpoint: Endpoint
