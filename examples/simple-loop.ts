@@ -1,9 +1,8 @@
 import "dotenv/config"
-import { LoopController } from "@agent/loop/controller"
 import { Memory } from "@agent/memory"
 import type { UserMessageItem } from "@inference/context"
 import type { InferenceRequest } from "@inference/inference-runner"
-import { advanceLoop, createAgent, createLoop, loopState } from "./module"
+import { inference, complete, state, createLoop, advanceLoop, createAgent } from "./module"
 
 const memory = Memory.create()
 const userMessage: UserMessageItem = {
@@ -30,16 +29,19 @@ async function run() {
 	const loop = await createLoop({
 		agentId: agent.id,
 		subject: "Tell me a joke about the topic",
+		rules: [
+			{
+				when: state("idle"),
+				then: inference(request),
+			},
+			{
+				when: state("awaiting_tool_output"),
+				then: complete("The joke was told."),
+			},
+		],
 	})
 
-	const controller = new LoopController(loop, [
-		{
-			when: loopState("idle"),
-			then: () => ({ type: "request_inference", request }),
-		},
-	])
-
-	advanceLoop(loop, controller)
+	await advanceLoop(loop)
 	console.log("loop state:", loop.stateId)
 	console.log("completed operations:", loop.completedOperations.length)
 }

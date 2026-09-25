@@ -6,7 +6,7 @@ import { SituationHandler } from "@environment/situation-handler"
 import { CreateAgentLoopUseCase } from "src/mozaik/use-cases/create-loop"
 import { SystemClock } from "@util/system-clock"
 import { InMemoryLoopRepository } from "src/mozaik/repositories/in-memory-loop-repository"
-import { InferenceRunner } from "@inference/inference-runner"
+import { InferenceRequest, InferenceRunner } from "@inference/inference-runner"
 import { AgentRepository } from "@agent/agent-repository"
 import { LoopRepository } from "@agent/loop/repository"
 import { Clock } from "@util/clock"
@@ -19,10 +19,11 @@ import { InferenceRequestValidator } from "@inference/request-validation/inferen
 import { supportedModels } from "@inference/models"
 import { AgentRecord } from "./record"
 import { Loop, LoopStateId } from "./loop"
-import { LoopController } from "./loop/controller"
 import { AdvanceLoopUseCase } from "src/mozaik/use-cases/advance-loop"
 import { LoopStateUseCase } from "src/mozaik/use-cases/loop-state"
 import { LoopSpecification } from "./loop/specification"
+import { CompleteAction, InferenceAction, LoopAction } from "./loop/action"
+import { LoopRule } from "./loop/rule"
 
 export type InferenceRunnerConfig = {
 	supportedModels?: GenerativeModel[]
@@ -78,26 +79,37 @@ export function createAgentModule(config: AgentFamilyConfig) {
 	type CreateLoopParams = {
 		agentId: string
 		subject: string
+		rules: LoopRule[]
 	}
 
 	async function createLoop(config: CreateLoopParams): Promise<Loop> {
-		return await createLoopUseCase.execute(config.agentId, config.subject)
+		return await createLoopUseCase.execute(config.agentId, config.subject, config.rules)
 	}
 
 	const advanceLoopUseCase = new AdvanceLoopUseCase(inferenceRunner)
-	async function advanceLoop(loop: Loop, controller: LoopController): Promise<Loop> {
-		return await advanceLoopUseCase.execute(loop, controller)
+	async function advanceLoop(loop: Loop): Promise<Loop> {
+		return await advanceLoopUseCase.execute(loop)
 	}
 
-	const loopStateUseCase = new LoopStateUseCase()
-	function loopState(loopStateId: LoopStateId): LoopSpecification {
-		return loopStateUseCase.execute(loopStateId)
+	const getLoopStateUseCase = new LoopStateUseCase()
+	function state(loopStateId: LoopStateId): LoopSpecification {
+		return getLoopStateUseCase.execute(loopStateId)
+	}
+
+	function inference(request: InferenceRequest): LoopAction {
+		return new InferenceAction(request)
+	}
+
+	function complete(reason: string): LoopAction {
+		return new CompleteAction(reason)
 	}
 
 	return {
 		createAgent,
 		createLoop,
 		advanceLoop,
-		loopState,
+		state,
+		inference,
+		complete,
 	}
 }

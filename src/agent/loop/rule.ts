@@ -1,8 +1,7 @@
-import { LoopControlDirective } from "@agent/loop/directive"
-import { Loop } from "."
-import { LoopSpecification } from "./specification"
+import { LoopSpecification } from "@agent/loop/specification"
+import { LoopAction } from "@agent/loop/action"
 
 export type LoopRule = {
 	readonly when: LoopSpecification
-	readonly then: (loop: Loop) => LoopControlDirective
+	readonly then: LoopAction
 }
