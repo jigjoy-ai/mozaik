@@ -63,23 +63,22 @@ export class GeminiGenerateContentMapper implements InferenceEndpointMapper {
 		const callNames = new Map<string, string>()
 
 		for (const item of context.items) {
-			if (item.type === "message") {
+			if (item.type === "developer_message" || item.type === "system_message") {
 				const message = item as MessageItem
-				if (message.role === "developer" || message.role === "system") {
-					system.push((message.content as InputText).text)
-					continue
-				}
+				system.push((message.content as InputText).text)
+				continue
+			}
 
-				if (message.role === "user") {
-					this.addPart(contents, "user", { text: (message.content as InputText).text })
-					continue
-				}
+			if (item.type === "user_message") {
+				const message = item as MessageItem
+				this.addPart(contents, "user", { text: (message.content as InputText).text })
+				continue
+			}
 
-				if (message.role === "assistant") {
-					const modelMessage = item as ModelMessageItem
-					this.addPart(contents, "model", { text: modelMessage.content.text })
-					continue
-				}
+			if (item.type === "model_message") {
+				const modelMessage = item as ModelMessageItem
+				this.addPart(contents, "model", { text: modelMessage.content.text })
+				continue
 			}
 
 			if (item.type === "tool_use_request") {
@@ -164,8 +163,7 @@ export class GeminiGenerateContentMapper implements InferenceEndpointMapper {
 			}
 			if (part.text) {
 				items.push({
-					type: "message",
-					role: "assistant",
+					type: "model_message",
 					content: { type: "output_text", text: part.text },
 				})
 				continue

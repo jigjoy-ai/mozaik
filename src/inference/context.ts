@@ -29,32 +29,27 @@ export interface ReasoningItem extends ContextItem {
 }
 
 export interface MessageItem extends ContextItem {
-	readonly type: "message"
-	readonly role: "developer" | "system" | "user" | "assistant"
+	readonly type: "user_message" | "system_message" | "developer_message" | "model_message"
 	readonly content: ItemContent
 }
 
 export interface DeveloperMessageItem extends MessageItem {
-	readonly type: "message"
-	readonly role: "developer"
+	readonly type: "developer_message"
 	readonly content: InputText
 }
 
 export interface SystemMessageItem extends MessageItem {
-	readonly type: "message"
-	readonly role: "system"
+	readonly type: "system_message"
 	readonly content: InputText
 }
 
 export interface UserMessageItem extends MessageItem {
-	readonly type: "message"
-	readonly role: "user"
+	readonly type: "user_message"
 	readonly content: InputText
 }
 
 export interface ModelMessageItem extends MessageItem {
-	readonly type: "message"
-	readonly role: "assistant"
+	readonly type: "model_message"
 	readonly content: OutputText
 }
 

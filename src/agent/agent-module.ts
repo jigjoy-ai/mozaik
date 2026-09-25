@@ -17,6 +17,11 @@ import { DefaultInferenceRunner } from "src/mozaik/runners/inference-runner"
 import { GenerativeModel } from "@inference/generative-model"
 import { InferenceRequestValidator } from "@inference/request-validation/inference-request-validator"
 import { supportedModels } from "@inference/models"
+import { AgentRecord } from "./record"
+import { LoopRecord } from "./loop/record"
+import { Loop } from "./loop"
+import { LoopController } from "./loop/controller"
+import { AdvanceLoopUseCase } from "src/mozaik/use-cases/advance-loop"
 
 export type InferenceRunnerConfig = {
 	supportedModels?: GenerativeModel[]
@@ -51,25 +56,41 @@ export function createAgentModule(config: AgentFamilyConfig) {
 	const createAgentUseCase = new CreateAgentUseCase(agentRepository, uuidGenerator)
 	const createLoopUseCase = new CreateAgentLoopUseCase(agentRepository, agentLoopRepository, uuidGenerator, clock)
 
+	type CreateAgentParams = {
+		name: string
+		instruction: string
+		capabilities: readonly string[]
+		tools: Tool[]
+		handlers: SituationHandler[]
+	}
 	// Interfaces
-	const createAgent =
-		() =>
-		async (
-			name: string,
-			instruction: string,
-			capabilities: readonly string[],
-			tools: Tool[],
-			handlers: SituationHandler[],
-		) => {
-			return await createAgentUseCase.execute(name, instruction, capabilities, tools, handlers)
-		}
+	async function createAgent(config: CreateAgentParams): Promise<AgentRecord> {
+		return await createAgentUseCase.execute(
+			config.name,
+			config.instruction,
+			config.capabilities,
+			config.tools,
+			config.handlers,
+		)
+	}
 
-	const createLoop = () => async (agentId: string, subject: string) => {
-		return await createLoopUseCase.execute(agentId, subject)
+	type CreateLoopParams = {
+		agentId: string
+		subject: string
+	}
+
+	async function createLoop(config: CreateLoopParams): Promise<Loop> {
+		return await createLoopUseCase.execute(config.agentId, config.subject)
+	}
+
+	const advanceLoopUseCase = new AdvanceLoopUseCase(agentLoopRepository)
+	async function advanceLoop(loop: Loop, controller: LoopController): Promise<Loop> {
+		return await advanceLoopUseCase.execute(loop, controller)
 	}
 
 	return {
 		createAgent,
 		createLoop,
+		advanceLoop,
 	}
 }

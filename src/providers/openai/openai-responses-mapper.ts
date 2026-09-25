@@ -57,26 +57,25 @@ export class OpenAIResponsesMapper implements InferenceEndpointMapper {
 		const input: any[] = []
 
 		for (const item of inferenceRequest.context.items) {
-			if (item.type === "message") {
+			if (item.type === "developer_message" || item.type === "system_message" || item.type === "user_message") {
 				const message = item as MessageItem
-				if (message.role === "developer" || message.role === "system" || message.role === "user") {
-					input.push({
-						type: "message",
-						role: message.role,
-						content: [{ type: "input_text", text: (message.content as InputText).text }],
-					})
-					continue
-				}
+				const role = item.type === "developer_message" ? "developer" : item.type === "system_message" ? "system" : "user"
+				input.push({
+					type: "message",
+					role,
+					content: [{ type: "input_text", text: (message.content as InputText).text }],
+				})
+				continue
+			}
 
-				if (message.role === "assistant") {
-					const modelMessage = item as ModelMessageItem
-					input.push({
-						type: "message",
-						role: modelMessage.role,
-						content: [{ type: "output_text", text: modelMessage.content.text }],
-					})
-					continue
-				}
+			if (item.type === "model_message") {
+				const modelMessage = item as ModelMessageItem
+				input.push({
+					type: "message",
+					role: "assistant",
+					content: [{ type: "output_text", text: modelMessage.content.text }],
+				})
+				continue
 			}
 
 			if (item.type === "tool_use_request") {
@@ -137,8 +136,7 @@ export class OpenAIResponsesMapper implements InferenceEndpointMapper {
 				const firstContent = item.content?.[0]
 				if (firstContent) {
 					items.push({
-						type: "message",
-						role: "assistant",
+						type: "model_message",
 						content: { type: "output_text", text: firstContent.text },
 					})
 				}

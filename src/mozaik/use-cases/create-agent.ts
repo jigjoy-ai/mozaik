@@ -28,8 +28,7 @@ export class CreateAgentUseCase {
 		const manifest: ParticipantManifest = { id, name, capabilities, role: "agent" }
 		const memory = Memory.create()
 		const developerMessageItem: DeveloperMessageItem = {
-			type: "message",
-			role: "developer",
+			type: "developer_message",
 			content: {
 				type: "input_text",
 				text: instruction,

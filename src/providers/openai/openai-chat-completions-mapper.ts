@@ -43,23 +43,22 @@ export class OpenAIChatCompletionsMapper implements InferenceEndpointMapper {
 		const messages: any[] = []
 
 		for (const item of inferenceRequest.context.items) {
-			if (item.type === "message") {
+			if (item.type === "developer_message" || item.type === "system_message") {
 				const message = item as MessageItem
-				if (message.role === "developer" || message.role === "system") {
-					messages.push({ role: "system", content: (message.content as InputText).text })
-					continue
-				}
+				messages.push({ role: "system", content: (message.content as InputText).text })
+				continue
+			}
 
-				if (message.role === "user") {
-					messages.push({ role: "user", content: (message.content as InputText).text })
-					continue
-				}
+			if (item.type === "user_message") {
+				const message = item as MessageItem
+				messages.push({ role: "user", content: (message.content as InputText).text })
+				continue
+			}
 
-				if (message.role === "assistant") {
-					const modelMessage = item as ModelMessageItem
-					messages.push({ role: "assistant", content: modelMessage.content.text })
-					continue
-				}
+			if (item.type === "model_message") {
+				const modelMessage = item as ModelMessageItem
+				messages.push({ role: "assistant", content: modelMessage.content.text })
+				continue
 			}
 
 			if (item.type === "tool_use_request") {
@@ -123,8 +122,7 @@ export class OpenAIChatCompletionsMapper implements InferenceEndpointMapper {
 
 		if (message.content) {
 			items.push({
-				type: "message",
-				role: "assistant",
+				type: "model_message",
 				content: { type: "output_text", text: message.content },
 			})
 		}

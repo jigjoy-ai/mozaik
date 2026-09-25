@@ -78,23 +78,22 @@ export class AnthropicMessagesMapper implements InferenceEndpointMapper {
 		const system: string[] = []
 
 		for (const item of context.items) {
-			if (item.type === "message") {
+			if (item.type === "developer_message" || item.type === "system_message") {
 				const message = item as MessageItem
-				if (message.role === "developer" || message.role === "system") {
-					system.push((message.content as InputText).text)
-					continue
-				}
+				system.push((message.content as InputText).text)
+				continue
+			}
 
-				if (message.role === "user") {
-					this.addContentBlock(messages, "user", { type: "text", text: (message.content as InputText).text })
-					continue
-				}
+			if (item.type === "user_message") {
+				const message = item as MessageItem
+				this.addContentBlock(messages, "user", { type: "text", text: (message.content as InputText).text })
+				continue
+			}
 
-				if (message.role === "assistant") {
-					const modelMessage = item as ModelMessageItem
-					this.addContentBlock(messages, "assistant", { type: "text", text: modelMessage.content.text })
-					continue
-				}
+			if (item.type === "model_message") {
+				const modelMessage = item as ModelMessageItem
+				this.addContentBlock(messages, "assistant", { type: "text", text: modelMessage.content.text })
+				continue
 			}
 
 			if (item.type === "reasoning") {
@@ -161,8 +160,7 @@ export class AnthropicMessagesMapper implements InferenceEndpointMapper {
 		for (const block of response.content as any[]) {
 			if (block.type === "text") {
 				items.push({
-					type: "message",
-					role: "assistant",
+					type: "model_message",
 					content: { type: "output_text", text: block.text },
 				})
 				continue
