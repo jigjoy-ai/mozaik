@@ -51,3 +51,33 @@ class NotLoopSpecification extends LoopSpecification {
 		return !this.rule.isSatisfiedBy(loop)
 	}
 }
+
+export class Idle extends LoopSpecification {
+	isSatisfiedBy(loop: Loop) {
+		return loop.stateId === "idle"
+	}
+}
+
+export class AwaitingInference extends LoopSpecification {
+	isSatisfiedBy(loop: Loop) {
+		return loop.stateId === "awaiting_inference"
+	}
+}
+
+export class AwaitingToolOutput extends LoopSpecification {
+	isSatisfiedBy(loop: Loop) {
+		return loop.stateId === "awaiting_tool_output"
+	}
+}
+
+export class Stopped extends LoopSpecification {
+	isSatisfiedBy(loop: Loop) {
+		return loop.stateId === "stopped"
+	}
+}
+
+export class Completed extends LoopSpecification {
+	isSatisfiedBy(loop: Loop) {
+		return loop.stateId === "completed"
+	}
+}

@@ -18,10 +18,11 @@ import { GenerativeModel } from "@inference/generative-model"
 import { InferenceRequestValidator } from "@inference/request-validation/inference-request-validator"
 import { supportedModels } from "@inference/models"
 import { AgentRecord } from "./record"
-import { LoopRecord } from "./loop/record"
-import { Loop } from "./loop"
+import { Loop, LoopStateId } from "./loop"
 import { LoopController } from "./loop/controller"
 import { AdvanceLoopUseCase } from "src/mozaik/use-cases/advance-loop"
+import { LoopStateUseCase } from "src/mozaik/use-cases/loop-state"
+import { LoopSpecification } from "./loop/specification"
 
 export type InferenceRunnerConfig = {
 	supportedModels?: GenerativeModel[]
@@ -83,14 +84,20 @@ export function createAgentModule(config: AgentFamilyConfig) {
 		return await createLoopUseCase.execute(config.agentId, config.subject)
 	}
 
-	const advanceLoopUseCase = new AdvanceLoopUseCase(agentLoopRepository)
+	const advanceLoopUseCase = new AdvanceLoopUseCase(inferenceRunner)
 	async function advanceLoop(loop: Loop, controller: LoopController): Promise<Loop> {
 		return await advanceLoopUseCase.execute(loop, controller)
+	}
+
+	const loopStateUseCase = new LoopStateUseCase()
+	function loopState(loopStateId: LoopStateId): LoopSpecification {
+		return loopStateUseCase.execute(loopStateId)
 	}
 
 	return {
 		createAgent,
 		createLoop,
 		advanceLoop,
+		loopState,
 	}
 }

@@ -1,12 +1,9 @@
 import { Loop } from "@agent/loop"
 import { LoopController } from "@agent/loop/controller"
-import { LoopRepository } from "@agent/loop/repository"
-import { DefaultInferenceRunner } from "../runners/inference-runner"
-import { InferenceRequestValidator } from "@inference/request-validation/inference-request-validator"
-import { supportedModels } from "@inference/models"
+import { InferenceRunner } from "@inference/inference-runner"
 
 export class AdvanceLoopUseCase {
-	constructor(private readonly loopRepository: LoopRepository) {}
+	constructor(private readonly inferenceRunner: InferenceRunner) {}
 
 	async execute(loop: Loop, controller: LoopController): Promise<Loop> {
 		const next = controller.decide()
@@ -14,8 +11,7 @@ export class AdvanceLoopUseCase {
 
 		if (next?.type === "request_inference") {
 			const pending = loop.requestInference("op-1", next.request, new Date())
-			const inferenceRunner = new DefaultInferenceRunner(supportedModels, new InferenceRequestValidator())
-			const result = await inferenceRunner.run(next.request)
+			const result = await this.inferenceRunner.run(next.request)
 			loop.receiveInferenceResult(pending.id, result, new Date())
 			console.log("model output:", result.items)
 		}
