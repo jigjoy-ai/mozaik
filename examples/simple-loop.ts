@@ -35,19 +35,11 @@ async function run() {
 	const controller = new LoopController(loop, [
 		{
 			when: loopState("idle"),
-			then: (loop) => ({ type: "request_inference", request }),
-		},
-		{
-			when: loopState("awaiting_inference"),
-			then: (loop) => ({ type: "request_inference", request }),
-		},
-		{
-			when: loopState("awaiting_tool_output"),
-			then: (loop) => ({ type: "request_inference", request }),
+			then: () => ({ type: "request_inference", request }),
 		},
 	])
 
-	await advanceLoop(loop, controller)
+	advanceLoop(loop, controller)
 	console.log("loop state:", loop.stateId)
 	console.log("completed operations:", loop.completedOperations.length)
 }
