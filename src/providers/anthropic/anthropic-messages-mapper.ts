@@ -1,13 +1,5 @@
 import type { InferenceRequest, InferenceResult } from "@inference/inference-runner"
-import type {
-	InputText,
-	MessageItem,
-	ModelMessageItem,
-	ModelOutputItem,
-	ReasoningItem,
-	ToolUseRequest,
-	ToolUseResult,
-} from "@inference/context"
+import type { ModelOutputItem, ReasoningItem, ToolUseRequest, ToolUseResult } from "@inference/context"
 import type { InferenceEndpointMapper } from "@inference/inference-endpoint-mapper"
 import { InputTokenDetails, OutputTokenDetails, TokenUsage } from "@inference/token-usage"
 import type Anthropic from "@anthropic-ai/sdk"
@@ -79,20 +71,17 @@ export class AnthropicMessagesMapper implements InferenceEndpointMapper {
 
 		for (const item of context.items) {
 			if (item.type === "developer_message" || item.type === "system_message") {
-				const message = item as MessageItem
-				system.push((message.content as InputText).text)
+				system.push(item.text)
 				continue
 			}
 
 			if (item.type === "user_message") {
-				const message = item as MessageItem
-				this.addContentBlock(messages, "user", { type: "text", text: (message.content as InputText).text })
+				this.addContentBlock(messages, "user", { type: "text", text: item.text })
 				continue
 			}
 
 			if (item.type === "model_message") {
-				const modelMessage = item as ModelMessageItem
-				this.addContentBlock(messages, "assistant", { type: "text", text: modelMessage.content.text })
+				this.addContentBlock(messages, "assistant", { type: "text", text: item.text })
 				continue
 			}
 
@@ -161,7 +150,7 @@ export class AnthropicMessagesMapper implements InferenceEndpointMapper {
 			if (block.type === "text") {
 				items.push({
 					type: "model_message",
-					content: { type: "output_text", text: block.text },
+					text: block.text,
 				})
 				continue
 			}

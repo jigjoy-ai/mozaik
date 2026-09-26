@@ -1,13 +1,6 @@
 import type { InferenceRequest, InferenceResult } from "@inference/inference-runner"
 import type { InferenceEndpointMapper } from "@inference/inference-endpoint-mapper"
-import type {
-	InputText,
-	MessageItem,
-	ModelMessageItem,
-	ModelOutputItem,
-	ToolUseRequest,
-	ToolUseResult,
-} from "@inference/context"
+import type { ModelOutputItem, ToolUseRequest, ToolUseResult } from "@inference/context"
 import { InputTokenDetails, OutputTokenDetails, TokenUsage } from "@inference/token-usage"
 
 export class OpenAIChatCompletionsMapper implements InferenceEndpointMapper {
@@ -44,20 +37,17 @@ export class OpenAIChatCompletionsMapper implements InferenceEndpointMapper {
 
 		for (const item of inferenceRequest.context.items) {
 			if (item.type === "developer_message" || item.type === "system_message") {
-				const message = item as MessageItem
-				messages.push({ role: "system", content: (message.content as InputText).text })
+				messages.push({ role: "system", content: item.text })
 				continue
 			}
 
 			if (item.type === "user_message") {
-				const message = item as MessageItem
-				messages.push({ role: "user", content: (message.content as InputText).text })
+				messages.push({ role: "user", content: item.text })
 				continue
 			}
 
 			if (item.type === "model_message") {
-				const modelMessage = item as ModelMessageItem
-				messages.push({ role: "assistant", content: modelMessage.content.text })
+				messages.push({ role: "assistant", content: item.text })
 				continue
 			}
 
@@ -123,7 +113,7 @@ export class OpenAIChatCompletionsMapper implements InferenceEndpointMapper {
 		if (message.content) {
 			items.push({
 				type: "model_message",
-				content: { type: "output_text", text: message.content },
+				text: message.content,
 			})
 		}
 

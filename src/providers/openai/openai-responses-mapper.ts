@@ -1,14 +1,6 @@
 import type { InferenceRequest, InferenceResult } from "@inference/inference-runner"
 import type { InferenceEndpointMapper } from "@inference/inference-endpoint-mapper"
-import type {
-	InputText,
-	MessageItem,
-	ModelMessageItem,
-	ModelOutputItem,
-	ReasoningItem,
-	ToolUseRequest,
-	ToolUseResult,
-} from "@inference/context"
+import type { ModelOutputItem, ReasoningItem, ToolUseRequest, ToolUseResult } from "@inference/context"
 import { InputTokenDetails, OutputTokenDetails, TokenUsage } from "@inference/token-usage"
 import type OpenAI from "openai"
 
@@ -58,22 +50,21 @@ export class OpenAIResponsesMapper implements InferenceEndpointMapper {
 
 		for (const item of inferenceRequest.context.items) {
 			if (item.type === "developer_message" || item.type === "system_message" || item.type === "user_message") {
-				const message = item as MessageItem
-				const role = item.type === "developer_message" ? "developer" : item.type === "system_message" ? "system" : "user"
+				const role =
+					item.type === "developer_message" ? "developer" : item.type === "system_message" ? "system" : "user"
 				input.push({
 					type: "message",
 					role,
-					content: [{ type: "input_text", text: (message.content as InputText).text }],
+					content: [{ type: "input_text", text: item.text }],
 				})
 				continue
 			}
 
 			if (item.type === "model_message") {
-				const modelMessage = item as ModelMessageItem
 				input.push({
 					type: "message",
 					role: "assistant",
-					content: [{ type: "output_text", text: modelMessage.content.text }],
+					content: [{ type: "output_text", text: item.text }],
 				})
 				continue
 			}
@@ -137,7 +128,7 @@ export class OpenAIResponsesMapper implements InferenceEndpointMapper {
 				if (firstContent) {
 					items.push({
 						type: "model_message",
-						content: { type: "output_text", text: firstContent.text },
+						text: firstContent.text,
 					})
 				}
 				continue

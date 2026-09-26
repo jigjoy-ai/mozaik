@@ -61,19 +61,12 @@ export function createAgentModule(config: AgentFamilyConfig) {
 	type CreateAgentParams = {
 		name: string
 		instruction: string
-		capabilities: readonly string[]
 		tools: Tool[]
 		handlers: SituationHandler[]
 	}
 	// Interfaces
 	async function createAgent(config: CreateAgentParams): Promise<AgentRecord> {
-		return await createAgentUseCase.execute(
-			config.name,
-			config.instruction,
-			config.capabilities,
-			config.tools,
-			config.handlers,
-		)
+		return await createAgentUseCase.execute(config.name, config.instruction, config.tools, config.handlers)
 	}
 
 	type CreateLoopParams = {

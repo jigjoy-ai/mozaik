@@ -1,14 +1,7 @@
 import type { InferenceRequest, InferenceResult } from "@inference/inference-runner"
 import type { InferenceEndpointMapper } from "@inference/inference-endpoint-mapper"
 import { InputTokenDetails, OutputTokenDetails, TokenUsage } from "@inference/token-usage"
-import type {
-	InputText,
-	MessageItem,
-	ModelMessageItem,
-	ModelOutputItem,
-	ToolUseRequest,
-	ToolUseResult,
-} from "@inference/context"
+import type { ModelOutputItem, ToolUseRequest, ToolUseResult } from "@inference/context"
 
 export class GeminiGenerateContentMapper implements InferenceEndpointMapper {
 	toRequest(inferenceRequest: InferenceRequest) {
@@ -64,20 +57,17 @@ export class GeminiGenerateContentMapper implements InferenceEndpointMapper {
 
 		for (const item of context.items) {
 			if (item.type === "developer_message" || item.type === "system_message") {
-				const message = item as MessageItem
-				system.push((message.content as InputText).text)
+				system.push(item.text)
 				continue
 			}
 
 			if (item.type === "user_message") {
-				const message = item as MessageItem
-				this.addPart(contents, "user", { text: (message.content as InputText).text })
+				this.addPart(contents, "user", { text: item.text })
 				continue
 			}
 
 			if (item.type === "model_message") {
-				const modelMessage = item as ModelMessageItem
-				this.addPart(contents, "model", { text: modelMessage.content.text })
+				this.addPart(contents, "model", { text: item.text })
 				continue
 			}
 
@@ -164,7 +154,7 @@ export class GeminiGenerateContentMapper implements InferenceEndpointMapper {
 			if (part.text) {
 				items.push({
 					type: "model_message",
-					content: { type: "output_text", text: part.text },
+					text: part.text,
 				})
 				continue
 			}

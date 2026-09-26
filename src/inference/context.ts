@@ -1,7 +1,3 @@
-export interface ContextItem {
-	readonly type: string
-}
-
 export interface ItemContent {
 	readonly type: string
 }
@@ -21,50 +17,52 @@ export interface SummaryText {
 	readonly text: string
 }
 
-export interface ReasoningItem extends ContextItem {
+export interface ReasoningItem {
 	readonly type: "reasoning"
 	readonly content?: InputText
 	readonly encryptedContent?: string
 	readonly summary: SummaryText[]
 }
 
-export interface MessageItem extends ContextItem {
+export interface MessageItem {
 	readonly type: "user_message" | "system_message" | "developer_message" | "model_message"
-	readonly content: ItemContent
+	readonly text: string
 }
 
 export interface DeveloperMessageItem extends MessageItem {
 	readonly type: "developer_message"
-	readonly content: InputText
+	readonly text: string
 }
 
 export interface SystemMessageItem extends MessageItem {
 	readonly type: "system_message"
-	readonly content: InputText
+	readonly text: string
 }
 
 export interface UserMessageItem extends MessageItem {
 	readonly type: "user_message"
-	readonly content: InputText
+	readonly text: string
 }
 
 export interface ModelMessageItem extends MessageItem {
 	readonly type: "model_message"
-	readonly content: OutputText
+	readonly text: string
 }
 
-export interface ToolUseRequest extends ContextItem {
+export interface ToolUseRequest {
 	readonly type: "tool_use_request"
 	readonly requestId: string
 	readonly toolName: string
 	readonly toolArguments: string
 }
 
-export interface ToolUseResult extends ContextItem {
+export interface ToolUseResult {
 	readonly type: "tool_use_result"
 	readonly requestId: string
 	readonly result: InputText
 }
+
+export type ContextItem = MessageItem | ReasoningItem | ToolUseRequest | ToolUseResult
 
 export type ModelOutputItem = ModelMessageItem | ToolUseRequest | ReasoningItem
 

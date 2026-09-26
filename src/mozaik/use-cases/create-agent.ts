@@ -20,19 +20,15 @@ export class CreateAgentUseCase {
 	async execute(
 		name: string,
 		instruction: string,
-		capabilities: readonly string[],
 		tools: Tool[],
 		handlers: SituationHandler[],
 	): Promise<AgentRecord> {
 		const id = this.ids.generate()
-		const manifest: ParticipantManifest = { id, name, capabilities, role: "agent" }
+		const manifest: ParticipantManifest = { id, name, role: "agent" }
 		const memory = Memory.create()
 		const developerMessageItem: DeveloperMessageItem = {
 			type: "developer_message",
-			content: {
-				type: "input_text",
-				text: instruction,
-			},
+			text: instruction,
 		}
 		memory.getContext().items.push(developerMessageItem)
 

@@ -1,27 +1,23 @@
 import "dotenv/config"
-import { Memory } from "@agent/memory"
-import type { UserMessageItem } from "@inference/context"
 import type { InferenceRequest } from "@inference/inference-runner"
 import { inference, complete, state, createLoop, advanceLoop, createAgent } from "./module"
 
-const memory = Memory.create()
-const userMessage: UserMessageItem = {
-	type: "user_message",
-	content: { type: "input_text", text: "Tell me a joke about soccer." },
-}
-
-memory.getContext().items.push(userMessage)
-
 const request: InferenceRequest = {
 	model: "gpt-5.4",
-	context: memory.getContext(),
+	context: {
+		items: [
+			{
+				type: "user_message",
+				text: "Tell me a joke about soccer.",
+			},
+		],
+	},
 }
 
 async function run() {
 	const agent = await createAgent({
 		name: "joke-teller",
 		instruction: "You are a joke teller. You are given a topic and you need to tell a joke about it.",
-		capabilities: [],
 		tools: [],
 		handlers: [],
 	})
@@ -35,7 +31,7 @@ async function run() {
 				then: inference(request),
 			},
 			{
-				when: state("awaiting_tool_output"),
+				when: state("completed"),
 				then: complete("The joke was told."),
 			},
 		],
