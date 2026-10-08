@@ -13,7 +13,6 @@
 		"baseUrl": ".",
 		"paths": {
 			"@agent/*": ["src/agent/*"],
-			"@space/*": ["src/space/*"],
 			"@inference/*": ["src/inference/*"],
 			"@util/*": ["src/util/*"]
 		},
