@@ -1,82 +1,76 @@
 import type { Memory } from "@agent/domain/memory"
 import type { ContextItem } from "@inference/context"
 
-import MemoryClient from "mem0ai"
-
-type Mem0Message = {
-    role: "user" | "assistant"
-    content: string
-}
+import MemoryClient, { Message } from "mem0ai"
 
 export class Mem0Memory implements Memory {
-    private readonly client: MemoryClient
+	private readonly client: MemoryClient
 
-    constructor() {
-        this.client = new MemoryClient({
-            apiKey: process.env.MEM0_API_KEY,
-        })
-    }
+	constructor() {
+		const apiKey = process.env.MEM0_API_KEY
+		if (!apiKey) {
+			throw new Error("MEM0_API_KEY is not set")
+		}
 
-    async remember(
-        items: ContextItem[],
-        participantId: string
-    ): Promise<void> {
-        const messages: Mem0Message[] = []
+		this.client = new MemoryClient({
+			apiKey,
+		})
+	}
 
-        for (const item of items) {
-            if (!("text" in item) || !item.text) {
-                continue
-            }
+	async remember(items: ContextItem[], participantId: string): Promise<void> {
+		const messages: Message[] = []
 
-            if (item.type === "user_message") {
-                messages.push({
-                    role: "user",
-                    content: item.text,
-                })
+		for (const item of items) {
+			if (!("text" in item) || !item.text) {
+				continue
+			}
 
-                continue
-            }
+			if (item.type === "user_message") {
+				messages.push({
+					role: "user",
+					content: item.text,
+				})
 
-            if (item.type === "model_message") {
-                messages.push({
-                    role: "assistant",
-                    content: item.text,
-                })
-            }
-        }
+				continue
+			}
 
-        if (messages.length === 0) {
-            return
-        }
+			if (item.type === "model_message") {
+				messages.push({
+					role: "assistant",
+					content: item.text,
+				})
+			}
+		}
 
-        await this.client.add(messages, {
-            userId: participantId,
-        })
-    }
+		if (messages.length === 0) {
+			return
+		}
 
-    async recall(
-        topic: string,
-        participantId: string
-    ): Promise<ContextItem[]> {
-        const result = await this.client.search(topic, {
-            filters: {
-                user_id: participantId,
-            },
-        })
+		await this.client.add(messages, {
+			userId: participantId,
+		})
+	}
 
-        const items: ContextItem[] = []
+	async recall(topic: string, participantId: string): Promise<ContextItem[]> {
+		const result = await this.client.search(topic, {
+			filters: {
+				user_id: participantId,
+			},
+		})
 
-        for (const memory of result.results) {
-            if (!memory.memory) {
-                continue
-            }
+		const items: ContextItem[] = []
 
-            items.push({
-                type: "user_message",
-                text: memory.memory,
-            })
-        }
+		for (const memory of result.results) {
+			if (!memory.memory) {
+				continue
+			}
 
-        return items
-    }
+			items.push({
+				type: "user_message",
+				text: memory.memory,
+			})
+		}
+
+		return items
+	}
 }

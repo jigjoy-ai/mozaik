@@ -33,6 +33,7 @@
 		"clean": "rimraf dist",
 		"format": "prettier --write \"src/**/*.{ts,tsx}\"",
 		"example": "tsx examples/simple-loop.ts",
+		"example:mozaik-network": "tsx examples/mozaik-network.ts",
 		"test": "rstest run",
 		"test:watch": "rstest watch",
 		"test:domain": "rstest run tests/domain",
@@ -75,11 +76,12 @@
 		"typescript-eslint": "^8.61.0"
 	},
 	"dependencies": {
-		"@anthropic-ai/sdk": "^0.74.0",
+		"@anthropic-ai/sdk": "^0.133.0",
 		"@google/genai": "^2.6.0",
 		"@modelcontextprotocol/sdk": "^1.29.0",
 		"@mozaik-ai/cloud-sdk": "^0.1.0",
 		"dotenv": "^17.4.1",
+		"mem0ai": "^3.3.1",
 		"openai": "^6.38.0",
 		"zod": "^4.3.6"
 	}
