@@ -1,5 +1,5 @@
-import { Memory } from "@agent/domain/memory"
-import { Context, ContextItem } from "@inference/context"
+import type { Memory } from "@agent/domain/memory"
+import type { Context, ContextItem } from "@inference/context"
 
 export class RuntimeMemory implements Memory {
 	private readonly context: Context
@@ -7,10 +7,10 @@ export class RuntimeMemory implements Memory {
 	constructor(context: Context) {
 		this.context = context
 	}
-	remember(items: ContextItem[], participantId: string): void {
-		throw new Error("Method not implemented.")
+	async remember(items: ContextItem[], _participantId: string): Promise<void> {
+		this.context.items.push(...items)
 	}
-	recall(topic: string, participantId: string): ContextItem[] {
-		throw new Error("Method not implemented.")
+	async recall(_topic: string, _participantId: string): Promise<ContextItem[]> {
+		return this.context.items
 	}
 }
