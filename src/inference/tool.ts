@@ -7,8 +7,4 @@ export interface FunctionTool {
 	invoke: (args: any) => Promise<any> | any
 }
 
-export interface InternalTool<T extends string> {
-	type: T
-}
-
 export type Tool = FunctionTool

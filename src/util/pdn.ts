@@ -1,11 +1,5 @@
-export type Envelope<TType extends string = string, TPayload = unknown> = {
-	id: string
-	networkId: string
-	type: TType
-	senderId: string
-	createdAt: Date
-	payload: TPayload
-}
+import { Envelope } from "src/peer/envelope"
+import { Peer } from "src/peer/peer"
 
 export type Network = {
 	id: string
@@ -15,7 +9,7 @@ export type CreateNetworkInput = {
 	name: string
 }
 
-export type CreateParticipantInput = {
+export type CreatePeerInput = {
 	name: string
 	capabilities: string[]
 	networkId: string
@@ -35,18 +29,6 @@ function resolveOrigins(origin: string): { httpOrigin: string; wsUrl: string } {
 	return {
 		httpOrigin: trimmed,
 		wsUrl: trimmed.replace(/^http(s)?/, "ws$1"),
-	}
-}
-
-export class Participant {
-	readonly id: string
-
-	constructor(id: string) {
-		this.id = id
-	}
-
-	receive(envelope: Envelope): void {
-		console.log(envelope)
 	}
 }
 
@@ -137,60 +119,58 @@ class WebSocketTransport {
 	}
 }
 
-export class ParticipantSession {
+export class Connection {
 	private readonly transport: WebSocketTransport
 	private joined = false
 
 	constructor(
-		private readonly participant: Participant,
+		private readonly peer: Peer,
 		wsUrl: string,
 	) {
-		this.transport = new WebSocketTransport(wsUrl, participant.id)
+		this.transport = new WebSocketTransport(wsUrl, peer.id)
 	}
 
 	async join(networkId: string): Promise<void> {
 		if (!this.joined) {
 			this.transport.onMessage((envelope) => {
-				this.participant.receive(envelope)
+				this.peer.receive(envelope)
 			})
 			this.joined = true
 		}
 
 		await this.transport.whenConnected()
-		this.transport.send(this.envelope(networkId, "participant.join", {
-			participantId: this.participant.id,
-		}))
-	}
-
-	leave(networkId: string): void {
-		this.transport.send(this.envelope(networkId, "participant.leave", {
-			participantId: this.participant.id,
-		}))
-	}
-
-	sendMessage(networkId: string, message: string): void {
 		this.transport.send(
-			this.envelope(networkId, "message.send", message),
+			this.envelope(networkId, "peer.join", {
+				peerId: this.peer.id,
+			}),
 		)
 	}
 
-	private envelope(
-		networkId: string,
-		type: string,
-		payload: unknown,
-	): Envelope {
+	leave(networkId: string): void {
+		this.transport.send(
+			this.envelope(networkId, "peer.leave", {
+				peerId: this.peer.id,
+			}),
+		)
+	}
+
+	sendMessage(networkId: string, message: string): void {
+		this.transport.send(this.envelope(networkId, "message.send", message))
+	}
+
+	private envelope(networkId: string, type: string, payload: unknown): Envelope {
 		return {
 			type,
 			payload,
 			id: crypto.randomUUID(),
 			networkId,
-			senderId: this.participant.id,
+			senderId: this.peer.id,
 			createdAt: new Date(),
 		}
 	}
 }
 
-export class MozaikClient {
+export class PeerDirectiveNetwork {
 	private readonly httpOrigin: string
 	private readonly wsUrl: string
 
@@ -204,13 +184,17 @@ export class MozaikClient {
 		return this.post<Network>("/networks", input)
 	}
 
-	async createParticipant(input: CreateParticipantInput): Promise<Participant> {
-		const created = await this.post<{ id: string }>("/participants", input)
-		return new Participant(created.id)
+	async createPeer(input: CreatePeerInput): Promise<Peer> {
+		const response = await this.post<{ id: string }>("/peers", input)
+		return new Peer(response.id, {
+			id: response.id,
+			name: input.name,
+			directives: [],
+		})
 	}
 
-	session(participant: Participant): ParticipantSession {
-		return new ParticipantSession(participant, this.wsUrl)
+	connection(peer: Peer): Connection {
+		return new Connection(peer, this.wsUrl)
 	}
 
 	private async post<T>(path: string, body: unknown): Promise<T> {
@@ -224,9 +208,7 @@ export class MozaikClient {
 
 		if (!response.ok) {
 			const detail = await response.text()
-			throw new Error(
-				`POST ${path} failed (${response.status}): ${detail || response.statusText}`,
-			)
+			throw new Error(`POST ${path} failed (${response.status}): ${detail || response.statusText}`)
 		}
 
 		return response.json() as Promise<T>
