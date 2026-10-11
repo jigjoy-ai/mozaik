@@ -20,12 +20,9 @@ async function main() {
 		networkId: network.id,
 	})
 
-	const mijuraConnection = pdn.connection(mijura)
-	const lotusConnection = pdn.connection(lotus)
-
-	await mijuraConnection.join(network.id)
-	await lotusConnection.join(network.id)
-	mijuraConnection.sendMessage(network.id, "Hello, Lotus!")
+	await mijura.join(network.id)
+	await lotus.join(network.id)
+	mijura.sendMessage(network.id, "Hello, Lotus!")
 }
 
 main()

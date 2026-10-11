@@ -13,7 +13,7 @@
 		"baseUrl": ".",
 		"paths": {
 			"@agent/*": ["src/agent/*"],
-			"@participant/*": ["src/peer/*"],
+			"@peer/*": ["src/peer/*"],
 			"@inference/*": ["src/inference/*"],
 			"@util/*": ["src/util/*"]
 		},
