@@ -9,6 +9,8 @@ import type { InferenceEndpointMapper } from "@inference/inference-endpoint-mapp
 export interface AnthropicConnectionConfig {
 	baseURL?: string
 	apiKey?: string
+	/** OAuth token for Claude Max / enterprise SSO (sent as `Authorization: Bearer`). */
+	authToken?: string
 }
 
 /**
@@ -33,6 +35,7 @@ export class AnthropicMessages implements InferenceEndpoint {
 		return (this._client ??= new Anthropic({
 			baseURL: this.clientConfig.baseURL,
 			apiKey: this.clientConfig.apiKey,
+			authToken: this.clientConfig.authToken,
 		}))
 	}
 
