@@ -35,6 +35,7 @@
 		"example": "tsx examples/simple-loop.ts",
 		"example:network": "tsx examples/network.ts",
 		"example:mem0": "tsx examples/mem0.ts",
+		"example:function-call": "tsx examples/function-call.ts",
 		"test": "rstest run",
 		"test:watch": "rstest watch",
 		"test:domain": "rstest run tests/domain",

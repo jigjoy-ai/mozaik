@@ -1,7 +1,5 @@
-import { DirectiveContract } from "./directive-contract"
-
 export interface Directive<TInput = unknown> {
 	id: string
-	definition: DirectiveContract
+	contractId: string
 	input: TInput
 }

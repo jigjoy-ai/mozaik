@@ -1,7 +1,7 @@
-import { DirectiveContract } from "./directive-contract"
+import { Contract } from "./contract"
 
 export interface PeerManifest {
 	id: string
 	name: string
-	directives: DirectiveContract[]
+	contracts: Contract[]
 }

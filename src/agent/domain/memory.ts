@@ -1,8 +1,8 @@
 import type { ContextItem } from "@inference/context"
 
 export interface Memory {
-	remember(items: ContextItem[], participantId: string): Promise<void>
-	recall(topic: string, participantId: string): Promise<ContextItem[]>
+	remember(items: ContextItem[], peerId: string): Promise<void>
+	recall(topic: string, peerId: string): Promise<ContextItem[]>
 }
 
 export interface MemoryFactory {

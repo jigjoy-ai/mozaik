@@ -1,5 +1,9 @@
 import { Peer } from "src/peer/peer"
 import { Connection } from "./connection"
+import { EnvelopeRuleEngine } from "@peer/envelope-rule-engine"
+import { OperationRegistry } from "@peer/operation-registry"
+import { Rulebook } from "@peer/rulebook"
+import { EnvelopeSpecificationRegistry } from "@peer/envelope-specification-registry"
 
 export type Network = {
 	id: string
@@ -14,6 +18,7 @@ export type CreatePeerInput = {
 	capabilities: string[]
 	networkId: string
 	role: "agent" | "user"
+	rulebook: Rulebook
 }
 
 export class PeerDirectiveNetwork {
@@ -48,11 +53,17 @@ export class PeerDirectiveNetwork {
 
 	async createPeer(input: CreatePeerInput): Promise<Peer> {
 		const response = await this.post<{ id: string }>("/peers", input)
-		return new Peer(response.id, {
-			id: response.id,
-			name: input.name,
-			directives: [],
-		})
+		return new Peer(
+			response.id,
+			{
+				id: response.id,
+				name: input.name,
+				contracts: [],
+			},
+			input.rulebook,
+			new EnvelopeRuleEngine(new EnvelopeSpecificationRegistry()),
+			new OperationRegistry(),
+		)
 	}
 
 	connection(peer: Peer): Connection {

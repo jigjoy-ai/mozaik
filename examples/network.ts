@@ -1,3 +1,4 @@
+import { Rulebook } from "@peer/rulebook"
 import { PeerDirectiveNetwork } from "@util/pdn"
 
 async function main() {
@@ -11,6 +12,7 @@ async function main() {
 		capabilities: ["message"],
 		role: "agent",
 		networkId: network.id,
+		rulebook: Rulebook.create([]),
 	})
 
 	const lotus = await pdn.createPeer({
@@ -18,6 +20,7 @@ async function main() {
 		capabilities: ["message"],
 		role: "agent",
 		networkId: network.id,
+		rulebook: Rulebook.create([]),
 	})
 
 	await mijura.join(network.id)

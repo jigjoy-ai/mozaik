@@ -15,9 +15,9 @@ export class OpenAIResponsesMapper implements InferenceEndpointMapper {
 		if (inferenceRequest.tools && inferenceRequest.tools.length > 0) {
 			request.tools = inferenceRequest.tools.map((tool) => ({
 				type: tool.type,
-				name: tool.name,
+				name: tool.id,
 				description: tool.description,
-				parameters: tool.parameters,
+				parameters: tool.inputSchema,
 			}))
 		}
 

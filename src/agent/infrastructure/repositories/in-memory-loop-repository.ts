@@ -1,5 +1,5 @@
 import { Loop } from "@agent/domain/loop/loop"
-import { LoopRepository } from "@agent/domain/loop/repository"
+import { LoopRepository } from "@agent/domain/loop/loop-repository"
 
 export class InMemoryLoopRepository implements LoopRepository {
 	private loops: Loop[] = []

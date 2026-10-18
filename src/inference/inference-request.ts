@@ -1,12 +1,12 @@
-import { Tool } from "@inference/tool"
 import { StructuredOutputFormat } from "@inference/request-validation/structured-output"
 import { Context } from "@inference/context"
+import { Contract } from "@peer/contract"
 
 export interface InferenceRequest {
 	model: string
 	maxOutputTokens?: number
 	reasoningEffort?: string
-	tools?: Tool[]
+	tools?: Contract[]
 	streaming?: boolean
 	structuredOutput?: StructuredOutputFormat
 	context: Context

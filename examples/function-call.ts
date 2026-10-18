@@ -1,52 +1,43 @@
-// export interface Situation {
-// 	readonly condition: Condition
-// 	readonly action: Action
-// }
+import "dotenv/config"
+import { initAgentModule } from "@agent/index"
+import { Contract } from "@peer/contract"
+import { Rulebook } from "@peer/rulebook"
 
-import { Directive } from "./directive"
-import { DirectiveExecutor } from "./directive-executor"
-import { DirectiveResult } from "./directive-result"
+initAgentModule()
 
-// export interface DirectiveExecutorRegistry<TInput, TOutput> {
-// 	register(directive: Directive): DirectiveExecutor<TInput, TOutput>
-// 	get(directive: Directive): DirectiveExecutor<TInput, TOutput>
-// 	list(): DirectiveExecutor<TInput, TOutput>[]
-// }
-
-export interface FunctionCallInput {
-	name: string
-	arguments: Record<string, unknown>
+const sendEmailContract: Contract = {
+	id: "send-email-fc",
+	type: "function",
+	description: "Send an email",
+	inputSchema: {
+		type: "object",
+		properties: {
+			subject: { type: "string" },
+			body: { type: "string" },
+			to: { type: "string" },
+		},
+	},
 }
 
-export interface FunctionCall extends Directive<FunctionCallInput> {
-	id: string
-	type: "function"
-	input: FunctionCallInput
-}
+const rulebook = Rulebook.create([
+	{
+		specificationId: "awaiting-request",
+		operationId: "request-preparation",
+	},
+	{
+		specificationId: "awaiting-inference",
+		operationId: "inference",
+	},
+	{
+		specificationId: "awaiting-tool-output",
+		operationId: "tool-use",
+	},
+	{
+		specificationId: "completed",
+		operationId: "complete",
+	},
+])
 
-export type FunctionCallOutput = unknown
-export interface FunctionCallResult extends DirectiveResult<FunctionCallOutput> {
-	directiveId: string
-	output: FunctionCallOutput
-}
+async function main(): Promise<void> {}
 
-export type FunctionCallExecutor = DirectiveExecutor<FunctionCallInput, FunctionCallOutput>
-
-export class SendEmailOperation implements Operation {
-	async invoke({ subject, body, to }: { subject: string; body: string; to: string }): Promise<{ success: boolean }> {
-		// TODO: Implement send email logic
-		return {
-			success: true,
-		}
-	}
-}
-
-export class LocalFunctionCallExecutor implements FunctionCallExecutor {
-	async execute(directive: FunctionCall, operation: Operation): Promise<FunctionCallResult> {
-		const output = await operation.invoke(directive.input.arguments)
-		return {
-			directiveId: directive.id,
-			output: output,
-		}
-	}
-}
+main()
