@@ -1,4 +1,4 @@
-export interface DirectiveResult<TOutput = unknown> {
+export interface DirectiveResult<TResult> {
 	directiveId: string
-	output: TOutput
+	result: TResult
 }

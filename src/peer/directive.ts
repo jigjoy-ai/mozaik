@@ -1,5 +1,4 @@
-export interface Directive<TInput = unknown> {
+export interface Directive {
 	id: string
-	contractId: string
-	input: TInput
+	invoke(input: unknown): Promise<unknown> | unknown
 }

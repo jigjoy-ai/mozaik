@@ -1,10 +1,7 @@
-import { Operation } from "@peer/operation"
 import { LoopRepository } from "@agent/domain/loop/loop-repository"
 import { Loop } from "@agent/domain/loop/loop"
 
-export class EndLoop implements Operation {
-	id: string = "end_loop"
-
+export class EndLoopUseCase {
 	constructor(private readonly loopRepository: LoopRepository) {}
 
 	async invoke(input: { loopId: string; modelMessage: string }): Promise<Loop> {
@@ -13,6 +10,7 @@ export class EndLoop implements Operation {
 			throw new Error("Loop not found")
 		}
 		loop.end()
+		await this.loopRepository.save(loop)
 		return loop
 	}
 }

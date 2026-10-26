@@ -1,6 +1,6 @@
-import { RuleDefinition, Rule } from "@peer/rule"
+import { Rule, RuleDefinition } from "@peer/rule"
 
-export class Rulebook {
+export class Policy {
 	private id: string
 	private rules: Rule[]
 
@@ -25,19 +25,20 @@ export class Rulebook {
 		return this.rules
 	}
 
-	static create(ruleDefinitions: RuleDefinition[]): Rulebook {
+	static create(ruleDefinitions: RuleDefinition[]): Policy {
 		const rules: Rule[] = []
 		for (const ruleDefinition of ruleDefinitions) {
 			const rule: Rule = {
 				id: crypto.randomUUID(),
-				specificationId: ruleDefinition.specificationId,
-				operationId: ruleDefinition.operationId,
+				specification: ruleDefinition.specification,
+				directive: ruleDefinition.directive,
+				inputResolver: ruleDefinition.inputResolver,
 				priority: ruleDefinition.priority,
 			}
 			rules.push(rule)
 		}
 
 		const id = crypto.randomUUID()
-		return new Rulebook(id, rules)
+		return new Policy(id, rules)
 	}
 }

@@ -1,41 +1,33 @@
 import { Peer } from "src/peer/peer"
 import { Connection } from "./connection"
-import { EnvelopeRuleEngine } from "@peer/envelope-rule-engine"
-import { OperationRegistry } from "@peer/operation-registry"
-import { Rulebook } from "@peer/rulebook"
-import { EnvelopeSpecificationRegistry } from "@peer/envelope-specification-registry"
-import { DirectiveProcessor } from "@peer/directive-processor"
+import { Policy } from "@peer/policy"
 
 export type Network = {
 	id: string
 }
 
-export type CreateNetworkInput = {
+export type CreateNetworkPayload = {
 	name: string
 }
 
-export type CreatePeerInput = {
+export type CreatePeerPayload = {
 	name: string
 	capabilities: string[]
 	networkId: string
 	role: "agent" | "user"
-	rulebook: Rulebook
+	policy: Policy
 }
 
 const origin = process.env.PDN_ORIGIN || "http://localhost:3000"
 
-export class PeerDirectiveNetwork {
+export class MozaikNetworkClient {
 	private readonly httpOrigin: string
 	private readonly wsUrl: string
-	private readonly operationRegistry: OperationRegistry
-	private readonly specificationRegistry: EnvelopeSpecificationRegistry
 
-	constructor(operationRegistry: OperationRegistry, specificationRegistry: EnvelopeSpecificationRegistry) {
+	constructor() {
 		const resolved = this.resolveOrigins(origin)
 		this.httpOrigin = resolved.httpOrigin
 		this.wsUrl = resolved.wsUrl
-		this.operationRegistry = operationRegistry
-		this.specificationRegistry = specificationRegistry
 	}
 
 	private resolveOrigins(origin: string): { httpOrigin: string; wsUrl: string } {
@@ -54,18 +46,13 @@ export class PeerDirectiveNetwork {
 		}
 	}
 
-	async createNetwork(input: CreateNetworkInput): Promise<Network> {
-		return this.post<Network>("/networks", input)
+	async createNetwork(payload: CreateNetworkPayload): Promise<Network> {
+		return this.post<Network>("/networks", payload)
 	}
 
-	async createPeer(input: CreatePeerInput): Promise<Peer> {
-		const response = await this.post<{ id: string }>("/peers", input)
-		return new Peer(
-			response.id,
-			input.rulebook,
-			new EnvelopeRuleEngine(this.specificationRegistry),
-			new DirectiveProcessor(this.operationRegistry),
-		)
+	async createPeer(payload: CreatePeerPayload): Promise<Peer> {
+		const response = await this.post<{ id: string }>("/peers", payload)
+		return new Peer(response.id, payload.policy)
 	}
 
 	connection(peer: Peer): Connection {

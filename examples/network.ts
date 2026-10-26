@@ -1,39 +1,35 @@
-import { Envelope } from "@peer/envelope"
-import { EnvelopeSpecification } from "@peer/envelope-specification"
-import { Rulebook } from "@peer/rulebook"
-import { PeerDirectiveNetwork } from "@util/pdn"
-import { EnvelopeSpecificationRegistry } from "@peer/envelope-specification-registry"
+import { Policy } from "@peer/policy"
+import { MozaikNetworkClient } from "@util/pdn"
 import "dotenv/config"
-import { operationRegistry } from "./operation-registry"
-import { specificationRegistry } from "./specification-registry"
 
-const rulebook = Rulebook.create([
+const policy = Policy.create([
 	{
-		specificationId: "message.sent",
-		operationId: "inference",
+		specification: "message.received",
+		inputResolver: "standard.llm.request",
+		directive: "inference",
 	},
 ])
 
 async function main() {
-	const pdn = new PeerDirectiveNetwork(operationRegistry, specificationRegistry)
-	const network = await pdn.createNetwork({ name: "my-network" })
+	const client = new MozaikNetworkClient()
+	const network = await client.createNetwork({ name: "my-network" })
 
 	console.log(`Network created: ${network.id}`)
 
-	const mijura = await pdn.createPeer({
+	const mijura = await client.createPeer({
 		name: "mijura",
 		capabilities: ["message"],
 		role: "agent",
 		networkId: network.id,
-		rulebook: Rulebook.create([]),
+		policy: Policy.create([]),
 	})
 
-	const lotus = await pdn.createPeer({
+	const lotus = await client.createPeer({
 		name: "lotus",
 		capabilities: ["message"],
 		role: "agent",
 		networkId: network.id,
-		rulebook,
+		policy,
 	})
 
 	await mijura.join(network.id)

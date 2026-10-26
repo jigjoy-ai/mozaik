@@ -1,19 +1,19 @@
-import { OperationRegistry } from "@peer/operation-registry"
-import { Directive } from "./directive"
+import { DirectiveRegistry } from "@peer/directive-registry"
+import { DirectiveDefinition } from "./directive-definition"
 import { DirectiveResult } from "./directive-result"
 
 export class DirectiveProcessor {
-	constructor(private readonly operationRegistry: OperationRegistry) {}
+	constructor(private readonly directiveRegistry: DirectiveRegistry) {}
 
-	async process(directive: Directive, operationId: string): Promise<DirectiveResult | undefined> {
-		const operation = this.operationRegistry.get(operationId)
-		if (!operation) {
+	async process(directiveDefinition: DirectiveDefinition<unknown>): Promise<DirectiveResult<unknown> | undefined> {
+		const directive = this.directiveRegistry.get(directiveDefinition.id)
+		if (!directive) {
 			return undefined
 		}
-		const output = await operation.invoke(directive.input)
+		const result = await directive.invoke(directiveDefinition.input)
 		return {
 			directiveId: directive.id,
-			output: output,
+			result: result,
 		}
 	}
 }

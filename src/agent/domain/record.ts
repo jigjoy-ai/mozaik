@@ -1,10 +1,10 @@
 import { Memory } from "@agent/domain/memory"
-import { Contract } from "@peer/contract"
+import { Tool } from "@inference/tool"
 
 export type AgentRecord = {
 	id: string
 	name: string
 	instruction: string
-	tools: Contract[]
+	tools: Tool[]
 	memory: Memory
 }

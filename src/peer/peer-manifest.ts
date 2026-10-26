@@ -1,7 +1,7 @@
-import { Contract } from "./contract"
+import { Tool } from "@inference/tool"
 
 export interface PeerManifest {
 	id: string
 	name: string
-	contracts: Contract[]
+	tools: Tool[]
 }

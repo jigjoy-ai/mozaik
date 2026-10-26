@@ -1,6 +1,5 @@
 import { Loop } from "@agent/domain/loop/loop"
 import { LoopRepository } from "@agent/domain/loop/loop-repository"
-import { Operation } from "@peer/operation"
 import { Context } from "@inference/context"
 
 export type StartLoopInput = {
@@ -8,9 +7,7 @@ export type StartLoopInput = {
 	subject: string
 }
 
-export class StartLoop implements Operation {
-	id: string = "start_loop"
-
+export class StartLoopUseCase {
 	constructor(private readonly loopRepository: LoopRepository) {}
 
 	async invoke(input: StartLoopInput): Promise<Loop> {

@@ -2,43 +2,38 @@ import { PendingOperation } from "@agent/domain/loop/operation"
 import { Envelope } from "./envelope"
 import { PeerManifest } from "./peer-manifest"
 import { Connection } from "@util/connection"
-import { Rulebook } from "./rulebook"
-import { EnvelopeRuleEngine } from "./envelope-rule-engine"
+import { Policy } from "./policy"
+import { RuleEngine } from "./rule-engine"
 import { DirectiveProcessor } from "./directive-processor"
 
 export type PeerRole = "agent" | "application" | "device"
 
 export class Peer {
 	readonly id: string
-	private rulebook: Rulebook
+	private policy: Policy
 	private connections: Map<string, Connection> = new Map()
-	private ruleEngine: EnvelopeRuleEngine
-	private directiveProcessor: DirectiveProcessor
 
 	constructor(
 		id: string,
 		//manifest: PeerManifest,
-		rulebook: Rulebook,
-		envelopeRuleEngine: EnvelopeRuleEngine,
-		directiveProcessor: DirectiveProcessor,
+		policy: Policy,
+		//ruleEngine: RuleEngine,
 	) {
 		this.id = id
-		this.rulebook = rulebook
-		this.ruleEngine = envelopeRuleEngine
-		this.directiveProcessor = directiveProcessor
+		this.policy = policy
 	}
 
 	async receive(envelope: Envelope<any>): Promise<void> {
 		console.log("Received envelope:", envelope)
-		const operationId = await this.ruleEngine.decide(this.rulebook, envelope)
-		console.log("Peer: operationId", operationId)
-		if (!operationId) {
-			return
-		}
+		// const operationId = await this.ruleEngine.decide(this.rulebook, envelope)
+		// console.log("Peer: operationId", operationId)
+		// if (!operationId) {
+		// 	return
+		// }
 
-		const directiveResult = await this.directiveProcessor.process(envelope.payload, operationId)
+		// const directiveResult = await this.directiveProcessor.process(envelope.payload, operationId)
 
-		await this.sendMessage(envelope.networkId, JSON.stringify(directiveResult))
+		// await this.sendMessage(envelope.networkId, JSON.stringify(directiveResult))
 	}
 
 	async join(networkId: string): Promise<void> {

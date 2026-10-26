@@ -4,8 +4,8 @@ import { InferenceRunner } from "@inference/inference-runner"
 import { AgentRepository } from "@agent/domain/agent-repository"
 import { LoopRepository } from "@agent/domain/loop/loop-repository"
 import { DirectiveProcessor } from "@peer/directive-processor"
-import { Contract } from "@peer/contract"
-import { RulebookRepository } from "../peer/rulebook-repository"
+import { PolicyRepository } from "../peer/policy-repository"
+import { Tool } from "@inference/tool"
 
 type InferenceRunnerConfig = {
 	supportedModels?: GenerativeModel[]
@@ -15,7 +15,7 @@ type InferenceRunnerConfig = {
 type AgentModuleConfig = {
 	agentRepository?: AgentRepository
 	agentLoopRepository?: LoopRepository
-	rulebookRepository?: RulebookRepository
+	policyRepository?: PolicyRepository
 	inferenceRunnerConfig?: InferenceRunnerConfig
 	directiveProcessor?: DirectiveProcessor
 	memoryFactory?: MemoryFactory
@@ -24,7 +24,7 @@ type AgentModuleConfig = {
 type AgentModule = {
 	agentRepository: AgentRepository
 	agentLoopRepository: LoopRepository
-	rulebookRepository: RulebookRepository
+	policyRepository: PolicyRepository
 	//inferenceRunner: InferenceRunner
 	directiveProcessor: DirectiveProcessor
 	memoryFactory: MemoryFactory
@@ -33,7 +33,7 @@ type AgentModule = {
 type CreateAgentParams = {
 	name: string
 	instruction: string
-	tools: Contract[]
+	tools: Tool[]
 }
 
 export type { InferenceRunnerConfig, AgentModuleConfig, AgentModule, CreateAgentParams }

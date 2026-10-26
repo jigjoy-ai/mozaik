@@ -1,11 +1,11 @@
 import { Context } from "@inference/context"
-import { Directive } from "@peer/directive"
+import { DirectiveDefinition } from "@peer/directive-definition"
 import { DirectiveResult } from "@peer/directive-result"
 
 export type LoopStateId = "idle" | "awaiting_result" | "completed" | "stopped" | "paused"
 
 interface PendingDirective {
-	directive: Directive
+	directive: DirectiveDefinition<unknown>
 	recipientId: string
 	issuedAt: Date
 }
@@ -36,7 +36,7 @@ export class Loop {
 		this.pendingDirective = pendingDirective
 	}
 
-	issueDirective(directive: Directive, recipientId: string): void {
+	issueDirective(directive: DirectiveDefinition<unknown>, recipientId: string): void {
 		if (this.pendingDirective) {
 			throw new Error("A directive is already pending")
 		}
@@ -48,7 +48,7 @@ export class Loop {
 		}
 	}
 
-	acceptResult(result: DirectiveResult): void {
+	acceptResult(result: DirectiveResult<unknown>): void {
 		if (this.pendingDirective?.directive.id !== result.directiveId) {
 			throw new Error("Result does not match the pending directive")
 		}
