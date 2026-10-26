@@ -4,7 +4,7 @@ import { DirectiveResult } from "./directive-result"
 export type Envelope<TPayload> = {
 	id: string
 	networkId: string
-	type: "directive" | "directive-result"
+	type: string
 	senderId: string
 	createdAt: Date
 	payload: TPayload

@@ -2,7 +2,7 @@ import { InMemoryAgentRepository } from "@agent/infrastructure/repositories/in-m
 import { InMemoryLoopRepository } from "@agent/infrastructure/repositories/in-memory-loop-repository"
 import { RuntimeMemoryFactory } from "./infrastructure/memory/runtime-memory-factory"
 import { AgentModule, AgentModuleConfig } from "@agent/types"
-import { DirectiveExecutor } from "@peer/directive-executor"
+import { DirectiveProcessor } from "@peer/directive-processor"
 import { OperationRegistry } from "@peer/operation-registry"
 import { InMemoryRulebookRepository } from "./infrastructure/repositories/in-memory-rulebook-repository"
 
@@ -21,7 +21,7 @@ function initAgentModule(config: AgentModuleConfig = {}) {
 
 	//operationRegistry.register("inference", inferenceRunner)
 
-	const directiveExecutor = config.directiveExecutor ?? new DirectiveExecutor(operationRegistry)
+	const directiveProcessor = config.directiveProcessor ?? new DirectiveProcessor(operationRegistry)
 
 	const memoryFactory = config.memoryFactory ?? new RuntimeMemoryFactory()
 
@@ -30,7 +30,7 @@ function initAgentModule(config: AgentModuleConfig = {}) {
 		agentLoopRepository,
 		rulebookRepository,
 		// inferenceRunner,
-		directiveExecutor,
+		directiveProcessor,
 		memoryFactory,
 	}
 }

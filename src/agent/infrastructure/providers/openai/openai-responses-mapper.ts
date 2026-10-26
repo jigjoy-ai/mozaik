@@ -1,7 +1,7 @@
 import type { InferenceRequest } from "@inference/inference-request"
 import type { InferenceResult } from "@inference/inference-result"
 import type { InferenceEndpointMapper } from "@inference/inference-endpoint-mapper"
-import type { ModelOutputItem, ReasoningItem, ToolUseRequest, ToolUseResult } from "@inference/context"
+import type { ModelOutputItem, ReasoningItem, ToolCallRequest, ToolCallResult } from "@inference/context"
 import { InputTokenDetails, OutputTokenDetails, TokenUsage } from "@inference/token-usage"
 import type OpenAI from "openai"
 
@@ -15,9 +15,9 @@ export class OpenAIResponsesMapper implements InferenceEndpointMapper {
 		if (inferenceRequest.tools && inferenceRequest.tools.length > 0) {
 			request.tools = inferenceRequest.tools.map((tool) => ({
 				type: tool.type,
-				name: tool.id,
+				name: tool.name,
 				description: tool.description,
-				parameters: tool.inputSchema,
+				parameters: tool.parameters,
 			}))
 		}
 
@@ -70,23 +70,23 @@ export class OpenAIResponsesMapper implements InferenceEndpointMapper {
 				continue
 			}
 
-			if (item.type === "tool_use_request") {
-				const toolUseRequest = item as ToolUseRequest
+			if (item.type === "tool_call_request") {
+				const toolCallRequest = item as ToolCallRequest
 				input.push({
 					type: "function_call",
-					call_id: toolUseRequest.requestId,
-					name: toolUseRequest.toolName,
-					arguments: toolUseRequest.toolArguments,
+					call_id: toolCallRequest.requestId,
+					name: toolCallRequest.toolName,
+					arguments: toolCallRequest.toolArguments,
 				})
 				continue
 			}
 
-			if (item.type === "tool_use_result") {
-				const toolUseResult = item as ToolUseResult
+			if (item.type === "tool_call_result") {
+				const toolCallResult = item as ToolCallResult
 				input.push({
 					type: "function_call_output",
-					call_id: toolUseResult.requestId,
-					output: [{ type: "input_text", text: toolUseResult.result.text }],
+					call_id: toolCallResult.requestId,
+					output: [{ type: "input_text", text: toolCallResult.result.text }],
 				})
 				continue
 			}
@@ -135,13 +135,13 @@ export class OpenAIResponsesMapper implements InferenceEndpointMapper {
 				continue
 			}
 			if (item.type === "function_call") {
-				const toolUseRequest: ToolUseRequest = {
-					type: "tool_use_request",
+				const toolCallRequest: ToolCallRequest = {
+					type: "tool_call_request",
 					requestId: item.call_id,
 					toolName: item.name,
 					toolArguments: item.arguments,
 				}
-				items.push(toolUseRequest)
+				items.push(toolCallRequest)
 				continue
 			}
 			if (item.type === "reasoning") {

@@ -3,7 +3,7 @@ import { GenerativeModel } from "@inference/generative-model"
 import { InferenceRunner } from "@inference/inference-runner"
 import { AgentRepository } from "@agent/domain/agent-repository"
 import { LoopRepository } from "@agent/domain/loop/loop-repository"
-import { DirectiveExecutor } from "@peer/directive-executor"
+import { DirectiveProcessor } from "@peer/directive-processor"
 import { Contract } from "@peer/contract"
 import { RulebookRepository } from "../peer/rulebook-repository"
 
@@ -17,7 +17,7 @@ type AgentModuleConfig = {
 	agentLoopRepository?: LoopRepository
 	rulebookRepository?: RulebookRepository
 	inferenceRunnerConfig?: InferenceRunnerConfig
-	directiveExecutor?: DirectiveExecutor
+	directiveProcessor?: DirectiveProcessor
 	memoryFactory?: MemoryFactory
 }
 
@@ -26,7 +26,7 @@ type AgentModule = {
 	agentLoopRepository: LoopRepository
 	rulebookRepository: RulebookRepository
 	//inferenceRunner: InferenceRunner
-	directiveExecutor: DirectiveExecutor
+	directiveProcessor: DirectiveProcessor
 	memoryFactory: MemoryFactory
 }
 

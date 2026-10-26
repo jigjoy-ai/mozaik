@@ -1,7 +1,7 @@
 import type { InferenceRequest } from "@inference/inference-request"
 import type { InferenceResult } from "@inference/inference-result"
 import type { InferenceEndpointMapper } from "@inference/inference-endpoint-mapper"
-import type { ModelOutputItem, ToolUseRequest, ToolUseResult } from "@inference/context"
+import type { ModelOutputItem, ToolCallRequest, ToolCallResult } from "@inference/context"
 import { InputTokenDetails, OutputTokenDetails, TokenUsage } from "@inference/token-usage"
 
 export class OpenAIChatCompletionsMapper implements InferenceEndpointMapper {
@@ -52,12 +52,12 @@ export class OpenAIChatCompletionsMapper implements InferenceEndpointMapper {
 				continue
 			}
 
-			if (item.type === "tool_use_request") {
-				const toolUseRequest = item as ToolUseRequest
+			if (item.type === "tool_call_request") {
+				const toolCallRequest = item as ToolCallRequest
 				const toolCall = {
-					id: toolUseRequest.requestId,
+					id: toolCallRequest.requestId,
 					type: "function",
-					function: { name: toolUseRequest.toolName, arguments: toolUseRequest.toolArguments },
+					function: { name: toolCallRequest.toolName, arguments: toolCallRequest.toolArguments },
 				}
 				const last = messages[messages.length - 1]
 				if (last?.role === "assistant") {
@@ -69,12 +69,12 @@ export class OpenAIChatCompletionsMapper implements InferenceEndpointMapper {
 				continue
 			}
 
-			if (item.type === "tool_use_result") {
-				const toolUseResult = item as ToolUseResult
+			if (item.type === "tool_call_result") {
+				const toolCallResult = item as ToolCallResult
 				messages.push({
 					role: "tool",
-					tool_call_id: toolUseResult.requestId,
-					content: toolUseResult.result.text,
+					tool_call_id: toolCallResult.requestId,
+					content: toolCallResult.result.text,
 				})
 			}
 		}
@@ -120,7 +120,7 @@ export class OpenAIChatCompletionsMapper implements InferenceEndpointMapper {
 
 		for (const toolCall of message.tool_calls ?? []) {
 			items.push({
-				type: "tool_use_request",
+				type: "tool_call_request",
 				requestId: toolCall.id,
 				toolName: toolCall.function.name,
 				toolArguments: toolCall.function.arguments,

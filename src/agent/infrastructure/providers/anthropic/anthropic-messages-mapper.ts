@@ -1,6 +1,6 @@
 import type { InferenceRequest } from "@inference/inference-request"
 import type { InferenceResult } from "@inference/inference-result"
-import type { ModelOutputItem, ReasoningItem, ToolUseRequest, ToolUseResult } from "@inference/context"
+import type { ModelOutputItem, ReasoningItem, ToolCallRequest, ToolCallResult } from "@inference/context"
 import type { InferenceEndpointMapper } from "@inference/inference-endpoint-mapper"
 import { InputTokenDetails, OutputTokenDetails, TokenUsage } from "@inference/token-usage"
 import type Anthropic from "@anthropic-ai/sdk"
@@ -96,29 +96,29 @@ export class AnthropicMessagesMapper implements InferenceEndpointMapper {
 				continue
 			}
 
-			if (item.type === "tool_use_request") {
-				const toolUseRequest = item as ToolUseRequest
+			if (item.type === "tool_call_request") {
+				const toolCallRequest = item as ToolCallRequest
 				let input: any
 				try {
-					input = JSON.parse(toolUseRequest.toolArguments)
+					input = JSON.parse(toolCallRequest.toolArguments)
 				} catch {
-					input = toolUseRequest.toolArguments
+					input = toolCallRequest.toolArguments
 				}
 				this.addContentBlock(messages, "assistant", {
-					type: "tool_use",
-					id: toolUseRequest.requestId,
-					name: toolUseRequest.toolName,
+					type: "tool_call_request",
+					id: toolCallRequest.requestId,
+					name: toolCallRequest.toolName,
 					input: input,
 				})
 				continue
 			}
 
-			if (item.type === "tool_use_result") {
-				const toolUseResult = item as ToolUseResult
+			if (item.type === "tool_call_result") {
+				const toolCallResult = item as ToolCallResult
 				this.addContentBlock(messages, "user", {
 					type: "tool_result",
-					tool_use_id: toolUseResult.requestId,
-					content: toolUseResult.result.text,
+					tool_call_id: toolCallResult.requestId,
+					content: toolCallResult.result.text,
 				})
 			}
 		}
@@ -155,9 +155,9 @@ export class AnthropicMessagesMapper implements InferenceEndpointMapper {
 				})
 				continue
 			}
-			if (block.type === "tool_use") {
+			if (block.type === "tool_call") {
 				items.push({
-					type: "tool_use_request",
+					type: "tool_call_request",
 					requestId: block.id,
 					toolName: block.name,
 					toolArguments: JSON.stringify(block.input ?? {}),

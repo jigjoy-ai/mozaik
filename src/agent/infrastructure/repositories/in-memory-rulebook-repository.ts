@@ -1,4 +1,4 @@
-import { Rulebook } from "@agent/domain/loop/rule"
+import { Rulebook } from "@peer/rulebook"
 import { RulebookRepository } from "@peer/rulebook-repository"
 
 export class InMemoryRulebookRepository implements RulebookRepository {

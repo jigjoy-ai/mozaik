@@ -1,5 +1,5 @@
-import type { FunctionTool } from "src/agent/domain/inference/tool"
-import { McpClient, type McpServerConfig } from "src/agent/domain/inference/mcp/mcp-client"
+import type { FunctionTool } from "@inference/tool"
+import { McpClient, type McpServerConfig } from "@inference/mcp/mcp-client"
 
 /** The slice of an MCP client the registry needs — lets tests inject a fake. */
 export interface McpClientLike {

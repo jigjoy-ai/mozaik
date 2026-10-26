@@ -1,7 +1,7 @@
 import { Envelope } from "./envelope"
 
 export abstract class EnvelopeSpecification {
-	abstract isSatisfiedBy(envelope: Envelope<any>): Promise<boolean>
+	abstract isSatisfiedBy(envelope: Envelope<any>): Promise<boolean> | boolean
 
 	and(other: EnvelopeSpecification): EnvelopeSpecification {
 		return new AndEnvelopeSpecification(this, other)

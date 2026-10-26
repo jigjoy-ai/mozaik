@@ -9,7 +9,7 @@ export class EnvelopeRuleEngine {
 		const satisfiedRules = []
 
 		for (const rule of rulebook.getRules()) {
-			const specification = this.specificationRegistry.getSpecification(rule.specificationId)
+			const specification = this.specificationRegistry.get(rule.specificationId)
 			if (specification?.isSatisfiedBy(envelope)) {
 				satisfiedRules.push(rule)
 			}

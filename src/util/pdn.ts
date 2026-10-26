@@ -4,6 +4,7 @@ import { EnvelopeRuleEngine } from "@peer/envelope-rule-engine"
 import { OperationRegistry } from "@peer/operation-registry"
 import { Rulebook } from "@peer/rulebook"
 import { EnvelopeSpecificationRegistry } from "@peer/envelope-specification-registry"
+import { DirectiveProcessor } from "@peer/directive-processor"
 
 export type Network = {
 	id: string
@@ -21,14 +22,20 @@ export type CreatePeerInput = {
 	rulebook: Rulebook
 }
 
+const origin = process.env.PDN_ORIGIN || "http://localhost:3000"
+
 export class PeerDirectiveNetwork {
 	private readonly httpOrigin: string
 	private readonly wsUrl: string
+	private readonly operationRegistry: OperationRegistry
+	private readonly specificationRegistry: EnvelopeSpecificationRegistry
 
-	constructor(origin = "http://localhost:3000") {
+	constructor(operationRegistry: OperationRegistry, specificationRegistry: EnvelopeSpecificationRegistry) {
 		const resolved = this.resolveOrigins(origin)
 		this.httpOrigin = resolved.httpOrigin
 		this.wsUrl = resolved.wsUrl
+		this.operationRegistry = operationRegistry
+		this.specificationRegistry = specificationRegistry
 	}
 
 	private resolveOrigins(origin: string): { httpOrigin: string; wsUrl: string } {
@@ -55,14 +62,9 @@ export class PeerDirectiveNetwork {
 		const response = await this.post<{ id: string }>("/peers", input)
 		return new Peer(
 			response.id,
-			{
-				id: response.id,
-				name: input.name,
-				contracts: [],
-			},
 			input.rulebook,
-			new EnvelopeRuleEngine(new EnvelopeSpecificationRegistry()),
-			new OperationRegistry(),
+			new EnvelopeRuleEngine(this.specificationRegistry),
+			new DirectiveProcessor(this.operationRegistry),
 		)
 	}
 

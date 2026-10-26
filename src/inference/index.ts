@@ -1,5 +1,5 @@
 export * from "@inference/context"
-export * from "@inference/tool-use-item-factory"
+export * from "@inference/tool-call-result-factory"
 export * from "@inference/inference-request"
 export * from "@inference/inference-result"
 export * from "@inference/inference-runner"

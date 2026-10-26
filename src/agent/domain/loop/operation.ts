@@ -1,4 +1,4 @@
-import { ToolUseRequest, ToolUseResult } from "@inference/context"
+import { ToolCallRequest, ToolCallResult } from "@inference/context"
 import { InferenceRequest } from "@inference/inference-request"
 import { InferenceResult } from "@inference/inference-result"
 
@@ -12,12 +12,12 @@ export type CompletedOperation =
 			result: InferenceResult
 	  }
 	| {
-			type: "tool_use"
+			type: "tool-call"
 			operationId: string
 			requestedAt: Date
 			completedAt: Date
-			call: ToolUseRequest
-			result: ToolUseResult
+			call: ToolCallRequest
+			result: ToolCallResult
 	  }
 
 export type PendingInference = {
@@ -31,7 +31,7 @@ export type PendingToolExecution = {
 	id: string
 	type: "tool_execution"
 	requestedAt: Date
-	call: ToolUseRequest
+	call: ToolCallRequest
 }
 
 export type PendingOperation = PendingInference | PendingToolExecution
