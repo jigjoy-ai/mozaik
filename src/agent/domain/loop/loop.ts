@@ -1,3 +1,4 @@
+import { Agent } from "@agent/index"
 import { Context } from "@inference/context"
 import { DirectiveDefinition } from "@peer/directive-definition"
 import { DirectiveResult } from "@peer/directive-result"
@@ -8,6 +9,11 @@ interface PendingDirective {
 	directive: DirectiveDefinition<unknown>
 	recipientId: string
 	issuedAt: Date
+}
+
+export type AgentLoop = {
+	agent: Agent
+	loop: Loop
 }
 
 export class Loop {
@@ -46,6 +52,10 @@ export class Loop {
 			recipientId,
 			issuedAt: new Date(),
 		}
+	}
+
+	getPendingDirective(): PendingDirective | undefined {
+		return this.pendingDirective
 	}
 
 	acceptResult(result: DirectiveResult<unknown>): void {

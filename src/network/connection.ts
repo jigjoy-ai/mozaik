@@ -1,6 +1,6 @@
 import { Envelope } from "@peer/envelope"
 import { Peer } from "@peer/peer"
-import { WebSocketTransport } from "@util/websocket-transport"
+import { WebSocketTransport } from "src/network/websocket-transport"
 
 export class Connection {
 	private readonly transport: WebSocketTransport
@@ -41,7 +41,7 @@ export class Connection {
 		this.transport.send(this.envelope(networkId, "message.send", message))
 	}
 
-	private envelope(networkId: string, type: string, payload: unknown): Envelope {
+	private envelope(networkId: string, type: string, payload: unknown): Envelope<unknown> {
 		return {
 			type,
 			payload,

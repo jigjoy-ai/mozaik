@@ -1,9 +1,9 @@
-import { RuleSpecification } from "@peer/rule-specification"
+import { ConditionSpecification } from "@peer/condition-specification"
 import { Envelope } from "@peer/envelope"
-import { Specification } from "@agent/agent-module"
+import { Condition } from "@agent/agent-module"
 
-@Specification({ name: "message.received" })
-export class MessageReceivedRule extends RuleSpecification {
+@Condition({ name: "message.received" })
+export class MessageReceivedCondition extends ConditionSpecification {
 	isSatisfiedBy(envelope: Envelope<any>) {
 		return envelope.type === "message"
 	}

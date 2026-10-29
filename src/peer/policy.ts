@@ -30,9 +30,9 @@ export class Policy {
 		for (const ruleDefinition of ruleDefinitions) {
 			const rule: Rule = {
 				id: crypto.randomUUID(),
-				specification: ruleDefinition.specification,
+				condition: ruleDefinition.condition,
+				input: ruleDefinition.input,
 				directive: ruleDefinition.directive,
-				inputResolver: ruleDefinition.inputResolver,
 				priority: ruleDefinition.priority,
 			}
 			rules.push(rule)

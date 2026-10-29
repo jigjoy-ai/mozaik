@@ -5,7 +5,7 @@ import { AgentRepository } from "@agent/domain/agent-repository"
 import { LoopRepository } from "@agent/domain/loop/loop-repository"
 import { DirectiveProcessor } from "@peer/directive-processor"
 import { PolicyRepository } from "../peer/policy-repository"
-import { Tool } from "@inference/tool"
+import { Tool, ToolDefinition } from "@inference/tool"
 
 type InferenceRunnerConfig = {
 	supportedModels?: GenerativeModel[]

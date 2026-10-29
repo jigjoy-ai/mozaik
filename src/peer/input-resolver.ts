@@ -1,5 +1,5 @@
-import { Agent } from "@agent/index"
+import { AgentLoop } from "@agent/domain/loop/loop"
 
 export interface InputResolver<T> {
-	resolve(agent: Agent): Promise<T>
+	resolve(agentLoop: AgentLoop): Promise<T>
 }

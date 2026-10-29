@@ -1,14 +1,10 @@
-export interface FunctionTool {
-	type: "function"
+export interface ToolDefinition {
 	name: string
 	description: string
-	parameters: Record<string, any>
+	parameters: Record<string, unknown>
 	strict: boolean
-	invoke: (args: any) => Promise<any> | any
 }
 
-export interface InternalTool<T extends string> {
-	type: T
+export interface Tool {
+	invoke: (args: Record<string, unknown>) => Promise<unknown> | unknown
 }
-
-export type Tool = FunctionTool

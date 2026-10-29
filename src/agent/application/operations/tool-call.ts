@@ -1,13 +1,12 @@
 import { Directive } from "@peer/directive"
 import { ToolCallRequest, ToolCallResult } from "@inference/context"
-import { Loop } from "@agent/domain/loop/loop"
 import { LoopRepository } from "@agent/domain/loop/loop-repository"
 import { ToolCallRunner } from "@inference/tool-call-runner"
 import { Tool } from "@inference/tool"
 import { DirectiveResult } from "@peer/directive-result"
 
 export class ToolCall implements Directive {
-	id: string = "tool-call"
+	id: string = "toolcall"
 
 	constructor(
 		private readonly loopRepository: LoopRepository,

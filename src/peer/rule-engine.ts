@@ -1,15 +1,15 @@
 import { Policy } from "@peer/policy"
-import { RuleSpecificationRegistry } from "./rule-specification-registry"
+import { RuleRegistry } from "./rule-registry"
 import { Envelope } from "./envelope"
 
 export class RuleEngine {
-	constructor(private readonly specificationRegistry: RuleSpecificationRegistry) {}
+	constructor(private readonly specificationRegistry: RuleRegistry) {}
 
 	async decide(policy: Policy, envelope: Envelope<any>): Promise<string | undefined> {
 		const satisfiedRules = []
 
 		for (const rule of policy.getRules()) {
-			const specification = this.specificationRegistry.get(rule.specification)
+			const specification = this.specificationRegistry.get(rule.condition)
 			if (specification?.isSatisfiedBy(envelope)) {
 				satisfiedRules.push(rule)
 			}

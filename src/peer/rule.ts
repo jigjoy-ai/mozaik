@@ -1,14 +1,14 @@
 export type RuleDefinition = {
-	specification: string
-	inputResolver: string
-	directive: string
+	condition: string
+	input: string
+	directive: string | any
 	priority?: number
 }
 
 export type Rule = {
 	id: string
-	specification: string
-	inputResolver: string
-	directive: string
+	condition: string
+	input: string
+	directive: string | any
 	priority?: number
 }

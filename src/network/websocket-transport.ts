@@ -48,13 +48,13 @@ export class WebSocketTransport {
 		return this.connectedPromise
 	}
 
-	onMessage(handler: (envelope: Envelope) => void): void {
+	onMessage(handler: (envelope: Envelope<unknown>) => void): void {
 		this.ensureSocket().addEventListener("message", (event) => {
-			handler(JSON.parse(event.data) as Envelope)
+			handler(JSON.parse(event.data) as Envelope<unknown>)
 		})
 	}
 
-	send(envelope: Envelope): void {
+	send(envelope: Envelope<unknown>): void {
 		const socket = this.ensureSocket()
 
 		if (socket.readyState !== WebSocket.OPEN) {

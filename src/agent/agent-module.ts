@@ -11,12 +11,12 @@ import { InferenceRequestValidator } from "@inference/request-validation/inferen
 import { Inference } from "./application/operations/inference"
 import { InputResolver } from "@peer/input-resolver"
 import { InputResolverRegistry } from "@peer/input-resolver-registry"
-import { RuleSpecificationRegistry } from "@peer/rule-specification-registry"
-import { RuleSpecification } from "@peer/rule-specification"
+import { RuleRegistry } from "@peer/rule-registry"
+import { ConditionSpecification } from "@peer/condition-specification"
 
 let module: AgentModule | undefined
 
-export const specificationRegistry = new RuleSpecificationRegistry()
+export const specificationRegistry = new RuleRegistry()
 export const inputResolverRegistry = new InputResolverRegistry()
 const directiveRegistry = new DirectiveRegistry()
 
@@ -51,7 +51,7 @@ function initAgentModule(config: AgentModuleConfig = {}) {
 	}
 }
 
-export function Resolver(options: { name: string }) {
+export function Input(options: { name: string }) {
 	return function <T extends new () => InputResolver<unknown>>(
 		ResolverClass: T,
 		_context: ClassDecoratorContext,
@@ -60,8 +60,8 @@ export function Resolver(options: { name: string }) {
 	}
 }
 
-export function Specification(options: { name: string }) {
-	return function <T extends new () => RuleSpecification>(
+export function Condition(options: { name: string }) {
+	return function <T extends new () => ConditionSpecification>(
 		SpecificationClass: T,
 		_context: ClassDecoratorContext,
 	): void {

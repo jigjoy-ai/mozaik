@@ -1,6 +1,7 @@
 import { Peer } from "src/peer/peer"
 import { Connection } from "./connection"
 import { Policy } from "@peer/policy"
+import { RuleDefinition } from "@peer/rule"
 
 export type Network = {
 	id: string
@@ -15,12 +16,12 @@ export type CreatePeerPayload = {
 	capabilities: string[]
 	networkId: string
 	role: "agent" | "user"
-	policy: Policy
+	policy: RuleDefinition[]
 }
 
-const origin = process.env.PDN_ORIGIN || "http://localhost:3000"
+const origin = process.env.NETWORK_ORIGIN || "http://localhost:3000"
 
-export class MozaikNetworkClient {
+export class NetworkClient {
 	private readonly httpOrigin: string
 	private readonly wsUrl: string
 
@@ -52,7 +53,17 @@ export class MozaikNetworkClient {
 
 	async createPeer(payload: CreatePeerPayload): Promise<Peer> {
 		const response = await this.post<{ id: string }>("/peers", payload)
-		return new Peer(response.id, payload.policy)
+
+		const policy = Policy.create(payload.policy)
+		return new Peer(
+			response.id,
+			{
+				id: response.id,
+				name: payload.name,
+				capabilities: payload.capabilities,
+			},
+			policy,
+		)
 	}
 
 	connection(peer: Peer): Connection {

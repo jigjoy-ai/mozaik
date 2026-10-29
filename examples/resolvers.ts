@@ -1,11 +1,12 @@
 import { InferenceRequest } from "@inference/index"
 import { InputResolver } from "@peer/input-resolver"
-import { Agent } from "@agent/index"
-import { Resolver } from "@agent/agent-module"
+import { AgentLoop } from "@agent/domain/loop/loop"
+import { Input } from "@agent/agent-module"
 
-@Resolver({ name: "standard.llm.request" })
+@Input({ name: "standard.request" })
 export class StandardInferenceRequest implements InputResolver<InferenceRequest> {
-	resolve(agent: Agent): Promise<InferenceRequest> {
+	resolve(agentLoop: AgentLoop): Promise<InferenceRequest> {
+		const { agent } = agentLoop
 		return Promise.resolve({
 			model: "gpt-5.5",
 			tools: agent.tools,
