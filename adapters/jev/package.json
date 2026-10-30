@@ -1,0 +1,45 @@
+{
+  "name": "mozaik-jev-adapter",
+  "version": "0.1.0",
+  "description": "Independent structured JEV arbitration for Mozaik",
+  "type": "module",
+  "license": "MIT",
+  "engines": {
+    "node": ">=22"
+  },
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE"
+  ],
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    }
+  },
+  "types": "./dist/index.d.ts",
+  "scripts": {
+    "build": "tsc -p tsconfig.build.json",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run",
+    "lint": "eslint src tests examples",
+    "spike": "tsx examples/spike.ts"
+  },
+  "dependencies": {
+    "@typesafe-ai/sdk": "0.7.0",
+    "zod": "4.3.6"
+  },
+  "peerDependencies": {
+    "@mozaik-ai/core": "4.1.0"
+  },
+  "devDependencies": {
+    "@mozaik-ai/core": "4.1.0",
+    "typescript": "5.9.3",
+    "tsx": "4.21.0",
+    "vitest": "3.2.4",
+    "@types/node": "22.15.30",
+    "eslint": "9.39.1",
+    "typescript-eslint": "8.61.0"
+  }
+}
