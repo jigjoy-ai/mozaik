@@ -23,8 +23,8 @@
     "build": "tsc -p tsconfig.build.json",
     "typecheck": "tsc --noEmit",
     "test": "vitest run",
-    "lint": "eslint src tests examples",
-    "spike": "tsx examples/spike.ts"
+    "lint": "eslint .",
+    "spike": "node --import tsx examples/spike.ts"
   },
   "dependencies": {
     "@typesafe-ai/sdk": "0.7.0",
