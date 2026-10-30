@@ -2,7 +2,7 @@ import {it,expect,vi} from 'vitest';
 import {z} from 'zod';
 import {TypeSafeClient} from '@typesafe-ai/sdk';
 import {TypeSafeJevAdapter,MockJevAdapter,mockFixtures} from '../src/providers.js';
-import {request} from './core.test.js';
+import {request} from './fixture.js';
 const config={stateSchema:z.object({}),proposalSchema:z.object({}),instructions:'Which proposal best matches the state?'};
 const response=(choice='candidate_0')=>({answers:{decision:{type:'choice',choice,confidence:0.42,probabilities:{candidate_0:0.8,abstain:0.2}}}});
 it('builds a single Choice and preserves real measurements',async()=>{
@@ -49,4 +49,28 @@ it.each(mockFixtures)('offline fixture %s is deterministic',async fixture=>{
  const r=await provider.arbitrate({...request,candidates:[...request.candidates,{...request.candidates[0],id:'b'}]});
  expect(r.source).toBe('mock');
  expect(r.status).toBe(fixture==='abstain'?'abstained':fixture==='error'||fixture==='malformed'?'error':fixture==='timeout'?'timeout':'selected');
+});
+it.each([
+ {...request,candidates:[]},
+ {...request,candidates:[request.candidates[0],request.candidates[0]]},
+ {...request,state:null},
+])('rejects invalid requests without invoking SDK',async input=>{
+ const systemOne=vi.fn(async()=>response());
+ const r=await new TypeSafeJevAdapter({...config,client:{systemOne}}).arbitrate(input as typeof request);
+ expect(r).toMatchObject({status:'error',errorCode:'invalid_request'});
+ expect(systemOne).not.toHaveBeenCalled();
+});
+it.each([
+ {type:'choice',choice:'candidate_0',confidence:2},
+ {type:'choice',choice:'candidate_0',probabilities:{candidate_0:0.9}},
+ {type:'choice',choice:'candidate_0',probabilities:{candidate_0:0.9,abstain:0.9}},
+ {type:'noul',choice:'candidate_0'},
+])('rejects malformed SDK measurements',async decision=>{
+ expect(await new TypeSafeJevAdapter({...config,client:{systemOne:async()=>({answers:{decision}})}}).arbitrate(request)).toMatchObject({status:'error',errorCode:'invalid_response'});
+});
+it('maps hostile candidate IDs without using them as SDK option names',async()=>{
+ const input={...request,candidates:[{...request.candidates[0],id:'__proto__'}]};
+ const r=await new TypeSafeJevAdapter({...config,client:{systemOne:async()=>response()}}).arbitrate(input);
+ expect(r.selectedCandidateId).toBe('__proto__');
+ expect(Object.hasOwn(r.probabilities!,'__proto__')).toBe(true);
 });

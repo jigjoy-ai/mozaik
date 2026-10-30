@@ -1,7 +1,7 @@
 import {describe,it,expect} from 'vitest';
 import {z} from 'zod';
 import {jsonSnapshot, requestSchema} from '../src/core.js';
-export const request = {requestId:'r',sessionId:'s',cycleId:'c',generation:0,stateVersion:0,state:{},candidates:[{id:'a',producerId:'A',label:'A',proposal:{}}]};
+import {request} from './fixture.js';
 describe('requests',()=>{
   const schema = requestSchema(z.object({}),z.object({}));
   it('accepts typed requests',()=>expect(schema.parse(request)).toEqual(request));
