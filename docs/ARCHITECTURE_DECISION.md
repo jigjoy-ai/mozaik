@@ -49,3 +49,28 @@ One Choice includes an abstain option. Confidence is returned by the SDK and is
 derived there from the distribution, not a safety guarantee or Noul probability.
 No live request is needed for verification; tests inject the official SDK client
 or its HTTP fetch boundary. Do not claim live service validation.
+
+## Verified implementation outcome
+
+The public-API spike ran successfully with published Mozaik 4.1.0. The dispatcher
+returned before asynchronous arbitration finished. The integration suite also
+uses two actual runLoop calls with a deterministic InferenceRunner and records
+overlapping start/end intervals before collecting proposals and arbitrating.
+
+Implementation uses a required isCurrent callback instead of an unbounded
+session-generation map. Session/cycle/request IDs are encoded as JSON tuples to
+avoid delimiter collisions. Pending tasks have a concurrency limit; there is no
+queue. Request and cycle idempotency is deliberately bounded by entry count and
+TTL. Durable exactly-once action execution belongs to the application.
+
+Generated SDK choice keys prevent user IDs from colliding with the abstain
+option. State is compact JSON text, preserving a JSON snapshot of state and
+candidate proposals. SDK uncertainty data is validated, never fabricated.
+The official SDK supports cancellation; the total deadline additionally drops
+late results from abort-ignoring injected clients. Such provider work retains
+a concurrency slot until it physically settles.
+
+Milestone validation includes offline provider/bridge tests, a real runtime
+spike, overlapping agent loops, TypeScript declarations, ESM package consumer
+installation, linting and build. No upstream issue/PR, push, npm publication,
+Intersection changes or live credentialed inference is part of this work.
