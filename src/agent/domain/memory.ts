@@ -1,4 +1,4 @@
-import type { ContextItem } from "@inference/context"
+import type { ContextItem } from "@agent/domain/inference/context"
 
 export interface Memory {
 	remember(items: ContextItem[], peerId: string): Promise<void>
