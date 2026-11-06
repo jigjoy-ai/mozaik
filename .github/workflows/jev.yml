@@ -1,0 +1,30 @@
+name: JEV adapter
+on:
+  push:
+    paths: ['adapters/jev/**', 'docs/**', '.github/workflows/jev.yml']
+  pull_request:
+    paths: ['adapters/jev/**', 'docs/**', '.github/workflows/jev.yml']
+permissions:
+  contents: read
+jobs:
+  offline:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node: [22, 24]
+    defaults:
+      run:
+        working-directory: adapters/jev
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node }}
+          cache: npm
+          cache-dependency-path: adapters/jev/package-lock.json
+      - run: npm ci --workspaces=false --ignore-scripts
+      - run: npm run check
+      - run: npm run spike
+      - run: npm run example:basic
+      - run: npm run example:traffic
+      - run: npm run verify:package

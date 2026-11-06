@@ -1,0 +1,64 @@
+{
+	"name": "mozaik-jev-adapter",
+	"version": "0.1.0",
+	"description": "Independent structured JEV arbitration for Mozaik",
+	"type": "module",
+	"license": "MIT",
+	"engines": {
+		"node": ">=22"
+	},
+	"files": [
+		"dist",
+		"README.md",
+		"LICENSE",
+		"CONTRIBUTING.md"
+	],
+	"exports": {
+		".": {
+			"types": "./dist/index.d.ts",
+			"import": "./dist/index.js"
+		},
+		"./providers": {
+			"types": "./dist/providers.d.ts",
+			"import": "./dist/providers.js"
+		}
+	},
+	"types": "./dist/index.d.ts",
+	"scripts": {
+		"build": "tsc -p tsconfig.build.json",
+		"typecheck": "tsc --noEmit",
+		"test": "vitest run",
+		"lint": "eslint .",
+		"spike": "node --import tsx examples/spike.ts",
+		"example:basic": "node --import tsx examples/basic.ts",
+		"example:concurrent": "node --import tsx examples/concurrent.ts",
+		"example:traffic": "node --import tsx examples/traffic.ts",
+		"verify:package": "npm run build && node scripts/verify-package.mjs",
+		"prepack": "npm run build",
+		"check": "npm run typecheck && npm run lint && npm test && npm run build",
+		"format": "prettier --write src tests examples scripts *.json *.js *.md",
+		"format:check": "prettier --check src tests examples scripts *.json *.js *.md"
+	},
+	"dependencies": {
+		"@typesafe-ai/sdk": "0.7.0",
+		"zod": "4.6.7"
+	},
+	"peerDependencies": {
+		"@mozaik-ai/core": "4.1.0"
+	},
+	"devDependencies": {
+		"@mozaik-ai/core": "4.1.0",
+		"@types/node": "22.15.30",
+		"eslint": "9.39.1",
+		"prettier": "3.7.4",
+		"tsx": "4.23.15",
+		"typescript": "5.9.3",
+		"typescript-eslint": "8.61.0",
+		"vitest": "4.1.12"
+	},
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/Bucov/mozaik-Jev-adapter.git",
+		"directory": "adapters/jev"
+	}
+}

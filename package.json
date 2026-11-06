@@ -1,5 +1,6 @@
 {
 	"name": "@mozaik-ai/core",
+	"workspaces": ["adapters/*"],
 	"version": "4.2.0-beta.18",
 	"description": "A TypeScript framework for building interoperable AI agents",
 	"main": "dist/index.js",
