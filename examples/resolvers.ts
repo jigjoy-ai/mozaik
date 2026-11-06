@@ -1,4 +1,4 @@
-import { InferenceRequest } from "@inference/index"
+import type { InferenceRequest } from "@agent/domain/inference/inference-request"
 import { InputResolver } from "@peer/input-resolver"
 import { AgentLoop } from "@agent/domain/loop/loop"
 import { Input } from "@agent/agent-module"

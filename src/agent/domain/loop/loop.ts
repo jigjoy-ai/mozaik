@@ -1,11 +1,11 @@
 import { Agent } from "@agent/index"
-import { Context } from "@inference/context"
+import type { Context } from "@agent/domain/inference/context"
 import { DirectiveDefinition } from "@peer/directive-definition"
 import { DirectiveResult } from "@peer/directive-result"
 
 export type LoopStateId = "idle" | "awaiting_result" | "completed" | "stopped" | "paused"
 
-interface PendingDirective {
+export interface PendingDirective {
 	directive: DirectiveDefinition<unknown>
 	recipientId: string
 	issuedAt: Date

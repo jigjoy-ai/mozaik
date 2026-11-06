@@ -1,5 +1,5 @@
-import { ToolCallRequest } from "@inference/context"
-import { InferenceRequest } from "@inference/inference-request"
+import type { ToolCallRequest } from "@agent/domain/inference/context"
+import type { InferenceRequest } from "@agent/domain/inference/inference-request"
 
 export type LoopControlDirective = InferenceDirective | ToolCallDirective | PauseLoopDirective | CompleteDirective
 

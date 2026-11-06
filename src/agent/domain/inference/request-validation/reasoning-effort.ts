@@ -1,6 +1,6 @@
-import type { RequestValidationRule } from "@inference/request-validation/rule"
-import type { ModelSpecification } from "@inference/generative-model"
-import { InferenceRequest } from "@inference/inference-request"
+import type { RequestValidationRule } from "@agent/domain/inference/request-validation/rule"
+import type { ModelSpecification } from "@agent/domain/inference/generative-model"
+import { InferenceRequest } from "@agent/domain/inference/inference-request"
 
 export class ReasoningEffortValidation implements RequestValidationRule {
 	readonly name = "reasoning-effort"

@@ -11,12 +11,16 @@ export type CreateNetworkPayload = {
 	name: string
 }
 
+export type BehaviorPolicyDefinition = {
+	rules: RuleDefinition[]
+}
+
 export type CreatePeerPayload = {
 	name: string
 	capabilities: string[]
 	networkId: string
 	role: "agent" | "user"
-	rules: RuleDefinition[]
+	policy: BehaviorPolicyDefinition
 }
 
 const origin = process.env.NETWORK_ORIGIN || "http://localhost:3000"
@@ -54,7 +58,7 @@ export class NetworkClient {
 	async createPeer(payload: CreatePeerPayload): Promise<Peer> {
 		const response = await this.post<{ id: string }>("/peers", payload)
 
-		const policy = BehaviorPolicy.create(payload.rules)
+		const policy = BehaviorPolicy.create(payload.policy)
 		return new Peer(
 			response.id,
 			{

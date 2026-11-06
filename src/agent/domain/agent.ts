@@ -1,6 +1,6 @@
 import { Memory } from "@agent/domain/memory"
 import { AgentRecord } from "@agent/domain/record"
-import { Tool } from "@inference/tool"
+import type { ToolDefinition } from "@agent/domain/inference/tool"
 import { UuidGenerator } from "@util/uuid-generator"
 
 export class Agent {
@@ -8,9 +8,9 @@ export class Agent {
 	private _name: string
 	private _instruction: string
 	private _memory: Memory
-	private _tools: Tool[]
+	private _tools: ToolDefinition[]
 
-	constructor(id: string, name: string, instruction: string, tools: Tool[], memory: Memory) {
+	constructor(id: string, name: string, instruction: string, tools: ToolDefinition[], memory: Memory) {
 		this._id = id
 		this._name = name
 		this._instruction = instruction
@@ -30,7 +30,7 @@ export class Agent {
 		return this._instruction
 	}
 
-	get tools(): Tool[] {
+	get tools(): ToolDefinition[] {
 		return this._tools
 	}
 
@@ -46,7 +46,7 @@ export class Agent {
 	}: {
 		name: string
 		instruction: string
-		tools: Tool[]
+		tools: ToolDefinition[]
 		memory: Memory
 	}): Agent {
 		const id = UuidGenerator.create()

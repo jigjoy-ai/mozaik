@@ -1,6 +1,6 @@
 import "dotenv/config"
 
-import type { ContextItem } from "@inference/context"
+import type { ContextItem } from "@agent/domain/inference/context"
 import { Mem0Factory } from "@agent/infrastructure/memory/mem0-memory-factory"
 
 async function main() {

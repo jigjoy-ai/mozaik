@@ -1,8 +1,8 @@
-import type { InferenceRequest } from "@inference/inference-request"
-import type { InferenceResult } from "@inference/inference-result"
-import type { InferenceEndpointMapper } from "@inference/inference-endpoint-mapper"
-import type { ModelOutputItem, ReasoningItem, ToolCallRequest, ToolCallResult } from "@inference/context"
-import { InputTokenDetails, OutputTokenDetails, TokenUsage } from "@inference/token-usage"
+import type { InferenceRequest } from "@agent/domain/inference/inference-request"
+import type { InferenceResult } from "@agent/domain/inference/inference-result"
+import type { InferenceEndpointMapper } from "@agent/domain/inference/inference-endpoint-mapper"
+import type { ModelOutputItem, ReasoningItem, ToolCallRequest, ToolCallResult } from "@agent/domain/inference/context"
+import { InputTokenDetails, OutputTokenDetails, TokenUsage } from "@agent/domain/inference/token-usage"
 import type OpenAI from "openai"
 
 export class OpenAIResponsesMapper implements InferenceEndpointMapper {
@@ -14,7 +14,7 @@ export class OpenAIResponsesMapper implements InferenceEndpointMapper {
 
 		if (inferenceRequest.tools && inferenceRequest.tools.length > 0) {
 			request.tools = inferenceRequest.tools.map((tool) => ({
-				type: tool.type,
+				type: "function",
 				name: tool.name,
 				description: tool.description,
 				parameters: tool.parameters,

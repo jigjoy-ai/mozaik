@@ -1,8 +1,8 @@
-import type { InferenceRequest } from "@inference/inference-request"
-import type { InferenceResult } from "@inference/inference-result"
-import type { InferenceEndpointMapper } from "@inference/inference-endpoint-mapper"
-import { InputTokenDetails, OutputTokenDetails, TokenUsage } from "@inference/token-usage"
-import type { ModelOutputItem, ToolUseRequest, ToolUseResult } from "@inference/context"
+import type { InferenceRequest } from "@agent/domain/inference/inference-request"
+import type { InferenceResult } from "@agent/domain/inference/inference-result"
+import type { InferenceEndpointMapper } from "@agent/domain/inference/inference-endpoint-mapper"
+import { InputTokenDetails, OutputTokenDetails, TokenUsage } from "@agent/domain/inference/token-usage"
+import type { ModelOutputItem, ToolCallRequest, ToolCallResult } from "@agent/domain/inference/context"
 
 export class GeminiGenerateContentMapper implements InferenceEndpointMapper {
 	toRequest(inferenceRequest: InferenceRequest) {
@@ -72,23 +72,23 @@ export class GeminiGenerateContentMapper implements InferenceEndpointMapper {
 				continue
 			}
 
-			if (item.type === "tool_use_request") {
-				const toolUseRequest = item as ToolUseRequest
-				callNames.set(toolUseRequest.requestId, toolUseRequest.toolName)
+			if (item.type === "tool_call_request") {
+				const toolCallRequest = item as ToolCallRequest
+				callNames.set(toolCallRequest.requestId, toolCallRequest.toolName)
 				let args: any
 				try {
-					args = JSON.parse(toolUseRequest.toolArguments)
+					args = JSON.parse(toolCallRequest.toolArguments)
 				} catch {
 					args = {}
 				}
 				this.addPart(contents, "model", {
-					functionCall: { id: toolUseRequest.requestId, name: toolUseRequest.toolName, args },
+					functionCall: { id: toolCallRequest.requestId, name: toolCallRequest.toolName, args },
 				})
 				continue
 			}
 
-			if (item.type === "tool_use_result") {
-				const toolUseResult = item as ToolUseResult
+			if (item.type === "tool_call_result") {
+				const toolUseResult = item as ToolCallResult
 				this.addPart(contents, "user", {
 					functionResponse: {
 						id: toolUseResult.requestId,
@@ -161,7 +161,7 @@ export class GeminiGenerateContentMapper implements InferenceEndpointMapper {
 			}
 			if (part.functionCall) {
 				items.push({
-					type: "tool_use_request",
+					type: "tool_call_request",
 					requestId: part.functionCall.id ?? "",
 					toolName: part.functionCall.name,
 					toolArguments: JSON.stringify(part.functionCall.args ?? {}),

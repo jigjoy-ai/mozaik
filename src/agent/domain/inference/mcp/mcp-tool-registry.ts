@@ -1,5 +1,5 @@
-import type { FunctionTool } from "@inference/tool"
-import { McpClient, type McpServerConfig } from "@inference/mcp/mcp-client"
+import type { ToolDefinition } from "@agent/domain/inference/tool"
+import { McpClient, type McpServerConfig } from "@agent/domain/inference/mcp/mcp-client"
 
 /** The slice of an MCP client the registry needs — lets tests inject a fake. */
 export interface McpClientLike {
@@ -26,8 +26,8 @@ export class McpToolRegistry {
 	) {}
 
 	/** Discover every tool across the configured servers, as FunctionTools ready to pass to a model. */
-	async discoverTools(): Promise<FunctionTool[]> {
-		const tools: FunctionTool[] = []
+	async discoverTools(): Promise<ToolDefinition[]> {
+		const tools: any[] = []
 		for (const server of this.servers) {
 			const client = this.createClient(server)
 			this.clients.push(client)

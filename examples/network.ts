@@ -13,7 +13,9 @@ async function main() {
 		capabilities: ["message"],
 		role: "user",
 		networkId: network.id,
-		policy: [],
+		policy: {
+			rules: [],
+		},
 	})
 
 	const lotus = await client.createPeer({
@@ -21,27 +23,20 @@ async function main() {
 		capabilities: ["message"],
 		role: "agent",
 		networkId: network.id,
-		policy: [
-			{
-				condition: "message.received",
-				input: "standard.request",
-				directive: {
-					type: "run_loop",
-					loop: [
-						{
-							condition: "awaiting_inference",
-							input: "standard.request",
-							directive: "inference",
-						},
-						{
-							condition: "awaiting_tool_call",
-							input: "standard.request",
-							directive: "tool_call",
-						},
-					],
+		policy: {
+			rules: [
+				{
+					condition: "message.received",
+					input: "standard.request",
+					directive: "mozaik_agent.run_loop",
 				},
-			},
-		],
+				{
+					condition: "tool_call.requested",
+					input: "standard.request",
+					directive: "tool_call",
+				},
+			],
+		},
 	})
 
 	await join(mijura, network.id)

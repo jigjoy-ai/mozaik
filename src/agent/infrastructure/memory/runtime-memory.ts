@@ -1,5 +1,5 @@
 import type { Memory } from "@agent/domain/memory"
-import type { Context, ContextItem } from "@inference/context"
+import type { Context, ContextItem } from "@agent/domain/inference/context"
 
 export class RuntimeMemory implements Memory {
 	private readonly context: Context

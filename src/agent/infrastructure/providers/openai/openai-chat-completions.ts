@@ -1,8 +1,8 @@
-import { InferenceRequest } from "@inference/inference-request"
-import { InferenceResult } from "@inference/inference-result"
+import { InferenceRequest } from "@agent/domain/inference/inference-request"
+import { InferenceResult } from "@agent/domain/inference/inference-result"
 import { SpaceEvent } from "@util/space-event"
-import type { InferenceEndpoint } from "@inference/inference-endpoint"
-import type { InferenceEndpointMapper } from "@inference/inference-endpoint-mapper"
+import type { InferenceEndpoint } from "@agent/domain/inference/inference-endpoint"
+import type { InferenceEndpointMapper } from "@agent/domain/inference/inference-endpoint-mapper"
 import { OpenAIChatCompletionsMapper } from "@agent/infrastructure/providers/openai/openai-chat-completions-mapper"
 import OpenAI from "openai"
 

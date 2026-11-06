@@ -25,7 +25,7 @@ import { claudeFable51Specification } from "@agent/infrastructure/providers/anth
 import { gemini35FlashLiteSpecification } from "@agent/infrastructure/providers/gemini/models/gemini-3-5-flash-lite"
 import { gemini38FlashSpecification } from "@agent/infrastructure/providers/gemini/models/gemini-3-8-flash"
 import { deepSeekFlashSpecification } from "@agent/infrastructure/providers/deepseek/models/deepseek-flash"
-import type { GenerativeModel } from "@inference/generative-model"
+import type { GenerativeModel } from "@agent/domain/inference/generative-model"
 
 export const supportedModels: GenerativeModel[] = [
 	{

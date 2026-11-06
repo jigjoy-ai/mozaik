@@ -1,4 +1,5 @@
 import { Rule, RuleDefinition } from "@peer/rule"
+import { BehaviorPolicyDefinition } from "src/network/network-client"
 
 export class BehaviorPolicy {
 	private id: string
@@ -25,9 +26,9 @@ export class BehaviorPolicy {
 		return this.rules
 	}
 
-	static create(ruleDefinitions: RuleDefinition[]): BehaviorPolicy {
+	static create(policyDefinition: BehaviorPolicyDefinition): BehaviorPolicy {
 		const rules: Rule[] = []
-		for (const ruleDefinition of ruleDefinitions) {
+		for (const ruleDefinition of policyDefinition.rules) {
 			const rule: Rule = {
 				id: crypto.randomUUID(),
 				condition: ruleDefinition.condition,

@@ -1,4 +1,4 @@
-import type { ModelSpecification } from "@inference/generative-model"
+import type { ModelSpecification } from "@agent/domain/inference/generative-model"
 
 export const gpt6LunaSpecification: ModelSpecification = {
 	name: "gpt-6-luna",

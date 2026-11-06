@@ -1,7 +1,7 @@
-import { CompletedOperation, PendingOperation } from "@agent/domain/loop/operation"
+import type { CompleteDirective } from "@agent/domain/loop/directive"
 import { LoopTransition } from "@agent/domain/loop/transition"
-import { InferenceRequest } from "@inference/inference-request"
-import { LoopStateId } from "@agent/domain/loop/loop"
+import type { InferenceRequest } from "@agent/domain/inference/inference-request"
+import { LoopStateId, PendingDirective } from "@agent/domain/loop/loop"
 
 export interface LoopRecord {
 	id: string
@@ -10,7 +10,7 @@ export interface LoopRecord {
 	createdAt: Date
 	state: LoopStateId
 	inferenceRequest?: InferenceRequest
-	pendingOperation?: PendingOperation
 	transitionHistory: LoopTransition[]
-	operationHistory: CompletedOperation[]
+	pendingDirective?: PendingDirective
+	//completedDirectives: CompletedDirective[]
 }

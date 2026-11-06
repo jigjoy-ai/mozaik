@@ -1,10 +1,10 @@
 import { Memory } from "@agent/domain/memory"
-import { Tool } from "@inference/tool"
+import type { ToolDefinition } from "@agent/domain/inference/tool"
 
 export type AgentRecord = {
 	id: string
 	name: string
 	instruction: string
-	tools: Tool[]
+	tools: ToolDefinition[]
 	memory: Memory
 }

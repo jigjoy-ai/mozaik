@@ -1,6 +1,6 @@
-import type { InferenceRequest } from "@inference/inference-request"
-import type { ModelSpecification } from "@inference/generative-model"
-import type { RequestValidationRule } from "@inference/request-validation/rule"
+import type { InferenceRequest } from "@agent/domain/inference/inference-request"
+import type { ModelSpecification } from "@agent/domain/inference/generative-model"
+import type { RequestValidationRule } from "@agent/domain/inference/request-validation/rule"
 
 export type StructuredOutputFormat = {
 	name?: string

@@ -4,10 +4,9 @@ import { RuntimeMemoryFactory } from "./infrastructure/memory/runtime-memory-fac
 import { AgentModule, AgentModuleConfig } from "@agent/types"
 import { DirectiveProcessor } from "@peer/directive-processor"
 import { DirectiveRegistry } from "@peer/directive-registry"
-import { InMemoryPolicyRepository } from "./infrastructure/repositories/in-memory-policy-repository"
 import { DefaultInferenceRunner } from "./application/runners/inference-runner"
 import { supportedModels } from "./infrastructure/providers/supported-models"
-import { InferenceRequestValidator } from "@inference/request-validation/inference-request-validator"
+import { InferenceRequestValidator } from "@agent/domain/inference/request-validation/inference-request-validator"
 import { Inference } from "./application/operations/inference"
 import { InputResolver } from "@peer/input-resolver"
 import { InputResolverRegistry } from "@peer/input-resolver-registry"
@@ -27,7 +26,6 @@ function initAgentModule(config: AgentModuleConfig = {}) {
 
 	const agentRepository = config.agentRepository ?? new InMemoryAgentRepository()
 	const agentLoopRepository = config.agentLoopRepository ?? new InMemoryLoopRepository()
-	const policyRepository = config.policyRepository ?? new InMemoryPolicyRepository()
 
 	const models = config.inferenceRunnerConfig?.supportedModels ?? supportedModels
 
@@ -44,7 +42,6 @@ function initAgentModule(config: AgentModuleConfig = {}) {
 	module = {
 		agentRepository,
 		agentLoopRepository,
-		policyRepository,
 		// inferenceRunner,
 		directiveProcessor,
 		memoryFactory,

@@ -1,8 +1,8 @@
-import type { InferenceRequest } from "@inference/inference-request"
-import type { InferenceResult } from "@inference/inference-result"
-import type { ModelOutputItem, ReasoningItem, ToolCallRequest, ToolCallResult } from "@inference/context"
-import type { InferenceEndpointMapper } from "@inference/inference-endpoint-mapper"
-import { InputTokenDetails, OutputTokenDetails, TokenUsage } from "@inference/token-usage"
+import type { InferenceRequest } from "@agent/domain/inference/inference-request"
+import type { InferenceResult } from "@agent/domain/inference/inference-result"
+import type { ModelOutputItem, ReasoningItem, ToolCallRequest, ToolCallResult } from "@agent/domain/inference/context"
+import type { InferenceEndpointMapper } from "@agent/domain/inference/inference-endpoint-mapper"
+import { InputTokenDetails, OutputTokenDetails, TokenUsage } from "@agent/domain/inference/token-usage"
 import type Anthropic from "@anthropic-ai/sdk"
 
 export class AnthropicMessagesMapper implements InferenceEndpointMapper {

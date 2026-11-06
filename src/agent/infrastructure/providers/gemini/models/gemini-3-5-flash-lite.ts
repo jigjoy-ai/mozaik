@@ -1,4 +1,4 @@
-import type { ModelSpecification } from "@inference/generative-model"
+import type { ModelSpecification } from "@agent/domain/inference/generative-model"
 
 export const gemini35FlashLiteSpecification: ModelSpecification = {
 	name: "gemini-3.5-flash-lite",

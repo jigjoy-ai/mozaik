@@ -1,10 +1,10 @@
 import { SpaceEvent } from "@util/space-event"
-import type { InferenceEndpoint } from "@inference/inference-endpoint"
-import type { InferenceRequest } from "@inference/inference-request"
-import type { InferenceResult } from "@inference/inference-result"
+import type { InferenceEndpoint } from "@agent/domain/inference/inference-endpoint"
+import type { InferenceRequest } from "@agent/domain/inference/inference-request"
+import type { InferenceResult } from "@agent/domain/inference/inference-result"
 import { AnthropicMessagesMapper } from "@agent/infrastructure/providers/anthropic/anthropic-messages-mapper"
 import Anthropic from "@anthropic-ai/sdk"
-import type { InferenceEndpointMapper } from "@inference/inference-endpoint-mapper"
+import type { InferenceEndpointMapper } from "@agent/domain/inference/inference-endpoint-mapper"
 
 export interface AnthropicConnectionConfig {
 	baseURL?: string
