@@ -1,4 +1,4 @@
-import { Rule, RuleDefinition } from "@peer/rule"
+import { Rule, RuleDefinition } from "@network/peer/rule"
 import { BehaviorPolicyDefinition } from "src/network/network-client"
 
 export class BehaviorPolicy {

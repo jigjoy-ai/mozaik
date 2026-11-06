@@ -17,7 +17,7 @@ export default defineConfig({
 		alias: {
 			"@agent": "./src/agent",
 			"@environment": "./src/environment",
-			"@inference": "./src/inference",
+			"@agent/domain/inference": "./src/inference",
 			"@providers": "./src/providers",
 			"@util": "./src/util",
 		},

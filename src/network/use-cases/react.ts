@@ -1,6 +1,6 @@
-import { Peer } from "@peer/peer"
+import { Peer } from "@network/peer/peer"
 import { ConnectionRegistry } from "../connection-registry"
-import { Envelope } from "@peer/envelope"
+import { Envelope } from "@network/peer/envelope"
 
 export class ReactToMessageUseCase {
 	constructor(private readonly connectionRegistry: ConnectionRegistry) {}

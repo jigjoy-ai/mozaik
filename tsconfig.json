@@ -13,8 +13,7 @@
 		"baseUrl": ".",
 		"paths": {
 			"@agent/*": ["src/agent/*"],
-			"@peer/*": ["src/peer/*"],
-			"@inference/*": ["src/inference/*"],
+			"@network/*": ["src/network/*"],
 			"@util/*": ["src/util/*"]
 		},
 		"esModuleInterop": true,

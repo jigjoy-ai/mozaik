@@ -1,4 +1,4 @@
-import { BehaviorPolicy } from "@peer/behavior-policy"
+import { BehaviorPolicy } from "@network/peer/behavior-policy"
 
 export interface BehaviorPolicyRepository {
 	findById(id: string): Promise<BehaviorPolicy | undefined>

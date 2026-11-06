@@ -1,6 +1,6 @@
 import { Loop } from "@agent/domain/loop/loop"
 import { LoopRepository } from "@agent/domain/loop/loop-repository"
-import { Context } from "@inference/context"
+import { Context } from "@agent/domain/inference/context"
 
 export type StartLoopInput = {
 	agentId: string

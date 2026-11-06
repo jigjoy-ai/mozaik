@@ -1,7 +1,7 @@
 import { Peer } from "src/peer/peer"
 import { Connection } from "./connection"
-import { BehaviorPolicy } from "@peer/behavior-policy"
-import { RuleDefinition } from "@peer/rule"
+import { BehaviorPolicy } from "@network/peer/behavior-policy"
+import { RuleDefinition } from "@network/peer/rule"
 
 export type Network = {
 	id: string

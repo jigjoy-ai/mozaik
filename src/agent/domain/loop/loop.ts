@@ -1,7 +1,7 @@
 import { Agent } from "@agent/index"
 import type { Context } from "@agent/domain/inference/context"
-import { DirectiveDefinition } from "@peer/directive-definition"
-import { DirectiveResult } from "@peer/directive-result"
+import { DirectiveDefinition } from "@network/peer/directive-definition"
+import { DirectiveResult } from "@network/peer/directive-result"
 
 export type LoopStateId = "idle" | "awaiting_result" | "completed" | "stopped" | "paused"
 

@@ -2,16 +2,16 @@ import { InMemoryAgentRepository } from "@agent/infrastructure/repositories/in-m
 import { InMemoryLoopRepository } from "@agent/infrastructure/repositories/in-memory-loop-repository"
 import { RuntimeMemoryFactory } from "./infrastructure/memory/runtime-memory-factory"
 import { AgentModule, AgentModuleConfig } from "@agent/types"
-import { DirectiveProcessor } from "@peer/directive-processor"
-import { DirectiveRegistry } from "@peer/directive-registry"
+import { DirectiveProcessor } from "@network/peer/directive-processor"
+import { DirectiveRegistry } from "@network/peer/directive-registry"
 import { DefaultInferenceRunner } from "./application/runners/inference-runner"
 import { supportedModels } from "./infrastructure/providers/supported-models"
 import { InferenceRequestValidator } from "@agent/domain/inference/request-validation/inference-request-validator"
 import { Inference } from "./application/operations/inference"
-import { InputResolver } from "@peer/input-resolver"
-import { InputResolverRegistry } from "@peer/input-resolver-registry"
-import { RuleRegistry } from "@peer/rule-registry"
-import { ConditionSpecification } from "@peer/condition-specification"
+import { InputResolver } from "@network/peer/input-resolver"
+import { InputResolverRegistry } from "@network/peer/input-resolver-registry"
+import { RuleRegistry } from "@network/peer/rule-registry"
+import { ConditionSpecification } from "@network/peer/condition-specification"
 
 let module: AgentModule | undefined
 

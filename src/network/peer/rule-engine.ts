@@ -1,4 +1,4 @@
-import { BehaviorPolicy } from "@peer/behavior-policy"
+import { BehaviorPolicy } from "@network/peer/behavior-policy"
 import { RuleRegistry } from "./rule-registry"
 import { Envelope } from "./envelope"
 

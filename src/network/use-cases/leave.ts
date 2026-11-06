@@ -1,4 +1,4 @@
-import { Peer } from "@peer/peer"
+import { Peer } from "@network/peer/peer"
 import { ConnectionRegistry } from "../connection-registry"
 
 export class LeaveNetworkUseCase {

@@ -1,7 +1,7 @@
-import { ToolCallRequest, ToolCallResult } from "@inference/context"
-import { ToolCallRunner } from "@inference/tool-call-runner"
-import { Tool } from "@inference/tool"
-import { ToolCallResultFactory } from "@inference/tool-call-result-factory"
+import { ToolCallRequest, ToolCallResult } from "@agent/domain/inference/context"
+import { ToolCallRunner } from "@agent/domain/inference/tool-call-runner"
+import { Tool } from "@agent/domain/inference/tool"
+import { ToolCallResultFactory } from "@agent/domain/inference/tool-call-result-factory"
 
 export class LocalToolRunner implements ToolCallRunner {
 	async run(input: ToolCallRequest, tool: Tool): Promise<ToolCallResult> {

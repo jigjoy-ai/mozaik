@@ -1,4 +1,4 @@
-import { Envelope } from "@peer/envelope"
+import { Envelope } from "@network/peer/envelope"
 
 export class WebSocketTransport {
 	private socket: WebSocket | null = null

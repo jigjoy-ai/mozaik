@@ -1,5 +1,5 @@
-import { Envelope } from "@peer/envelope"
-import { Peer } from "@peer/peer"
+import { Envelope } from "@network/peer/envelope"
+import { Peer } from "@network/peer/peer"
 import { WebSocketTransport } from "src/network/websocket-transport"
 
 export class Connection {

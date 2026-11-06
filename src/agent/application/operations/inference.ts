@@ -1,9 +1,9 @@
-import { InferenceResult } from "@inference/inference-result"
-import { Directive } from "@peer/directive"
+import { InferenceResult } from "@agent/domain/inference/inference-result"
+import { Directive } from "@network/peer/directive"
 import { LoopRepository } from "@agent/domain/loop/loop-repository"
-import { DirectiveResult } from "@peer/directive-result"
-import { InferenceRunner } from "@inference/inference-runner"
-import { InferenceRequest } from "@inference/index"
+import { DirectiveResult } from "@network/peer/directive-result"
+import { InferenceRunner } from "@agent/domain/inference/inference-runner"
+import { InferenceRequest } from "@agent/domain/inference/inference-request"
 
 export class Inference implements Directive {
 	id: string = "inference"

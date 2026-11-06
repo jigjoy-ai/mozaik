@@ -1,10 +1,10 @@
 import { JoinNetworkUseCase } from "./use-cases/join"
 import { ConnectionRegistry } from "./connection-registry"
-import { Peer } from "@peer/peer"
+import { Peer } from "@network/peer/peer"
 import { LeaveNetworkUseCase } from "./use-cases/leave"
 import { SendMessageUseCase } from "./use-cases/send-message"
 import { ReactToMessageUseCase } from "./use-cases/react"
-import { Envelope } from "@peer/envelope"
+import { Envelope } from "@network/peer/envelope"
 
 const connectionRegistry = new ConnectionRegistry()
 

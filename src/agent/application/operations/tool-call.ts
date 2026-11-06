@@ -1,9 +1,9 @@
-import { Directive } from "@peer/directive"
-import { ToolCallRequest, ToolCallResult } from "@inference/context"
+import { Directive } from "@network/peer/directive"
+import { ToolCallRequest, ToolCallResult } from "@agent/domain/inference/context"
 import { LoopRepository } from "@agent/domain/loop/loop-repository"
-import { ToolCallRunner } from "@inference/tool-call-runner"
-import { Tool } from "@inference/tool"
-import { DirectiveResult } from "@peer/directive-result"
+import { ToolCallRunner } from "@agent/domain/inference/tool-call-runner"
+import { Tool } from "@agent/domain/inference/tool"
+import { DirectiveResult } from "@network/peer/directive-result"
 
 export class ToolCall implements Directive {
 	id: string = "toolcall"

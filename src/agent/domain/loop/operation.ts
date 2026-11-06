@@ -1,6 +1,6 @@
-// import { ToolCallRequest, ToolCallResult } from "@inference/context"
-// import { InferenceRequest } from "@inference/inference-request"
-// import { InferenceResult } from "@inference/inference-result"
+// import { ToolCallRequest, ToolCallResult } from "@agent/domain/inference/context"
+// import { InferenceRequest } from "@agent/domain/inference/inference-request"
+// import { InferenceResult } from "@agent/domain/inference/inference-result"
 
 // export type CompletedOperation =
 // 	| {

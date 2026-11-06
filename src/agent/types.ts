@@ -3,7 +3,7 @@ import { GenerativeModel } from "@agent/domain/inference/generative-model"
 import { InferenceRunner } from "@agent/domain/inference/inference-runner"
 import { AgentRepository } from "@agent/domain/agent-repository"
 import { LoopRepository } from "@agent/domain/loop/loop-repository"
-import { DirectiveProcessor } from "@peer/directive-processor"
+import { DirectiveProcessor } from "@network/peer/directive-processor"
 import { ToolDefinition } from "@agent/domain/inference/tool"
 
 type InferenceRunnerConfig = {

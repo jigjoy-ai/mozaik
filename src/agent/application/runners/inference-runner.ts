@@ -1,8 +1,8 @@
-import type { InferenceRunner } from "@inference/inference-runner"
-import type { InferenceRequest } from "@inference/inference-request"
-import type { InferenceResult } from "@inference/inference-result"
-import type { InferenceRequestValidator } from "@inference/request-validation/inference-request-validator"
-import { GenerativeModel } from "@inference/generative-model"
+import type { InferenceRunner } from "@agent/domain/inference/inference-runner"
+import type { InferenceRequest } from "@agent/domain/inference/inference-request"
+import type { InferenceResult } from "@agent/domain/inference/inference-result"
+import type { InferenceRequestValidator } from "@agent/domain/inference/request-validation/inference-request-validator"
+import { GenerativeModel } from "@agent/domain/inference/generative-model"
 import { SpaceEvent } from "@util/space-event"
 
 export type InferenceCompletedParams = { answer: string; producerId: string; price?: number }

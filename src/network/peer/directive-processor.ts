@@ -1,4 +1,4 @@
-import { DirectiveRegistry } from "@peer/directive-registry"
+import { DirectiveRegistry } from "@network/peer/directive-registry"
 import { DirectiveDefinition } from "./directive-definition"
 import { DirectiveResult } from "./directive-result"
 
