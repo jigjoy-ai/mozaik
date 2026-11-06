@@ -1,5 +1,5 @@
-import { Policy } from "@peer/policy"
-import { PolicyRepository } from "@peer/policy-repository"
+import { Policy } from "@peer/behavior-policy"
+import { PolicyRepository } from "@peer/behavior-policy-repository"
 
 export class InMemoryPolicyRepository implements PolicyRepository {
 	private readonly policies: Map<string, Policy> = new Map()

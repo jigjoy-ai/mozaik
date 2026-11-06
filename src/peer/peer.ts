@@ -1,5 +1,5 @@
 import { Envelope } from "./envelope"
-import { Policy } from "./policy"
+import { BehaviorPolicy } from "./behavior-policy"
 import { PeerManifest } from "./peer-manifest"
 import { reactToMessage } from "src/network"
 
@@ -7,10 +7,10 @@ export type PeerRole = "agent" | "application" | "device"
 
 export class Peer {
 	readonly id: string
-	private policy: Policy
+	private policy: BehaviorPolicy
 	private manifest: PeerManifest
 
-	constructor(id: string, manifest: PeerManifest, policy: Policy) {
+	constructor(id: string, manifest: PeerManifest, policy: BehaviorPolicy) {
 		this.id = id
 		this.policy = policy
 		this.manifest = manifest

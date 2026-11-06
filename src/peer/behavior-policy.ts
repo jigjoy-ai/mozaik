@@ -1,6 +1,6 @@
 import { Rule, RuleDefinition } from "@peer/rule"
 
-export class Policy {
+export class BehaviorPolicy {
 	private id: string
 	private rules: Rule[]
 
@@ -25,7 +25,7 @@ export class Policy {
 		return this.rules
 	}
 
-	static create(ruleDefinitions: RuleDefinition[]): Policy {
+	static create(ruleDefinitions: RuleDefinition[]): BehaviorPolicy {
 		const rules: Rule[] = []
 		for (const ruleDefinition of ruleDefinitions) {
 			const rule: Rule = {
@@ -39,6 +39,6 @@ export class Policy {
 		}
 
 		const id = crypto.randomUUID()
-		return new Policy(id, rules)
+		return new BehaviorPolicy(id, rules)
 	}
 }

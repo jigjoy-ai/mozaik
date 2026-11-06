@@ -1,11 +1,11 @@
-import { Policy } from "@peer/policy"
+import { BehaviorPolicy } from "@peer/behavior-policy"
 import { RuleRegistry } from "./rule-registry"
 import { Envelope } from "./envelope"
 
 export class RuleEngine {
 	constructor(private readonly specificationRegistry: RuleRegistry) {}
 
-	async decide(policy: Policy, envelope: Envelope<any>): Promise<string | undefined> {
+	async decide(policy: BehaviorPolicy, envelope: Envelope<any>): Promise<string | undefined> {
 		const satisfiedRules = []
 
 		for (const rule of policy.getRules()) {
