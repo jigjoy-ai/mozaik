@@ -1,15 +1,8 @@
 import { Agent } from "@agent/index"
 import type { Context } from "@agent/domain/inference/context"
-import { DirectiveDefinition } from "@network/peer/directive-definition"
-import { DirectiveResult } from "@network/peer/directive-result"
+import { CompletedOperation, PendingOperation } from "./operation"
 
 export type LoopStateId = "idle" | "awaiting_result" | "completed" | "stopped" | "paused"
-
-export interface PendingDirective {
-	directive: DirectiveDefinition<unknown>
-	recipientId: string
-	issuedAt: Date
-}
 
 export type AgentLoop = {
 	agent: Agent
@@ -22,9 +15,8 @@ export class Loop {
 	assignee: string
 	state: LoopStateId
 	context: Context
-	private pendingDirective?: PendingDirective
-
-	// private history: Directive | DirectiveResult[] = []
+	pendingOperation: PendingOperation | undefined
+	completedOperations: CompletedOperation[]
 
 	constructor(
 		id: string,
@@ -32,39 +24,37 @@ export class Loop {
 		assignee: string,
 		context: Context,
 		state: LoopStateId,
-		pendingDirective?: PendingDirective,
+		pendingOperation: PendingOperation | undefined,
+		completedOperations: CompletedOperation[] = [],
 	) {
 		this.id = id
 		this.goal = goal
 		this.assignee = assignee
 		this.context = context
 		this.state = state
-		this.pendingDirective = pendingDirective
+		this.pendingOperation = pendingOperation
+		this.completedOperations = completedOperations
 	}
 
-	issueDirective(directive: DirectiveDefinition<unknown>, recipientId: string): void {
-		if (this.pendingDirective) {
-			throw new Error("A directive is already pending")
+	issueOperation(operation: PendingOperation): void {
+		if (this.pendingOperation) {
+			throw new Error("An operation is already pending")
 		}
 
-		this.pendingDirective = {
-			directive,
-			recipientId,
-			issuedAt: new Date(),
-		}
+		this.pendingOperation = operation
 	}
 
-	getPendingDirective(): PendingDirective | undefined {
-		return this.pendingDirective
+	getPendingOperation(): PendingOperation | undefined {
+		return this.pendingOperation
 	}
 
-	acceptResult(result: DirectiveResult<unknown>): void {
-		if (this.pendingDirective?.directive.id !== result.directiveId) {
+	acceptResult(result: CompletedOperation): void {
+		if (this.pendingOperation?.id !== result.operationId) {
 			throw new Error("Result does not match the pending directive")
 		}
 
-		// Record or apply the result before clearing the pending directive.
-		this.pendingDirective = undefined
+		this.pendingOperation = undefined
+		this.completedOperations.push(result)
 	}
 
 	handoff(recipientId: string): void {

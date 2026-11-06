@@ -29,7 +29,14 @@ export class Inference implements Directive {
 			directiveId: input.directiveId,
 			result: inferenceResult,
 		}
-		loop.acceptResult(directiveResult)
+		loop.acceptResult({
+			type: "inference",
+			operationId: input.directiveId,
+			requestedAt: new Date(),
+			completedAt: new Date(),
+			request: input.request,
+			result: inferenceResult,
+		})
 		return directiveResult
 	}
 }

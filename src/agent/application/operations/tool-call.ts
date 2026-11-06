@@ -30,7 +30,14 @@ export class ToolCall implements Directive {
 			directiveId: input.directiveId,
 			result: result,
 		}
-		loop.acceptResult(directiveResult)
+		loop.acceptResult({
+			type: "tool-call",
+			operationId: input.directiveId,
+			requestedAt: new Date(),
+			completedAt: new Date(),
+			call: input.request,
+			result: result,
+		})
 
 		return directiveResult
 	}
