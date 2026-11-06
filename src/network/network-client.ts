@@ -1,4 +1,4 @@
-import { Peer } from "src/peer/peer"
+import { Peer } from "@network/peer/peer"
 import { Connection } from "./connection"
 import { BehaviorPolicy } from "@network/peer/behavior-policy"
 import { RuleDefinition } from "@network/peer/rule"
