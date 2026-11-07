@@ -1,5 +1,5 @@
-import { TokenUsage } from "./token-usage"
-import { ModelOutputItem } from "./context"
+import { TokenUsage } from "@agent/domain/inference/token-usage"
+import { ModelOutputItem } from "@agent/domain/inference/context"
 
 export type InferenceResult = {
 	items: ModelOutputItem[]

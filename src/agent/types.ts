@@ -3,7 +3,6 @@ import { GenerativeModel } from "@agent/domain/inference/generative-model"
 import { InferenceRunner } from "@agent/domain/inference/inference-runner"
 import { AgentRepository } from "@agent/domain/agent-repository"
 import { LoopRepository } from "@agent/domain/loop/loop-repository"
-import { DirectiveProcessor } from "@network/peer/directive-processor"
 import { ToolDefinition } from "@agent/domain/inference/tool"
 
 type InferenceRunnerConfig = {
@@ -15,7 +14,6 @@ type AgentModuleConfig = {
 	agentRepository?: AgentRepository
 	agentLoopRepository?: LoopRepository
 	inferenceRunnerConfig?: InferenceRunnerConfig
-	directiveProcessor?: DirectiveProcessor
 	memoryFactory?: MemoryFactory
 }
 
@@ -23,7 +21,6 @@ type AgentModule = {
 	agentRepository: AgentRepository
 	agentLoopRepository: LoopRepository
 	//inferenceRunner: InferenceRunner
-	directiveProcessor: DirectiveProcessor
 	memoryFactory: MemoryFactory
 }
 

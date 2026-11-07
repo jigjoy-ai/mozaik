@@ -1,6 +1,6 @@
 import { Agent } from "@agent/index"
 import type { Context } from "@agent/domain/inference/context"
-import { CompletedOperation, PendingOperation } from "./operation"
+import { CompletedOperation, PendingOperation } from "@agent/domain/loop/operation"
 
 export type LoopStateId = "idle" | "awaiting_result" | "completed" | "stopped" | "paused"
 

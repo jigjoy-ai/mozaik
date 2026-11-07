@@ -1,4 +1,4 @@
-import { Tool } from "./tool"
+import { Tool } from "@agent/domain/inference/tool"
 
 export class ToolRegistry {
 	private tools: Map<string, Tool> = new Map()

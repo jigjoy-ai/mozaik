@@ -1,7 +1,7 @@
 import { LoopTransition } from "@agent/domain/loop/transition"
 import type { InferenceRequest } from "@agent/domain/inference/inference-request"
 import { LoopStateId } from "@agent/domain/loop/loop"
-import { CompletedOperation, PendingOperation } from "./operation"
+import { CompletedOperation, PendingOperation } from "@agent/domain/loop/operation"
 
 export interface LoopRecord {
 	id: string

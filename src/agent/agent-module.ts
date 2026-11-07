@@ -1,23 +1,13 @@
 import { InMemoryAgentRepository } from "@agent/infrastructure/repositories/in-memory-agent-repository"
 import { InMemoryLoopRepository } from "@agent/infrastructure/repositories/in-memory-loop-repository"
-import { RuntimeMemoryFactory } from "./infrastructure/memory/runtime-memory-factory"
+import { RuntimeMemoryFactory } from "@agent/infrastructure/memory/runtime-memory-factory"
 import { AgentModule, AgentModuleConfig } from "@agent/types"
-import { DirectiveProcessor } from "@network/peer/directive-processor"
-import { DirectiveRegistry } from "@network/peer/directive-registry"
-import { DefaultInferenceRunner } from "./application/runners/inference-runner"
-import { supportedModels } from "./infrastructure/providers/supported-models"
+import { DefaultInferenceRunner } from "@agent/application/runners/inference-runner"
+import { supportedModels } from "@agent/infrastructure/providers/supported-models"
 import { InferenceRequestValidator } from "@agent/domain/inference/request-validation/inference-request-validator"
-import { Inference } from "./application/operations/inference"
-import { InputResolver } from "@network/peer/input-resolver"
-import { InputResolverRegistry } from "@network/peer/input-resolver-registry"
-import { RuleRegistry } from "@network/peer/rule-registry"
-import { ConditionSpecification } from "@network/peer/condition-specification"
+import { Inference } from "@agent/application/operations/inference"
 
 let module: AgentModule | undefined
-
-export const specificationRegistry = new RuleRegistry()
-export const inputResolverRegistry = new InputResolverRegistry()
-const directiveRegistry = new DirectiveRegistry()
 
 function initAgentModule(config: AgentModuleConfig = {}) {
 	if (module) {
@@ -33,9 +23,6 @@ function initAgentModule(config: AgentModuleConfig = {}) {
 
 	const loopRepository = new InMemoryLoopRepository()
 	const inferenceOperation = new Inference(loopRepository, inferenceRunner)
-	directiveRegistry.register("inference", inferenceOperation)
-
-	const directiveProcessor = config.directiveProcessor ?? new DirectiveProcessor(directiveRegistry)
 
 	const memoryFactory = config.memoryFactory ?? new RuntimeMemoryFactory()
 
@@ -43,26 +30,7 @@ function initAgentModule(config: AgentModuleConfig = {}) {
 		agentRepository,
 		agentLoopRepository,
 		// inferenceRunner,
-		directiveProcessor,
 		memoryFactory,
-	}
-}
-
-export function Input(options: { name: string }) {
-	return function <T extends new () => InputResolver<unknown>>(
-		ResolverClass: T,
-		_context: ClassDecoratorContext,
-	): void {
-		inputResolverRegistry.register(options.name, new ResolverClass())
-	}
-}
-
-export function Condition(options: { name: string }) {
-	return function <T extends new () => ConditionSpecification>(
-		SpecificationClass: T,
-		_context: ClassDecoratorContext,
-	): void {
-		specificationRegistry.register(options.name, new SpecificationClass())
 	}
 }
 

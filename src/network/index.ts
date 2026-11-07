@@ -5,6 +5,11 @@ import { LeaveNetworkUseCase } from "./use-cases/leave"
 import { SendMessageUseCase } from "./use-cases/send-message"
 import { ReactToMessageUseCase } from "./use-cases/react"
 import { Envelope } from "@network/peer/envelope"
+import { ConditionSpecification } from "./peer/condition-specification"
+import { InputResolver } from "./peer/input-resolver"
+import { DirectiveRegistry } from "./peer/directive-registry"
+import { InputResolverRegistry } from "./peer/input-resolver-registry"
+import { RuleRegistry } from "./peer/rule-registry"
 
 const connectionRegistry = new ConnectionRegistry()
 
@@ -26,4 +31,31 @@ export function sendMessage(peer: Peer, networkId: string, message: string): Pro
 export async function reactToMessage(peer: Peer, networkId: string, envelope: Envelope<any>): Promise<void> {
 	const useCase = new ReactToMessageUseCase(connectionRegistry)
 	return await useCase.execute(peer, networkId, envelope)
+}
+
+export const inputResolverRegistry = new InputResolverRegistry()
+
+export const specificationRegistry = new RuleRegistry()
+const directiveRegistry = new DirectiveRegistry()
+
+// directiveRegistry.register("inference", inferenceOperation)
+
+// const directiveProcessor = config.directiveProcessor ?? new DirectiveProcessor(directiveRegistry)
+
+export function Input(options: { name: string }) {
+	return function <T extends new () => InputResolver<unknown>>(
+		ResolverClass: T,
+		_context: ClassDecoratorContext,
+	): void {
+		inputResolverRegistry.register(options.name, new ResolverClass())
+	}
+}
+
+export function Condition(options: { name: string }) {
+	return function <T extends new () => ConditionSpecification>(
+		SpecificationClass: T,
+		_context: ClassDecoratorContext,
+	): void {
+		specificationRegistry.register(options.name, new SpecificationClass())
+	}
 }

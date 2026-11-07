@@ -2,7 +2,7 @@ import { SpaceEvent } from "@util/space-event"
 import { InferenceRequest } from "@agent/domain/inference/inference-request"
 import { InferenceResult } from "@agent/domain/inference/inference-result"
 import type { InferenceEndpoint } from "@agent/domain/inference/inference-endpoint"
-import { OpenAIResponsesMapper } from "src/agent/infrastructure/providers/openai/openai-responses-mapper"
+import { OpenAIResponsesMapper } from "@agent/infrastructure/providers/openai/openai-responses-mapper"
 import type { InferenceEndpointMapper } from "@agent/domain/inference/inference-endpoint-mapper"
 import OpenAI from "openai"
 
