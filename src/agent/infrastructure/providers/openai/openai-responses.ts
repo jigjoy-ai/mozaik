@@ -1,4 +1,4 @@
-import { SpaceEvent } from "@util/space-event"
+import { SemanticEvent } from "@util/semantic-event"
 import { InferenceRequest } from "@agent/domain/inference/inference-request"
 import { InferenceResult } from "@agent/domain/inference/inference-result"
 import type { InferenceEndpoint } from "@agent/domain/inference/inference-endpoint"
@@ -44,7 +44,7 @@ export class OpenAIResponses implements InferenceEndpoint {
 		return this.endpointMapper.toResponse(response)
 	}
 
-	async *stream(inferenceRequest: InferenceRequest): AsyncIterable<SpaceEvent> {
+	async *stream(inferenceRequest: InferenceRequest): AsyncIterable<SemanticEvent> {
 		const request = this.endpointMapper.toRequest(inferenceRequest)
 		const stream: any = await this.client.responses.create({ ...request, stream: true })
 

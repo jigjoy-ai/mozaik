@@ -1,4 +1,4 @@
-import { SpaceEvent } from "@util/space-event"
+import { SemanticEvent } from "@util/semantic-event"
 import type { InferenceEndpoint } from "@agent/domain/inference/inference-endpoint"
 import type { InferenceRequest } from "@agent/domain/inference/inference-request"
 import type { InferenceResult } from "@agent/domain/inference/inference-result"
@@ -46,12 +46,12 @@ export class AnthropicMessages implements InferenceEndpoint {
 		return this.endpointMapper.toResponse(response)
 	}
 
-	async *stream(inferenceRequest: InferenceRequest): AsyncIterable<SpaceEvent> {
+	async *stream(inferenceRequest: InferenceRequest): AsyncIterable<SemanticEvent> {
 		const request = this.endpointMapper.toRequest(inferenceRequest)
 		const stream = this.client.messages.stream(request)
 
 		for await (const event of stream) {
-			yield event as unknown as SpaceEvent
+			yield event as unknown as SemanticEvent
 		}
 
 		const output = this.endpointMapper.toResponse(await stream.finalMessage())

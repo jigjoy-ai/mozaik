@@ -3,7 +3,7 @@ import type { InferenceRequest } from "@agent/domain/inference/inference-request
 import type { InferenceResult } from "@agent/domain/inference/inference-result"
 import type { InferenceRequestValidator } from "@agent/domain/inference/request-validation/inference-request-validator"
 import { GenerativeModel } from "@agent/domain/inference/generative-model"
-import { SpaceEvent } from "@util/space-event"
+import { SemanticEvent } from "@util/semantic-event"
 
 export type InferenceCompletedParams = { answer: string; producerId: string; price?: number }
 
@@ -24,7 +24,7 @@ export class DefaultInferenceRunner implements InferenceRunner {
 		return await generativeModel.endpoint.infer(input)
 	}
 
-	async *stream(input: InferenceRequest): AsyncGenerator<SpaceEvent> {
+	async *stream(input: InferenceRequest): AsyncGenerator<SemanticEvent> {
 		const generativeModel = this.supportedModels.find((model) => model.specification.name === input.model)
 		if (!generativeModel) {
 			throw new Error(`Unsupported model: ${input.model}`)

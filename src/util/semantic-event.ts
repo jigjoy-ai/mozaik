@@ -1,4 +1,4 @@
-export class SpaceEvent<TType extends string = string, TPayload = unknown> {
+export class SemanticEvent<TType extends string = string, TPayload = unknown> {
 	readonly type: TType
 	readonly producerId: string
 	readonly occurredAt: Date
@@ -16,7 +16,7 @@ export class SpaceEvent<TType extends string = string, TPayload = unknown> {
 		producerId: string,
 		occurredAt: Date,
 		payload: TPayload,
-	): SpaceEvent<TType, TPayload> {
-		return new SpaceEvent(type, producerId, occurredAt, payload)
+	): SemanticEvent<TType, TPayload> {
+		return new SemanticEvent(type, producerId, occurredAt, payload)
 	}
 }
