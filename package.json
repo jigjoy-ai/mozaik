@@ -34,7 +34,6 @@
 		"format": "prettier --write \"src/**/*.{ts,tsx}\"",
 		"example": "tsx examples/simple-loop.ts",
 		"example:network": "tsx examples/network.ts",
-		"example:mem0": "tsx examples/mem0.ts",
 		"example:function-call": "tsx examples/function-call.ts",
 		"prepublishOnly": "npm run build",
 		"lint": "eslint .",
@@ -77,7 +76,6 @@
 		"@modelcontextprotocol/sdk": "^1.32.2",
 		"@mozaik-ai/cloud-sdk": "^0.1.0",
 		"dotenv": "^17.4.1",
-		"mem0ai": "^3.1.6",
 		"openai": "^6.38.0",
 		"zod": "^4.3.6"
 	}
