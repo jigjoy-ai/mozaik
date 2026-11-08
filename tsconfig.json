@@ -15,12 +15,12 @@
 			"@application/*": ["./src/application/*"],
 			"@domain/*": ["./src/domain/*"],
 			"@infrastructure/*": ["./src/infrastructure/*"],
-			"@network/*": ["./packages/network/*"]
+			"@client/*": ["./packages/client/*"]
 		},
 		"esModuleInterop": true,
 		"skipLibCheck": true,
 		"forceConsistentCasingInFileNames": true
 	},
-	"include": ["src", "tests", "packages"],
+	"include": ["src", "tests", "packages", "examples"],
 	"exclude": ["node_modules", "dist"]
 }
