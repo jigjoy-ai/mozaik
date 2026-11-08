@@ -9,17 +9,18 @@
 		"outDir": "./dist",
 		"rootDir": ".",
 		"strict": true,
-		"moduleResolution": "node",
-		"baseUrl": ".",
+		"moduleResolution": "bundler",
+		"types": ["node"],
 		"paths": {
-			"@agent/*": ["src/agent/*"],
-			"@network/*": ["src/network/*"],
-			"@util/*": ["src/util/*"]
+			"@application/*": ["./src/application/*"],
+			"@domain/*": ["./src/domain/*"],
+			"@infrastructure/*": ["./src/infrastructure/*"],
+			"@network/*": ["./packages/network/*"]
 		},
 		"esModuleInterop": true,
 		"skipLibCheck": true,
 		"forceConsistentCasingInFileNames": true
 	},
-	"include": ["src", "examples"],
-	"exclude": ["node_modules", "dist"] // For now excluded tests
+	"include": ["src", "tests", "packages"],
+	"exclude": ["node_modules", "dist"]
 }

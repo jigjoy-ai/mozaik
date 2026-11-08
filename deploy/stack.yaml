@@ -1,0 +1,173 @@
+AWSTemplateFormatVersion: "2010-09-09"
+Description: >
+  Mozaik Network on ECS Fargate: one task (its state is in memory), behind the existing
+  mozaik-cloud load balancer, at its own host name with its own certificate.
+
+Parameters:
+  ImageUri:
+    Type: String
+    Description: The image to run, e.g. <account>.dkr.ecr.eu-west-1.amazonaws.com/mozaik-network:<git sha>
+  HostName:
+    Type: String
+    Default: network.app.jigjoy.ai
+  CertificateArn:
+    Type: String
+    Description: An ACM certificate for HostName, in this region, already validated
+  VpcId:
+    Type: AWS::EC2::VPC::Id
+  SubnetIds:
+    Type: List<AWS::EC2::Subnet::Id>
+  LoadBalancerSecurityGroupId:
+    Type: AWS::EC2::SecurityGroup::Id
+  HttpsListenerArn:
+    Type: String
+  RulePriority:
+    Type: Number
+    Default: 10
+  MozaikCloudUrl:
+    Type: String
+    Default: https://api.app.jigjoy.ai
+    Description: Where keys are checked and messages are reported (an account's free messages, then its balance)
+  ServiceTokenParameter:
+    Type: String
+    Default: /mozaik-network/service-token
+    Description: >
+      SSM SecureString holding the secret Mozaik Cloud takes usage reports with (its NETWORK_SERVICE_TOKEN).
+      Made once, outside this stack: aws ssm put-parameter --type SecureString --name <this> --value "$(openssl rand -hex 32)"
+
+Resources:
+  Cluster:
+    Type: AWS::ECS::Cluster
+    Properties:
+      ClusterName: mozaik-network
+
+  Logs:
+    Type: AWS::Logs::LogGroup
+    Properties:
+      LogGroupName: /mozaik-network
+      RetentionInDays: 14
+
+  ExecutionRole:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Effect: Allow
+            Principal: { Service: ecs-tasks.amazonaws.com }
+            Action: sts:AssumeRole
+      ManagedPolicyArns:
+        - arn:aws:iam::aws:policy/service-role/AmazonECSTaskExecutionRolePolicy
+      # The service token goes into the container as NETWORK_SERVICE_TOKEN; nothing else is read.
+      Policies:
+        - PolicyName: service-token
+          PolicyDocument:
+            Version: "2012-10-17"
+            Statement:
+              - Effect: Allow
+                Action: ssm:GetParameters
+                Resource: !Sub arn:aws:ssm:${AWS::Region}:${AWS::AccountId}:parameter${ServiceTokenParameter}
+
+  TaskDefinition:
+    Type: AWS::ECS::TaskDefinition
+    Properties:
+      Family: mozaik-network
+      RequiresCompatibilities: [FARGATE]
+      NetworkMode: awsvpc
+      Cpu: "256"
+      Memory: "512"
+      RuntimePlatform:
+        CpuArchitecture: ARM64
+        OperatingSystemFamily: LINUX
+      ExecutionRoleArn: !GetAtt ExecutionRole.Arn
+      ContainerDefinitions:
+        - Name: network
+          Image: !Ref ImageUri
+          Essential: true
+          PortMappings:
+            - ContainerPort: 3000
+          Environment:
+            - { Name: PORT, Value: "3000" }
+            - { Name: MOZAIK_CLOUD_URL, Value: !Ref MozaikCloudUrl }
+          Secrets:
+            - Name: NETWORK_SERVICE_TOKEN
+              ValueFrom: !Sub arn:aws:ssm:${AWS::Region}:${AWS::AccountId}:parameter${ServiceTokenParameter}
+          LogConfiguration:
+            LogDriver: awslogs
+            Options:
+              awslogs-group: !Ref Logs
+              awslogs-region: !Ref AWS::Region
+              awslogs-stream-prefix: network
+
+  TaskSecurityGroup:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: Mozaik Network tasks, reached only through the load balancer
+      VpcId: !Ref VpcId
+      SecurityGroupIngress:
+        - IpProtocol: tcp
+          FromPort: 3000
+          ToPort: 3000
+          SourceSecurityGroupId: !Ref LoadBalancerSecurityGroupId
+
+  TargetGroup:
+    Type: AWS::ElasticLoadBalancingV2::TargetGroup
+    Properties:
+      VpcId: !Ref VpcId
+      TargetType: ip
+      Protocol: HTTP
+      Port: 3000
+      HealthCheckPath: /healthz
+      HealthCheckIntervalSeconds: 15
+      HealthyThresholdCount: 2
+      TargetGroupAttributes:
+        - { Key: deregistration_delay.timeout_seconds, Value: "10" }
+
+  ListenerCertificate:
+    Type: AWS::ElasticLoadBalancingV2::ListenerCertificate
+    Properties:
+      ListenerArn: !Ref HttpsListenerArn
+      Certificates:
+        - CertificateArn: !Ref CertificateArn
+
+  ListenerRule:
+    Type: AWS::ElasticLoadBalancingV2::ListenerRule
+    Properties:
+      ListenerArn: !Ref HttpsListenerArn
+      Priority: !Ref RulePriority
+      Conditions:
+        - Field: host-header
+          Values: [!Ref HostName]
+      Actions:
+        - Type: forward
+          TargetGroupArn: !Ref TargetGroup
+
+  Service:
+    Type: AWS::ECS::Service
+    DependsOn: ListenerRule
+    Properties:
+      ServiceName: mozaik-network
+      Cluster: !Ref Cluster
+      LaunchType: FARGATE
+      DesiredCount: 1
+      TaskDefinition: !Ref TaskDefinition
+      # One task at a time: networks live in its memory, so two would each have half of them.
+      DeploymentConfiguration:
+        MinimumHealthyPercent: 0
+        MaximumPercent: 100
+      HealthCheckGracePeriodSeconds: 30
+      NetworkConfiguration:
+        AwsvpcConfiguration:
+          AssignPublicIp: ENABLED
+          Subnets: !Ref SubnetIds
+          SecurityGroups: [!Ref TaskSecurityGroup]
+      LoadBalancers:
+        - ContainerName: network
+          ContainerPort: 3000
+          TargetGroupArn: !Ref TargetGroup
+
+Outputs:
+  Url:
+    Value: !Sub https://${HostName}
+  WebSocketUrl:
+    Value: !Sub wss://${HostName}

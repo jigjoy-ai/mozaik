@@ -1,82 +1,25 @@
 {
-	"name": "@mozaik-ai/core",
-	"version": "4.2.0-beta.18",
-	"description": "A TypeScript framework for building interoperable AI agents",
-	"main": "dist/index.js",
-	"module": "dist/index.mjs",
-	"types": "dist/index.d.ts",
-	"typesVersions": {
-		"*": {
-			"core": [
-				"dist/core/index.d.ts"
-			],
-			"providers/openai": [
-				"dist/providers/openai/index.d.ts"
-			]
-		}
-	},
-	"files": [
-		"dist"
-	],
-	"publishConfig": {
-		"access": "public",
-		"registry": "https://registry.npmjs.org/"
-	},
-	"repository": {
-		"type": "git",
-		"url": "git+https://github.com/jigjoy-ai/mozaik.git"
-	},
-	"author": "Miodrag Vilotijević",
+	"name": "mozaik-network",
+	"version": "1.0.0",
+	"description": "",
+	"main": "index.js",
 	"scripts": {
-		"build": "tsup",
-		"dev": "tsup --watch",
-		"clean": "rimraf dist",
-		"format": "prettier --write \"src/**/*.{ts,tsx}\"",
-		"example": "tsx examples/simple-loop.ts",
-		"example:network": "tsx examples/network.ts",
-		"example:function-call": "tsx examples/function-call.ts",
-		"prepublishOnly": "npm run build",
-		"lint": "eslint .",
-		"lint:fix": "eslint . --fix",
-		"typecheck": "tsc --noEmit",
-		"prepare": "husky"
+		"start": "tsx src/server.ts",
+		"dev": "tsx watch src/server.ts",
+		"test": "rstest run",
+		"typecheck": "tsc --noEmit -p ."
 	},
-	"keywords": [
-		"mozaik-runtime",
-		"mozaik-cloud",
-		"agent-interoperability",
-		"non-blocking agents",
-		"event-driven agents",
-		"ai-infrastructure",
-		"advanced loop engineering",
-		"agent-swarms",
-		"conccurent AI agents",
-		"agent awareness",
-		"adaptive AI agents",
-		"typescript framework"
-	],
-	"license": "MIT",
+	"keywords": [],
+	"author": "",
+	"license": "ISC",
 	"devDependencies": {
-		"@eslint/js": "^9.39.5",
-		"@rstest/core": "^0.10.2",
-		"@rstest/coverage-istanbul": "^0.10.2",
-		"eslint": "^9.39.5",
-		"husky": "^9.1.7",
-		"lint-staged": "^17.0.7",
-		"prettier": "^3.7.4",
-		"rimraf": "^6.1.4",
-		"tsup": "^9.0.0",
-		"tsx": "^4.21.0",
-		"typescript": "^5.9.3",
-		"typescript-eslint": "^8.36.0"
+		"@rstest/core": "0.12.4",
+		"@types/node": "^26.6.4",
+		"@types/ws": "^8.18.2",
+		"tsx": "^4.23.15",
+		"typescript": "^7.0.2"
 	},
 	"dependencies": {
-		"@anthropic-ai/sdk": "^1.6.0",
-		"@google/genai": "^2.6.0",
-		"@modelcontextprotocol/sdk": "^1.32.2",
-		"@mozaik-ai/cloud-sdk": "^0.1.0",
-		"dotenv": "^17.4.1",
-		"openai": "^6.38.0",
-		"zod": "^4.3.6"
+		"ws": "^8.22.0"
 	}
 }
