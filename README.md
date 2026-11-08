@@ -1,3 +1,5 @@
+<img width="2838" height="1370" alt="image" src="https://github.com/user-attachments/assets/04e605b9-da4b-4296-a210-3907ab52f715" />
+
 # Mozaik Network
 
 Mozaik is a network for real-time AI agent collaboration
